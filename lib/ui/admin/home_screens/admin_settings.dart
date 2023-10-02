@@ -88,13 +88,17 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                       height: 20.h,
                       alignment: Alignment.bottomRight,
                       child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          var value = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const EditNewAdminScreen(),
                               ));
+                          if (value == 'edit') {
+                            await cubit.getCurrentParentData();
+                            await cubit.getHomeData();
+                          }
                         },
                         icon: const Icon(
                           IconBroken.Edit,

@@ -204,7 +204,7 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                             message: "admin Edited",
                             toastColor: Colors.green,
                           );
-                          Navigator.pop(context);
+                          Navigator.pop(context, 'edit');
                         }
                         if (state is ErorrEditAdmin) {
                           showFlutterToast(

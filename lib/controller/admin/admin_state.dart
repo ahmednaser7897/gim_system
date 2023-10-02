@@ -35,6 +35,15 @@ class ErorrAddAdmin extends AdminState {
   ErorrAddAdmin(this.error);
 }
 
+class LoadingGetHomeData extends AdminState {}
+
+class ScGetHomeData extends AdminState {}
+
+class ErorrGetHomeData extends AdminState {
+  final String error;
+  ErorrGetHomeData(this.error);
+}
+
 class LoadingEditAdmin extends AdminState {}
 
 class ScEditAdmin extends AdminState {}
@@ -44,11 +53,20 @@ class ErorrEditAdmin extends AdminState {
   ErorrEditAdmin(this.error);
 }
 
-// class LoadingAddImage extends AdminState {}
+class LoadingChangeGymBan extends AdminState {}
 
-// class ScAddImage extends AdminState {}
+class ScChangeGymBan extends AdminState {}
 
-// class ErorrAddImage extends AdminState {
-//   final String error;
-//   ErorrAddImage(this.error);
-// }
+class ErorrChangeGymBan extends AdminState {
+  final String error;
+  ErorrChangeGymBan(this.error);
+}
+
+class LoadingChangeAdminBan extends AdminState {}
+
+class ScChangeAdminBan extends AdminState {}
+
+class ErorrChangeAdminBan extends AdminState {
+  final String error;
+  ErorrChangeAdminBan(this.error);
+}

@@ -9,6 +9,7 @@ import 'app_textformfiled_widget.dart';
 Widget timesRow({
   required TextEditingController openDateController,
   required TextEditingController closeDateController,
+  bool isEnable = true,
 }) {
   TimeOfDay open = TimeOfDay.now();
   TimeOfDay close = TimeOfDay.now();
@@ -29,14 +30,16 @@ Widget timesRow({
               ),
               AppSizedBox.h2,
               InkWell(
-                onTap: () async {
-                  TimeOfDay? value = await showPicker(context);
+                onTap: isEnable
+                    ? () async {
+                        TimeOfDay? value = await showPicker(context);
 
-                  if (value != null) {
-                    open = value;
-                    openDateController.text = open.format(context);
-                  }
-                },
+                        if (value != null) {
+                          open = value;
+                          openDateController.text = open.format(context);
+                        }
+                      }
+                    : null,
                 child: AppTextFormFiledWidget(
                   isEnable: false,
                   controller: openDateController,
@@ -66,13 +69,15 @@ Widget timesRow({
               ),
               AppSizedBox.h2,
               InkWell(
-                onTap: () async {
-                  TimeOfDay? value = await showPicker(context);
-                  if (value != null) {
-                    close = value;
-                    closeDateController.text = close.format(context);
-                  }
-                },
+                onTap: isEnable
+                    ? () async {
+                        TimeOfDay? value = await showPicker(context);
+                        if (value != null) {
+                          close = value;
+                          closeDateController.text = close.format(context);
+                        }
+                      }
+                    : null,
                 child: AppTextFormFiledWidget(
                   isEnable: false,
                   controller: closeDateController,

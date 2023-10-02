@@ -15,6 +15,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     AdminCubit.get(context).getCurrentParentData();
+    AdminCubit.get(context).getHomeData();
     super.initState();
   }
 

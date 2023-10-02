@@ -21,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController =
-      TextEditingController(text: 'ahmednaser7897@gmail.com');
+      TextEditingController(text: 'ahmednaser321@gmail.com');
 
   TextEditingController passwordController =
       TextEditingController(text: '123456');
@@ -108,14 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 validate: (value) {
                                   return Validations.emailValidation(value,
                                       name: 'your email');
-                                  // if (value!.isEmpty) {
-                                  //   return 'Please enter your email';
-                                  // }
-                                  // if (!value.contains('@')) {
-                                  //   return 'Please enter a valid email';
-                                  // }
-
-                                  // return null;
                                 },
                               ),
                               AppSizedBox.h3,

@@ -11,27 +11,35 @@ AdminModel _$AdminModelFromJson(Map<String, dynamic> json) => AdminModel(
       name: json['name'] as String?,
       email: json['email'] as String?,
       password: json['password'] as String?,
-      age: (json['age'] as num?)?.toDouble(),
+      age: json['age'] as String?,
       phone: json['phone'] as String?,
       image: json['image'] as String?,
       gender: json['gender'] as String?,
       createdAt: json['createdAt'] as String?,
-      ban: json['ban'] as String?,
+      ban: json['ban'] as bool?,
     );
 
-Map<String, dynamic> _$AdminModelToJson(AdminModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'email': instance.email,
-      'password': instance.password,
-      'phone': instance.phone,
-      'image': instance.image,
-      'gender': instance.gender,
-      'createdAt': instance.createdAt,
-      'ban': instance.ban,
-      'age': instance.age,
-    };
+Map<String, dynamic> _$AdminModelToJson(AdminModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('name', instance.name);
+  writeNotNull('email', instance.email);
+  writeNotNull('password', instance.password);
+  writeNotNull('phone', instance.phone);
+  writeNotNull('image', instance.image);
+  writeNotNull('gender', instance.gender);
+  writeNotNull('createdAt', instance.createdAt);
+  writeNotNull('ban', instance.ban);
+  writeNotNull('age', instance.age);
+  return val;
+}
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String?,
@@ -42,28 +50,37 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       image: json['image'] as String?,
       gender: json['gender'] as String?,
       createdAt: json['createdAt'] as String?,
-      ban: json['ban'] as String?,
-      age: (json['age'] as num?)?.toDouble(),
+      ban: json['ban'] as bool?,
+      age: json['age'] as String?,
       gymId: json['gymId'] as String?,
       fitnessData: json['fitnessData'] == null
           ? null
           : FitnessData.fromJson(json['fitnessData'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
-      'id': instance.id,
-      'gymId': instance.gymId,
-      'name': instance.name,
-      'email': instance.email,
-      'password': instance.password,
-      'phone': instance.phone,
-      'image': instance.image,
-      'gender': instance.gender,
-      'createdAt': instance.createdAt,
-      'ban': instance.ban,
-      'age': instance.age,
-      'fitnessData': instance.fitnessData,
-    };
+Map<String, dynamic> _$UserModelToJson(UserModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('gymId', instance.gymId);
+  writeNotNull('name', instance.name);
+  writeNotNull('email', instance.email);
+  writeNotNull('password', instance.password);
+  writeNotNull('phone', instance.phone);
+  writeNotNull('image', instance.image);
+  writeNotNull('gender', instance.gender);
+  writeNotNull('createdAt', instance.createdAt);
+  writeNotNull('ban', instance.ban);
+  writeNotNull('age', instance.age);
+  writeNotNull('fitnessData', instance.fitnessData);
+  return val;
+}
 
 FitnessData _$FitnessDataFromJson(Map<String, dynamic> json) => FitnessData(
       id: json['id'] as String?,
@@ -73,14 +90,22 @@ FitnessData _$FitnessDataFromJson(Map<String, dynamic> json) => FitnessData(
       weight: (json['weight'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$FitnessDataToJson(FitnessData instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'weight': instance.weight,
-      'height': instance.height,
-      'bodyFatPercentage': instance.bodyFatPercentage,
-      'goal': instance.goal,
-    };
+Map<String, dynamic> _$FitnessDataToJson(FitnessData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('weight', instance.weight);
+  writeNotNull('height', instance.height);
+  writeNotNull('bodyFatPercentage', instance.bodyFatPercentage);
+  writeNotNull('goal', instance.goal);
+  return val;
+}
 
 CoachModel _$CoachModelFromJson(Map<String, dynamic> json) => CoachModel(
       id: json['id'] as String?,
@@ -92,26 +117,34 @@ CoachModel _$CoachModelFromJson(Map<String, dynamic> json) => CoachModel(
       image: json['image'] as String?,
       gender: json['gender'] as String?,
       createdAt: json['createdAt'] as String?,
-      ban: json['ban'] as String?,
-      age: (json['age'] as num?)?.toDouble(),
+      ban: json['ban'] as bool?,
+      age: json['age'] as String?,
       gymId: json['gymId'] as String?,
     );
 
-Map<String, dynamic> _$CoachModelToJson(CoachModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'gymId': instance.gymId,
-      'name': instance.name,
-      'email': instance.email,
-      'password': instance.password,
-      'phone': instance.phone,
-      'image': instance.image,
-      'gender': instance.gender,
-      'createdAt': instance.createdAt,
-      'ban': instance.ban,
-      'bio': instance.bio,
-      'age': instance.age,
-    };
+Map<String, dynamic> _$CoachModelToJson(CoachModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('gymId', instance.gymId);
+  writeNotNull('name', instance.name);
+  writeNotNull('email', instance.email);
+  writeNotNull('password', instance.password);
+  writeNotNull('phone', instance.phone);
+  writeNotNull('image', instance.image);
+  writeNotNull('gender', instance.gender);
+  writeNotNull('createdAt', instance.createdAt);
+  writeNotNull('ban', instance.ban);
+  writeNotNull('bio', instance.bio);
+  writeNotNull('age', instance.age);
+  return val;
+}
 
 GymModel _$GymModelFromJson(Map<String, dynamic> json) => GymModel(
       id: json['id'] as String?,
@@ -120,7 +153,7 @@ GymModel _$GymModelFromJson(Map<String, dynamic> json) => GymModel(
       password: json['password'] as String?,
       phone: json['phone'] as String?,
       image: json['image'] as String?,
-      ban: json['ban'] as String?,
+      ban: json['ban'] as bool?,
       closeDate: json['closeDate'] as String?,
       description: json['description'] as String?,
       coachs: (json['coachs'] as List<dynamic>?)
@@ -133,18 +166,27 @@ GymModel _$GymModelFromJson(Map<String, dynamic> json) => GymModel(
           .toList(),
     );
 
-Map<String, dynamic> _$GymModelToJson(GymModel instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'email': instance.email,
-      'description': instance.description,
-      'password': instance.password,
-      'phone': instance.phone,
-      'image': instance.image,
-      'openDate': instance.openDate,
-      'closeDate': instance.closeDate,
-      'ban': instance.ban,
-      'rate': instance.rate,
-      'users': instance.users,
-      'coachs': instance.coachs,
-    };
+Map<String, dynamic> _$GymModelToJson(GymModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('name', instance.name);
+  writeNotNull('email', instance.email);
+  writeNotNull('description', instance.description);
+  writeNotNull('password', instance.password);
+  writeNotNull('phone', instance.phone);
+  writeNotNull('image', instance.image);
+  writeNotNull('openDate', instance.openDate);
+  writeNotNull('closeDate', instance.closeDate);
+  writeNotNull('ban', instance.ban);
+  writeNotNull('rate', instance.rate);
+  writeNotNull('users', instance.users);
+  writeNotNull('coachs', instance.coachs);
+  return val;
+}

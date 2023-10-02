@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/constants.dart';
-import 'package:gim_system/ui/admin/admin_home_screen.dart';
+import 'package:gim_system/ui/admin/home_screens/admin_home_screen.dart';
 import 'package:gim_system/ui/coach/coach_home_screen.dart';
 import 'package:gim_system/ui/gym/gym_home_screen.dart';
 import 'package:gim_system/ui/user/user_home_screen.dart';
 
 import 'app/style.dart';
+import 'controller/admin/admin_cubit.dart';
 import 'ui/auth/login_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -16,16 +18,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        darkTheme: AppTheme.darkTheme(),
-        themeMode: ThemeMode.light,
-        onGenerateTitle: (context) {
-          appContext = context;
-          return '';
-        },
-        home: getInitialRoute());
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AdminCubit(),
+        )
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: ThemeMode.light,
+          onGenerateTitle: (context) {
+            appContext = context;
+            return '';
+          },
+          home: getInitialRoute()),
+    );
   }
 
   Widget getInitialRoute() {

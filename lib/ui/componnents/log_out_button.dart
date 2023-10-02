@@ -21,7 +21,7 @@ class _LogOutButtonState extends State<LogOutButton> {
         ? const CircularProgressComponent()
         : BottomComponent(
             child: const Text(
-              'Log Out',
+              'Sign Out',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

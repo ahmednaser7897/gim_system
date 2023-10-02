@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../app/app_colors.dart';
 
@@ -9,8 +10,11 @@ class AppTextFormFiledWidget extends StatefulWidget {
   final IconData? prefix;
   final IconData? suffix;
   final TextInputType? keyboardType;
+  final int maxLines;
+  final bool readOnly;
+  final Function()? onTap;
   bool isPassword = false;
-  bool isEnable = true;
+  final bool isEnable;
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validate;
   AppTextFormFiledWidget({
@@ -18,11 +22,14 @@ class AppTextFormFiledWidget extends StatefulWidget {
     required this.controller,
     required this.hintText,
     this.keyboardType,
+    this.maxLines = 1,
+    this.readOnly = false,
+    this.onTap,
+    this.onChanged,
     this.prefix,
     this.suffix,
     this.isPassword = false,
     this.isEnable = true,
-    this.onChanged,
     this.validate,
   });
 
@@ -35,6 +42,9 @@ class _AppTextFormFiledWidgetState extends State<AppTextFormFiledWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: widget.isEnable,
+      readOnly: widget.readOnly,
+      maxLines: widget.maxLines,
+      onTap: widget.onTap,
       controller: widget.controller,
       keyboardType: widget.keyboardType ?? TextInputType.text,
       validator: widget.validate,

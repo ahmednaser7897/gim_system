@@ -14,14 +14,14 @@ import '../componnents/image_picker/image_widget.dart';
 import '../componnents/show_flutter_toast.dart';
 import '../componnents/widgets.dart';
 
-class AddNewGymScreen extends StatefulWidget {
-  const AddNewGymScreen({super.key});
+class EditNewAdminScreen extends StatefulWidget {
+  const EditNewAdminScreen({super.key});
 
   @override
-  State<AddNewGymScreen> createState() => _AddNewGymScreenState();
+  State<EditNewAdminScreen> createState() => _EditNewAdminScreenState();
 }
 
-class _AddNewGymScreenState extends State<AddNewGymScreen> {
+class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
@@ -29,28 +29,35 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
+  TextEditingController agecontroller = TextEditingController();
 
   TextEditingController genderController = TextEditingController();
-
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController openDateController = TextEditingController();
-  TextEditingController closeDateController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    genderController.text = 'male';
+    AdminCubit cubit = AdminCubit.get(context);
+    if (cubit.adminModel != null) {
+      genderController.text = cubit.adminModel!.gender ?? 'male';
+      phoneController.text = cubit.adminModel!.phone ?? '';
+      //emailController.text = cubit.adminModel!.email ?? '';
+      nameController.text = cubit.adminModel!.name ?? '';
+      passwordController.text = cubit.adminModel!.password ?? '';
+      agecontroller.text = cubit.adminModel!.age ?? '';
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    AdminCubit cubit = AdminCubit.get(context);
     return BlocProvider(
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Gym'),
+          title: const Text('Add New Admin'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -62,8 +69,11 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSizedBox.h1,
-                    const Align(
-                        alignment: Alignment.center, child: ImageWidget()),
+                    Align(
+                        alignment: Alignment.center,
+                        child: ImageWidget(
+                          init: cubit.adminModel!.image,
+                        )),
                     const Text(
                       "Name",
                       style: TextStyle(
@@ -80,35 +90,27 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       validate: (value) {
                         return Validations.normalValidation(value,
                             name: 'your name');
-                        // if (value!.isEmpty) {
-                        //   return "Please Enter your name";
-                        // }
-                        // return null;
                       },
                     ),
-                    AppSizedBox.h3,
-                    const Text(
-                      "Email",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      hintText: "Enter your email",
-                      prefix: Icons.email_rounded,
-                      validate: (value) {
-                        return Validations.emailValidation(value,
-                            name: 'your email');
-                        // if (value!.isEmpty) {
-                        //   return "Please Enter Email";
-                        // }
-                        // return null;
-                      },
-                    ),
+                    // AppSizedBox.h3,
+                    // const Text(
+                    //   "Email",
+                    //   style: TextStyle(
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.w400,
+                    //   ),
+                    // ),
+                    // AppSizedBox.h2,
+                    // AppTextFormFiledWidget(
+                    //   controller: emailController,
+                    //   keyboardType: TextInputType.emailAddress,
+                    //   hintText: "Enter your email",
+                    //   prefix: Icons.email_rounded,
+                    //   validate: (value) {
+                    //     return Validations.emailValidation(value,
+                    //         name: 'your email');
+                    //   },
+                    // ),
                     AppSizedBox.h3,
                     const Text(
                       "Password",
@@ -125,17 +127,59 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
-                        return Validations.passwordValidation(value,
+                        return Validations.normalValidation(value,
                             name: 'your password');
-                        // if (value!.isEmpty) {
-                        //   return 'Please enter a password';
-                        // }
-                        // return null;
                       },
                     ),
                     AppSizedBox.h3,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Phone",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              AppSizedBox.h2,
+                              AppTextFormFiledWidget(
+                                keyboardType: TextInputType.phone,
+                                controller: phoneController,
+                                hintText: "Enter your phone",
+                                prefix: Icons.call,
+                                validate: (value) {
+                                  return Validations.mobileValidation(value,
+                                      name: 'your phone');
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        AppSizedBox.w5,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Gender",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              AppSizedBox.h2,
+                              genderWidget(genderController,
+                                  init: genderController.text),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    AppSizedBox.h3,
                     const Text(
-                      "Phone",
+                      "age",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -143,49 +187,26 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                     ),
                     AppSizedBox.h2,
                     AppTextFormFiledWidget(
-                      keyboardType: TextInputType.phone,
-                      controller: phoneController,
-                      hintText: "Enter your phone",
-                      prefix: Icons.call,
-                      validate: (value) {
-                        return Validations.mobileValidation(value,
-                            name: 'your phone');
-                      },
-                    ),
-                    AppSizedBox.h3,
-                    timesRow(
-                        closeDateController: closeDateController,
-                        openDateController: openDateController),
-                    AppSizedBox.h3,
-                    const Text(
-                      "description",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: descriptionController,
-                      maxLines: 4,
-                      keyboardType: TextInputType.text,
-                      hintText: "Enter gym description",
+                      controller: agecontroller,
+                      prefix: Icons.timelapse,
+                      keyboardType: TextInputType.number,
+                      hintText: "Enter Admin age",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'your description');
+                            name: 'your age');
                       },
                     ),
                     AppSizedBox.h3,
                     BlocConsumer<AdminCubit, AdminState>(
                       listener: (context, state) {
-                        if (state is ScAddGym) {
+                        if (state is ScEditAdmin) {
                           showFlutterToast(
-                            message: "gym added",
+                            message: "admin Edited",
                             toastColor: Colors.green,
                           );
                           Navigator.pop(context);
                         }
-                        if (state is ErorrAddGym) {
+                        if (state is ErorrEditAdmin) {
                           showFlutterToast(
                             message: state.error,
                             toastColor: Colors.red,
@@ -194,11 +215,11 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       },
                       builder: (context, state) {
                         AdminCubit adminCubit = AdminCubit.get(context);
-                        return state is LoadingAddGym
+                        return state is LoadingEditAdmin
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Add New Gym',
+                                  'Edit Admin',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -206,24 +227,20 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                                   ),
                                 ),
                                 onPressed: () {
+                                  print("object1");
                                   if (_formKey.currentState!.validate()) {
-                                    adminCubit.addGym(
+                                    print("object2");
+                                    adminCubit.editAdmin(
                                         image: ImageCubit.get(context).image,
-                                        gymModel: GymModel(
-                                          ban: false,
-                                          closeDate: closeDateController.text,
-                                          coachs: null,
-                                          description:
-                                              descriptionController.text,
-                                          email: emailController.text,
-                                          id: null,
-                                          image: null,
+                                        model: AdminModel(
+                                          image: cubit.adminModel?.image,
                                           name: nameController.text,
-                                          openDate: openDateController.text,
                                           password: passwordController.text,
                                           phone: phoneController.text,
-                                          rate: 0,
-                                          users: null,
+                                          age: agecontroller.text,
+                                          gender: genderController.text,
+                                          createdAt:
+                                              cubit.adminModel?.createdAt,
                                         ));
                                   }
                                 },

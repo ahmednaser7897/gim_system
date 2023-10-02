@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'users_models.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class AdminModel {
   String? id;
   String? name;
@@ -14,8 +14,8 @@ class AdminModel {
   String? image;
   String? gender;
   String? createdAt;
-  String? ban;
-  double? age;
+  bool? ban;
+  String? age;
 
   AdminModel({
     this.id,
@@ -34,7 +34,7 @@ class AdminModel {
   Map<String, dynamic> toJson() => _$AdminModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class UserModel {
   String? id;
   String? gymId;
@@ -45,8 +45,8 @@ class UserModel {
   String? image;
   String? gender;
   String? createdAt;
-  String? ban;
-  double? age;
+  bool? ban;
+  String? age;
   FitnessData? fitnessData;
 
   UserModel(
@@ -67,7 +67,7 @@ class UserModel {
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class FitnessData {
   String? id;
   double? weight;
@@ -87,7 +87,7 @@ class FitnessData {
   Map<String, dynamic> toJson() => _$FitnessDataToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class CoachModel {
   String? id;
   String? gymId;
@@ -98,9 +98,9 @@ class CoachModel {
   String? image;
   String? gender;
   String? createdAt;
-  String? ban;
+  bool? ban;
   String? bio;
-  double? age;
+  String? age;
 
   CoachModel(
       {this.id,
@@ -120,18 +120,18 @@ class CoachModel {
   Map<String, dynamic> toJson() => _$CoachModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class GymModel {
   String? id;
-  String? name;
-  String? email;
-  String? description;
-  String? password;
-  String? phone;
+  String? name; //
+  String? email; //
+  String? description; //
+  String? password; //
+  String? phone; //
   String? image;
-  String? openDate;
-  String? closeDate;
-  String? ban;
+  String? openDate; //
+  String? closeDate; //
+  bool? ban;
   double? rate;
   List<UserModel>? users;
   List<CoachModel>? coachs;

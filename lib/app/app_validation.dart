@@ -24,17 +24,66 @@ class Validations {
   static RegExp arabic = RegExp(r'^[ّء-ي 0-9]+$');
 
   static RegExp english = RegExp('[a-zA-Z]');
+  static String? normalValidation(String? value, {required String name}) {
+    if (value == null || value.isEmpty) {
+      return "Please Enter $name";
+    }
+    return null;
+  }
 
-  // static String? emailValidation(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return MyApp.tr.pleaseEnterEmail;
-  //   }
-  //   if (!emailRegix.hasMatch(value)) {
-  //     return MyApp.tr.pleaseEnterCorrectEmail;
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  static String? passwordValidation(String? value, {required String name}) {
+    if (value == null || value.isEmpty) {
+      return "Please Enter $name";
+    }
+    if (value.length < 6) {
+      return ' $name must  have at least 6 letters';
+    }
+    if (capitalLettersRegix.hasMatch(value)) {
+      return ' $name must not have capital letters';
+    }
+    return null;
+  }
+
+  static String? emailValidation(String? value, {required String name}) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter $name';
+    }
+    if (capitalLettersRegix.hasMatch(value)) {
+      return ' $name must not have capital letters';
+    }
+    if (!value.contains('@')) {
+      return 'Please enter a valid email';
+    }
+
+    return null;
+  }
+
+  static String? mobileValidation(String? value, {required String name}) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter $name';
+    }
+    if (!startsWith05(value)) {
+      return 'Phone number must start with 05';
+    }
+    if (!contains8Digits(value)) {
+      return 'Phone number must contain 8 digits';
+    }
+    return null;
+  }
+
+  static bool startsWith05(String number) {
+    if (number.isEmpty) {
+      return false;
+    }
+    return number.startsWith('05');
+  }
+
+  static bool contains8Digits(String number) {
+    if (number.isEmpty) {
+      return false;
+    }
+    return RegExp(r'^\d{8}$').hasMatch(number.substring(2));
+  }
 
   // static String? numberValidation(
   //     {String? value, required String name, bool isInt = false}) {

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_assets.dart';
 import 'package:gim_system/app/app_sized_box.dart';
+import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:gim_system/ui/admin/admin_home_screen.dart';
+import 'package:gim_system/ui/admin/home_screens/admin_home_screen.dart';
 
 import '../../controller/auth/auth_cubit.dart';
 import '../componnents/const_widget.dart';
@@ -105,14 +106,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Email',
                                 prefixIcon: Icons.email,
                                 validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your email';
-                                  }
-                                  if (!value.contains('@')) {
-                                    return 'Please enter a valid email';
-                                  }
+                                  return Validations.emailValidation(value,
+                                      name: 'your email');
+                                  // if (value!.isEmpty) {
+                                  //   return 'Please enter your email';
+                                  // }
+                                  // if (!value.contains('@')) {
+                                  //   return 'Please enter a valid email';
+                                  // }
 
-                                  return null;
+                                  // return null;
                                 },
                               ),
                               AppSizedBox.h3,
@@ -124,10 +127,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 suffixIcon: Icons.visibility,
                                 obscureText: true,
                                 validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your password';
-                                  }
-                                  return null;
+                                  return Validations.normalValidation(value,
+                                      name: ' your password');
+                                  // if (value!.isEmpty) {
+                                  //   return 'Please enter your password';
+                                  // }
+                                  // return null;
                                 },
                               ),
                               AppSizedBox.h5,
@@ -151,39 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         }
                                       },
                                     ),
-
-                              // AppSizedBox.h3,
-                              //       Row(
-                              //         mainAxisAlignment: MainAxisAlignment.center,
-                              //         children: [
-                              //           const Text(
-                              //             'Don\'t have an account?',
-                              //             style: TextStyle(
-                              //               fontSize: 16,
-                              //               fontWeight: FontWeight.w400,
-                              //               color: Colors.black45,
-                              //             ),
-                              //           ),
-                              //           AppSizedBox.w10,
-                              //           GestureDetector(
-                              //             onTap: () {
-                              //               // Navigator.pushNamedAndRemoveUntil(
-                              //               //   context,
-                              //               //   Routers.REGISTER_SCREEN,
-                              //               //   (route) => false,
-                              //               // );
-                              //             },
-                              //             child: const Text(
-                              //               'Register',
-                              //               style: TextStyle(
-                              //                 fontSize: 16,
-                              //                 fontWeight: FontWeight.w400,
-                              //                 color: Colors.blue,
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       ),
                             ],
                           ),
                         ),

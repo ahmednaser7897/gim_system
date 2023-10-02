@@ -122,7 +122,7 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
-                        return Validations.normalValidation(value,
+                        return Validations.passwordValidation(value,
                             name: 'your password');
                       },
                     ),

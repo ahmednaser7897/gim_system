@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 suffixIcon: Icons.visibility,
                                 obscureText: true,
                                 validate: (value) {
-                                  return Validations.normalValidation(value,
+                                  return Validations.passwordValidation(value,
                                       name: ' your password');
                                   // if (value!.isEmpty) {
                                   //   return 'Please enter your password';

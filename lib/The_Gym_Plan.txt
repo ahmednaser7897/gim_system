@@ -170,11 +170,11 @@ Targets :
                             diet of his users,
                             his exercises
                            )
-            # Edit His Info
-            # Create new Coach
-            # Create new User
+            # Edit His Info--
+            # Create new Coach--
+            # Create new User--
             # Create, Edit his exercises
-            # Ban (User, Coach)
+            # Ban (User, Coach)--
 
 @ Coach =>    Can do ?
             # Make Login Note: "Can not login if his gym was banned or he was banned"

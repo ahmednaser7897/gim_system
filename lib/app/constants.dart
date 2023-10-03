@@ -12,4 +12,6 @@ class Constants {
   static const String user = "user";
   static const String coach = "coach";
   static const String gym = "gym";
+
+  static const String exercise = "Exercise";
 }

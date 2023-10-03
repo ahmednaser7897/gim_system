@@ -5,31 +5,32 @@ import 'package:gim_system/app/extensions.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
-import '../../../controller/admin/admin_cubit.dart';
+import '../../../controller/gym/gym_cubit.dart';
 import '../../componnents/log_out_button.dart';
 import '../../componnents/screen_builder.dart';
-import '../add_new_admin_screen.dart';
-import '../add_new_gym_screen.dart';
-import '../edit_admin_screen.dart';
+import '../add_new_coach_screen.dart';
+import '../add_new_exercises.dart';
+import '../add_new_user_screen.dart';
+import '../edit_gym_screen.dart';
 
-class AdminSettingsScreen extends StatefulWidget {
-  const AdminSettingsScreen({super.key});
+class GymSettingsScreen extends StatefulWidget {
+  const GymSettingsScreen({super.key});
 
   @override
-  State<AdminSettingsScreen> createState() => _AdminSettingsScreenState();
+  State<GymSettingsScreen> createState() => _GymSettingsScreenState();
 }
 
-class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
+class _GymSettingsScreenState extends State<GymSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdminCubit, AdminState>(
+    return BlocConsumer<GymCubit, GymState>(
       buildWhen: (previous, current) =>
-          current is LoadingGetAdmin ||
-          current is ScGetAdmin ||
-          current is ErorrGetAdmin,
+          current is LoadingGetGym ||
+          current is ScGetGym ||
+          current is ErorrGetGym,
       listener: (context, state) {},
       builder: (context, state) {
-        AdminCubit cubit = AdminCubit.get(context);
+        GymCubit cubit = GymCubit.get(context);
         return screenBuilder(
           contant: Column(
             children: [
@@ -49,8 +50,8 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (cubit.adminModel!.image != null &&
-                              cubit.adminModel!.image!.isNotEmpty)
+                          if (cubit.gymModel!.image != null &&
+                              cubit.gymModel!.image!.isNotEmpty)
                             Container(
                               width: 20.w,
                               height: 12.h,
@@ -59,7 +60,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: NetworkImage(cubit.adminModel!.image!),
+                                  image: NetworkImage(cubit.gymModel!.image!),
                                 ),
                               ),
                             ),
@@ -69,13 +70,13 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                cubit.adminModel!.name.orEmpty(),
+                                cubit.gymModel!.name.orEmpty(),
                                 style:
                                     Theme.of(context).textTheme.displayMedium,
                               ),
                               AppSizedBox.h3,
                               Text(
-                                cubit.adminModel!.email.orEmpty(),
+                                cubit.gymModel!.email.orEmpty(),
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
@@ -92,11 +93,10 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                           var value = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const EditNewAdminScreen(),
+                                builder: (context) => const EditGymScreen(),
                               ));
                           if (value == 'edit') {
-                            await cubit.getCurrentParentData();
+                            await cubit.getCurrentGymData();
                             //await cubit.getHomeData();
                           }
                         },
@@ -112,27 +112,40 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
               AppSizedBox.h3,
               _buildListItem(
                 context,
-                title: 'New admin',
+                title: 'New coach',
                 leadingIcon: IconBroken.Profile,
-                subtitle: 'Create new admin account',
+                subtitle: 'Create new coach account',
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AddNewAdminScreen(),
+                        builder: (context) => const AddNewCoachScreen(),
                       ));
                 },
               ),
               _buildListItem(
                 context,
-                title: 'New Gym',
+                title: 'New User',
                 leadingIcon: IconBroken.Profile,
-                subtitle: 'Create new Gym account',
+                subtitle: 'Create new User account',
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AddNewGymScreen(),
+                        builder: (context) => const AddNewUserScreen(),
+                      ));
+                },
+              ),
+              _buildListItem(
+                context,
+                title: 'New Exercise',
+                leadingIcon: Icons.sports_gymnastics,
+                subtitle: 'Create new Exercise',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddNewExercisesScreen(),
                       ));
                 },
               ),
@@ -146,9 +159,9 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             ],
           ),
           isEmpty: false,
-          isErorr: state is ErorrGetAdmin,
-          isLoading: state is LoadingGetAdmin,
-          isSc: state is ScGetAdmin || cubit.adminModel != null,
+          isErorr: state is ErorrGetGym,
+          isLoading: state is LoadingGetGym,
+          isSc: state is ScGetGym || cubit.gymModel != null,
         );
       },
     );

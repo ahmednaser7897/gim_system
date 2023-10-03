@@ -53,107 +53,104 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  void addGym({required GymModel gymModel, required File? image}) {
-    emit(LoadingAddGym());
-    FirebaseFirestore.instance.collection('phoneNumbers').get().then((value) {
+  Future<void> addGym(
+      {required GymModel gymModel, required File? image}) async {
+    try {
+      emit(LoadingAddGym());
+      var value =
+          await FirebaseFirestore.instance.collection('phoneNumbers').get();
       if (checkPhone(gymModel.phone ?? '', value.docs)) {
         emit(ErorrAddGym('Phone number is already used'));
         return;
       } else {
-        FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
+        var value1 = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: gymModel.email ?? '',
           password: gymModel.password ?? '',
-        )
-            .then((value1) {
-          FirebaseFirestore.instance
-              .collection('phoneNumbers')
-              .doc(value1.user!.uid)
-              .set({
-            'phone': gymModel.phone,
-          });
-          gymModel.id = value1.user!.uid;
-          FirebaseFirestore.instance
-              .collection(Constants.gym)
-              .doc(value1.user?.uid)
-              .set(gymModel.toJson())
-              .then((value) {
-            print('User Register Success 😎');
-            print('addGym userId');
-            print(value1.user?.uid);
-            if (image != null) {
-              addImage(
-                type: Constants.gym,
-                userId: value1.user!.uid,
-                parentImageFile: image,
-              );
-            }
-
-            emit(ScAddGym());
-          }).catchError((error) {
-            print('Error: $error');
-            emit(ErorrAddGym(error.toString()));
-          });
-        }).catchError((error) {
-          emit(ErorrAddGym(error.toString()));
+        );
+        FirebaseFirestore.instance
+            .collection('phoneNumbers')
+            .doc(value1.user!.uid)
+            .set({
+          'phone': gymModel.phone,
         });
+        gymModel.id = value1.user!.uid;
+        await FirebaseFirestore.instance
+            .collection(Constants.gym)
+            .doc(value1.user?.uid)
+            .set(gymModel.toJson());
+        print('User Register Success 😎');
+        print('addGym userId');
+        print(value1.user?.uid);
+        if (image != null) {
+          await addImage(
+            type: Constants.gym,
+            userId: value1.user!.uid,
+            parentImageFile: image,
+          );
+        }
+        emit(ScAddGym());
       }
-    });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains('The email address is already in use by another account')) {
+        emit(ErorrAddGym(
+            'The email address is already in use by another account'));
+      } else {
+        emit(ErorrAddGym(error.toString()));
+      }
+      print('Error: $error');
+    }
   }
 
-  void addAdmin({required AdminModel model, required File? image}) {
-    emit(LoadingAddAdmin());
-    FirebaseFirestore.instance.collection('phoneNumbers').get().then((value) {
+  Future<void> addAdmin(
+      {required AdminModel model, required File? image}) async {
+    try {
+      emit(LoadingAddAdmin());
+      var value =
+          await FirebaseFirestore.instance.collection('phoneNumbers').get();
       if (checkPhone(model.phone ?? '', value.docs)) {
         emit(ErorrAddAdmin('Phone number is already used'));
         return;
       } else {
-        FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
+        var value1 = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: model.email ?? '',
           password: model.password ?? '',
-        )
-            .then((value1) {
-          FirebaseFirestore.instance
-              .collection('phoneNumbers')
-              .doc(value1.user!.uid)
-              .set({
-            'phone': model.phone,
-          });
-          model.id = value1.user!.uid;
-          FirebaseFirestore.instance
-              .collection(Constants.admin)
-              .doc(value1.user?.uid)
-              .set(model.toJson())
-              .then((value) {
-            print('admin Register Success 😎');
-            print('addadmin userId');
-            print(value1.user?.uid);
-            if (image != null) {
-              addImage(
-                type: Constants.admin,
-                userId: value1.user!.uid,
-                parentImageFile: image,
-              );
-            }
-
-            emit(ScAddAdmin());
-          }).catchError((error) {
-            print('Error: $error');
-            emit(ErorrAddAdmin(error.toString()));
-          });
-        }).catchError((error) {
-          if (error.toString().contains(
-              'The email address is already in use by another account')) {
-            emit(ErorrAddAdmin(
-                'The email address is already in use by another account'));
-          } else {
-            emit(ErorrAddAdmin(error.toString()));
-          }
-          print('Error: $error');
+        );
+        await FirebaseFirestore.instance
+            .collection('phoneNumbers')
+            .doc(value1.user!.uid)
+            .set({
+          'phone': model.phone,
         });
+        model.id = value1.user!.uid;
+        await FirebaseFirestore.instance
+            .collection(Constants.admin)
+            .doc(value1.user?.uid)
+            .set(model.toJson());
+        print('admin Register Success 😎');
+        print('addadmin userId');
+        print(value1.user?.uid);
+        if (image != null) {
+          await addImage(
+            type: Constants.admin,
+            userId: value1.user!.uid,
+            parentImageFile: image,
+          );
+        }
+        emit(ScAddAdmin());
       }
-    });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains('The email address is already in use by another account')) {
+        emit(ErorrAddAdmin(
+            'The email address is already in use by another account'));
+      } else {
+        emit(ErorrAddAdmin(error.toString()));
+      }
+      print('Error: $error');
+    }
   }
 
   Future<void> editAdmin(
@@ -267,9 +264,9 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   Future<void> getHomeData() async {
-    emit(LoadingGetHomeData());
     admins = [];
     gyms = [];
+    emit(LoadingGetHomeData());
     try {
       await getAllAdmins();
       await getAllGyms();

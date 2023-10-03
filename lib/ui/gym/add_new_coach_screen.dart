@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../controller/admin/admin_cubit.dart';
 import '../../model/users_models.dart';
 import '../auth/widgets/build_auth_bottom.dart';
 import '../componnents/app_textformfiled_widget.dart';
@@ -14,14 +15,14 @@ import '../componnents/image_picker/image_widget.dart';
 import '../componnents/show_flutter_toast.dart';
 import '../componnents/widgets.dart';
 
-class AddNewGymScreen extends StatefulWidget {
-  const AddNewGymScreen({super.key});
+class AddNewCoachScreen extends StatefulWidget {
+  const AddNewCoachScreen({super.key});
 
   @override
-  State<AddNewGymScreen> createState() => _AddNewGymScreenState();
+  State<AddNewCoachScreen> createState() => _AddNewCoachScreenState();
 }
 
-class _AddNewGymScreenState extends State<AddNewGymScreen> {
+class _AddNewCoachScreenState extends State<AddNewCoachScreen> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
@@ -29,15 +30,15 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
+  TextEditingController agecontroller = TextEditingController();
 
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController openDateController = TextEditingController();
-  TextEditingController closeDateController = TextEditingController();
-
+  TextEditingController genderController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
+    genderController.text = 'male';
     super.initState();
   }
 
@@ -47,7 +48,7 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Gym'),
+          title: const Text('Add New Coach'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -72,13 +73,13 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                     AppTextFormFiledWidget(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-                      hintText: "Enter your name",
+                      hintText: "Enter coach name",
                       prefix: Icons.person,
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'your name');
+                            name: 'coach name');
                         // if (value!.isEmpty) {
-                        //   return "Please Enter your name";
+                        //   return "Please Enter coach name";
                         // }
                         // return null;
                       },
@@ -95,11 +96,11 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                     AppTextFormFiledWidget(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      hintText: "Enter your email",
+                      hintText: "Enter coach email",
                       prefix: Icons.email_rounded,
                       validate: (value) {
                         return Validations.emailValidation(value,
-                            name: 'your email');
+                            name: 'coach email');
                         // if (value!.isEmpty) {
                         //   return "Please Enter Email";
                         // }
@@ -117,22 +118,63 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                     AppSizedBox.h2,
                     AppTextFormFiledWidget(
                       controller: passwordController,
-                      hintText: "Enter your password",
+                      hintText: "Enter coach password",
                       prefix: Icons.lock,
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
                         return Validations.passwordValidation(value,
-                            name: 'your password');
-                        // if (value!.isEmpty) {
-                        //   return 'Please enter a password';
-                        // }
-                        // return null;
+                            name: 'coach password');
                       },
                     ),
                     AppSizedBox.h3,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Phone",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              AppSizedBox.h2,
+                              AppTextFormFiledWidget(
+                                keyboardType: TextInputType.phone,
+                                controller: phoneController,
+                                hintText: "Enter coach phone",
+                                prefix: Icons.call,
+                                validate: (value) {
+                                  return Validations.mobileValidation(value,
+                                      name: 'coach phone');
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        AppSizedBox.w5,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Gender",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              AppSizedBox.h2,
+                              genderWidget(genderController),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    AppSizedBox.h3,
                     const Text(
-                      "Phone",
+                      "age",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -140,49 +182,45 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                     ),
                     AppSizedBox.h2,
                     AppTextFormFiledWidget(
-                      keyboardType: TextInputType.phone,
-                      controller: phoneController,
-                      hintText: "Enter your phone",
-                      prefix: Icons.call,
-                      validate: (value) {
-                        return Validations.mobileValidation(value,
-                            name: 'your phone');
-                      },
-                    ),
-                    AppSizedBox.h3,
-                    timesRow(
-                        closeDateController: closeDateController,
-                        openDateController: openDateController),
-                    AppSizedBox.h3,
-                    const Text(
-                      "description",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: descriptionController,
-                      maxLines: 4,
-                      keyboardType: TextInputType.text,
-                      hintText: "Enter gym description",
+                      controller: agecontroller,
+                      prefix: Icons.timelapse,
+                      keyboardType: TextInputType.number,
+                      hintText: "Enter coach age",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'your description');
+                            name: 'coach age');
                       },
                     ),
                     AppSizedBox.h3,
-                    BlocConsumer<AdminCubit, AdminState>(
+                    const Text(
+                      "bio",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    AppTextFormFiledWidget(
+                      controller: bioController,
+                      maxLines: 4,
+                      keyboardType: TextInputType.text,
+                      hintText: "Enter coach bio",
+                      validate: (value) {
+                        return Validations.normalValidation(value,
+                            name: 'coach bio');
+                      },
+                    ),
+                    AppSizedBox.h3,
+                    BlocConsumer<GymCubit, GymState>(
                       listener: (context, state) {
-                        if (state is ScAddGym) {
+                        if (state is ScAddCoach) {
                           showFlutterToast(
-                            message: "gym added",
+                            message: "Coach added",
                             toastColor: Colors.green,
                           );
                           Navigator.pop(context);
                         }
-                        if (state is ErorrAddGym) {
+                        if (state is ErorrAddCoach) {
                           showFlutterToast(
                             message: state.error,
                             toastColor: Colors.red,
@@ -190,12 +228,12 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                         }
                       },
                       builder: (context, state) {
-                        AdminCubit adminCubit = AdminCubit.get(context);
-                        return state is LoadingAddGym
+                        GymCubit cubit = GymCubit.get(context);
+                        return state is LoadingAddCoach
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Add New Gym',
+                                  'Add New Coach',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -204,23 +242,21 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    adminCubit.addGym(
+                                    cubit.addCoach(
                                         image: ImageCubit.get(context).image,
-                                        gymModel: GymModel(
+                                        model: CoachModel(
                                           ban: false,
-                                          closeDate: closeDateController.text,
-                                          coachs: null,
-                                          description:
-                                              descriptionController.text,
                                           email: emailController.text,
                                           id: null,
                                           image: null,
                                           name: nameController.text,
-                                          openDate: openDateController.text,
                                           password: passwordController.text,
                                           phone: phoneController.text,
-                                          rate: 0,
-                                          users: null,
+                                          age: agecontroller.text,
+                                          gender: genderController.text,
+                                          createdAt: DateTime.now().toString(),
+                                          bio: bioController.text,
+                                          gymId: AppPreferences.uId,
                                         ));
                                   }
                                 },

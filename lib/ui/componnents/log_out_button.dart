@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/ui/auth/login_screen.dart';
 
@@ -7,8 +9,11 @@ import '../auth/widgets/build_auth_bottom.dart';
 import 'const_widget.dart';
 
 class LogOutButton extends StatefulWidget {
-  const LogOutButton({super.key});
-
+  const LogOutButton({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+  final Function onTap;
   @override
   State<LogOutButton> createState() => _LogOutButtonState();
 }
@@ -29,6 +34,7 @@ class _LogOutButtonState extends State<LogOutButton> {
               ),
             ),
             onPressed: () async {
+              //widget.onTap();
               await FirebaseAuth.instance.signOut();
               await AppPreferences.logOut();
               Navigator.pushAndRemoveUntil(

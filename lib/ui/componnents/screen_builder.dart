@@ -23,7 +23,7 @@ Widget screenBuilder({
         children: [
           const Text('Erorr'),
           AppSizedBox.h10,
-          const LogOutButton(),
+          LogOutButton(onTap: () {}),
         ],
       ),
     );
@@ -32,8 +32,8 @@ Widget screenBuilder({
       child: Text('Empty'),
     );
   } else {
-    return const Center(
-      child: LogOutButton(),
+    return Center(
+      child: LogOutButton(onTap: () {}),
     );
   }
 }

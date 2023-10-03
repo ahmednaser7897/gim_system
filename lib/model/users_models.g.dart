@@ -53,9 +53,11 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       ban: json['ban'] as bool?,
       age: json['age'] as String?,
       gymId: json['gymId'] as String?,
-      fitnessData: json['fitnessData'] == null
-          ? null
-          : FitnessData.fromJson(json['fitnessData'] as Map<String, dynamic>),
+      bodyFatPercentage: json['bodyFatPercentage'] as String?,
+      goal: json['goal'] as String?,
+      height: json['height'] as String?,
+      weight: json['weight'] as String?,
+      fitnesLevel: json['fitnesLevel'] as String?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) {
@@ -78,32 +80,11 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   writeNotNull('createdAt', instance.createdAt);
   writeNotNull('ban', instance.ban);
   writeNotNull('age', instance.age);
-  writeNotNull('fitnessData', instance.fitnessData);
-  return val;
-}
-
-FitnessData _$FitnessDataFromJson(Map<String, dynamic> json) => FitnessData(
-      id: json['id'] as String?,
-      bodyFatPercentage: (json['bodyFatPercentage'] as num?)?.toDouble(),
-      goal: json['goal'] as String?,
-      height: (json['height'] as num?)?.toDouble(),
-      weight: (json['weight'] as num?)?.toDouble(),
-    );
-
-Map<String, dynamic> _$FitnessDataToJson(FitnessData instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
   writeNotNull('weight', instance.weight);
   writeNotNull('height', instance.height);
   writeNotNull('bodyFatPercentage', instance.bodyFatPercentage);
   writeNotNull('goal', instance.goal);
+  writeNotNull('fitnesLevel', instance.fitnesLevel);
   return val;
 }
 

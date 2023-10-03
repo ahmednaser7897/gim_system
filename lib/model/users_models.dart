@@ -47,7 +47,11 @@ class UserModel {
   String? createdAt;
   bool? ban;
   String? age;
-  FitnessData? fitnessData;
+  String? weight;
+  String? height;
+  String? bodyFatPercentage;
+  String? goal;
+  String? fitnesLevel;
 
   UserModel(
       {this.id,
@@ -61,30 +65,14 @@ class UserModel {
       this.ban,
       this.age,
       this.gymId,
-      this.fitnessData});
+      this.bodyFatPercentage,
+      this.goal,
+      this.height,
+      this.weight,
+      this.fitnesLevel});
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
-}
-
-@JsonSerializable(includeIfNull: false)
-class FitnessData {
-  String? id;
-  double? weight;
-  double? height;
-  double? bodyFatPercentage;
-  String? goal;
-
-  FitnessData({
-    this.id,
-    this.bodyFatPercentage,
-    this.goal,
-    this.height,
-    this.weight,
-  });
-  factory FitnessData.fromJson(Map<String, dynamic> json) =>
-      _$FitnessDataFromJson(json);
-  Map<String, dynamic> toJson() => _$FitnessDataToJson(this);
 }
 
 @JsonSerializable(includeIfNull: false)
@@ -123,14 +111,14 @@ class CoachModel {
 @JsonSerializable(includeIfNull: false)
 class GymModel {
   String? id;
-  String? name; //
-  String? email; //
-  String? description; //
-  String? password; //
-  String? phone; //
+  String? name;
+  String? email;
+  String? description;
+  String? password;
+  String? phone;
   String? image;
-  String? openDate; //
-  String? closeDate; //
+  String? openDate;
+  String? closeDate;
   bool? ban;
   double? rate;
   List<UserModel>? users;

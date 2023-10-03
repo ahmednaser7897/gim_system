@@ -168,6 +168,114 @@ Widget genderWidget(TextEditingController genderController,
   });
 }
 
+Widget userGoalWidget(TextEditingController golaController,
+    {String init = 'Weight loss'}) {
+  // var list = ['male', 'female'];
+  // if (init == 'female') {
+  //   list = ['female', 'male'];
+  // }
+  var list = ['Weight loss', 'Get muscles', 'both of them'];
+  return StatefulBuilder(builder: (context, setState) {
+    return Container(
+      width: 40.w,
+      height: 6.5.h,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isExpanded: true,
+          hint: const Text(
+            "Select goal",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          value: golaController.text,
+          onChanged: (value) {
+            setState(() {
+              golaController.text = value.toString();
+            });
+          },
+          items: list.map((value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  });
+}
+
+Widget fitnessLevelWidget(TextEditingController golaController,
+    {String init = 'beginner'}) {
+  // var list = ['male', 'female'];
+  // if (init == 'female') {
+  //   list = ['female', 'male'];
+  // }
+  var list = ['beginner', 'intermediate', 'advanced'];
+  return StatefulBuilder(builder: (context, setState) {
+    return Container(
+      width: 40.w,
+      height: 6.5.h,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isExpanded: true,
+          hint: const Text(
+            "Select goal",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          value: golaController.text,
+          onChanged: (value) {
+            setState(() {
+              golaController.text = value.toString();
+            });
+          },
+          items: list.map((value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  });
+}
+
 Future<TimeOfDay?> showPicker(BuildContext context) async {
   TimeOfDay? pickedDate = await showTimePicker(
     context: context,

@@ -3,40 +3,48 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../controller/admin/admin_cubit.dart';
 import '../../model/users_models.dart';
 import '../componnents/app_textformfiled_widget.dart';
 import '../componnents/const_widget.dart';
 
-class AdminDetailsScreen extends StatefulWidget {
-  const AdminDetailsScreen({super.key, required this.adminModel});
-  final AdminModel adminModel;
+class UserDetailsScreen extends StatefulWidget {
+  const UserDetailsScreen({super.key, required this.model});
+  final UserModel model;
   @override
-  State<AdminDetailsScreen> createState() => _AdminDetailsScreenState();
+  State<UserDetailsScreen> createState() => _UserDetailsScreenState();
 }
 
-class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
+class _UserDetailsScreenState extends State<UserDetailsScreen> {
   TextEditingController nameController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController phoneController = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
-
   TextEditingController genderController = TextEditingController();
 
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController bodyFatPercentageController = TextEditingController();
+  TextEditingController goalController = TextEditingController();
+  TextEditingController fitnessLevelController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
-  late AdminModel adminModel;
+  late UserModel model;
   @override
   void initState() {
-    adminModel = widget.adminModel;
+    model = widget.model;
+    genderController.text = model.gender ?? 'male';
+    phoneController.text = model.phone ?? '';
+    emailController.text = model.email ?? '';
+    nameController.text = model.name ?? '';
+    agecontroller.text = model.age ?? '';
 
-    genderController.text = adminModel.gender ?? 'male';
-    phoneController.text = adminModel.phone ?? '';
-    emailController.text = adminModel.email ?? '';
-    nameController.text = adminModel.name ?? '';
-    agecontroller.text = adminModel.age ?? '';
+    weightController.text = model.weight ?? '';
+    heightController.text = model.height ?? '';
+    bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
+    goalController.text = model.goal ?? '';
+    fitnessLevelController.text = model.fitnesLevel ?? '';
 
     super.initState();
   }
@@ -45,13 +53,13 @@ class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Details'),
+        title: const Text('User Details'),
       ),
-      body: BlocConsumer<AdminCubit, AdminState>(
+      body: BlocConsumer<GymCubit, GymState>(
         listener: (context, state) {
-          if (state is ScChangeAdminBan) {
+          if (state is ScChangeUserBan) {
             setState(() {
-              adminModel.ban = !adminModel.ban.orFalse();
+              model.ban = !model.ban.orFalse();
             });
           }
         },
@@ -64,32 +72,31 @@ class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppSizedBox.h1,
-                  if (adminModel.image != null && adminModel.image!.isNotEmpty)
+                  if (model.image != null && model.image!.isNotEmpty)
                     Align(
                       alignment: Alignment.center,
                       child: Column(
                         children: [
                           Hero(
-                            tag: adminModel.email.orEmpty(),
+                            tag: model.email.orEmpty(),
                             child: CircleAvatar(
                               radius: 15.w,
                               backgroundImage:
-                                  NetworkImage(adminModel.image.orEmpty()),
+                                  NetworkImage(model.image.orEmpty()),
                             ),
                           ),
                           AppSizedBox.h2,
-                          (state is LoadingChangeAdminBan)
+                          (state is LoadingChangeUserBan)
                               ? const CircularProgressComponent()
                               : Center(
                                   child: Switch(
-                                    value: adminModel.ban.orFalse(),
+                                    value: model.ban.orFalse(),
                                     activeColor: Colors.red,
                                     splashRadius: 18.0,
                                     onChanged: (value) async {
-                                      await AdminCubit.get(context)
-                                          .changeAdminBan(
-                                              adminModel.id.orEmpty(),
-                                              !adminModel.ban.orFalse());
+                                      await GymCubit.get(context).changeUserBan(
+                                          model.id.orEmpty(),
+                                          !model.ban.orFalse());
                                     },
                                   ),
                                 ),
@@ -189,10 +196,110 @@ class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
                     controller: agecontroller,
                     prefix: Icons.timelapse,
                     keyboardType: TextInputType.number,
-                    hintText: "Enter Admin age",
+                    hintText: "Enter User age",
                     validate: (value) {
                       return Validations.normalValidation(value,
                           name: 'your age');
+                    },
+                  ),
+                  AppSizedBox.h3,
+                  const Text(
+                    "Height",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  AppSizedBox.h2,
+                  AppTextFormFiledWidget(
+                    isEnable: false,
+                    controller: heightController,
+                    prefix: Icons.height,
+                    keyboardType: TextInputType.number,
+                    hintText: "Enter User height",
+                    validate: (value) {
+                      return Validations.normalValidation(value,
+                          name: 'User height');
+                    },
+                  ),
+                  AppSizedBox.h3,
+                  const Text(
+                    "Weight",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  AppSizedBox.h2,
+                  AppTextFormFiledWidget(
+                    isEnable: false,
+                    controller: weightController,
+                    prefix: Icons.monitor_weight_sharp,
+                    keyboardType: TextInputType.number,
+                    hintText: "Enter User weight",
+                    validate: (value) {
+                      return Validations.normalValidation(value,
+                          name: 'User weight');
+                    },
+                  ),
+                  AppSizedBox.h3,
+                  const Text(
+                    "Body Fat Percentage",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  AppSizedBox.h2,
+                  AppTextFormFiledWidget(
+                    isEnable: false,
+                    controller: bodyFatPercentageController,
+                    prefix: Icons.percent,
+                    keyboardType: TextInputType.number,
+                    hintText: "Enter User body Fat Percentage",
+                    validate: (value) {
+                      return Validations.normalValidation(value,
+                          name: 'User body Fat Percentage');
+                    },
+                  ),
+                  AppSizedBox.h3,
+                  const Text(
+                    "Goal",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  AppSizedBox.h2,
+                  AppTextFormFiledWidget(
+                    isEnable: false,
+                    controller: goalController,
+                    prefix: Icons.star,
+                    keyboardType: TextInputType.number,
+                    hintText: "Enter User goal",
+                    validate: (value) {
+                      return Validations.normalValidation(value,
+                          name: 'User goal');
+                    },
+                  ),
+                  AppSizedBox.h3,
+                  const Text(
+                    "Fitness Level",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  AppSizedBox.h2,
+                  AppTextFormFiledWidget(
+                    isEnable: false,
+                    controller: fitnessLevelController,
+                    prefix: Icons.percent,
+                    keyboardType: TextInputType.number,
+                    hintText: "Enter User Fitness Level",
+                    validate: (value) {
+                      return Validations.normalValidation(value,
+                          name: 'User Fitness Level');
                     },
                   ),
                   AppSizedBox.h3,

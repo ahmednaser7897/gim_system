@@ -3,12 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_assets.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
+import 'package:gim_system/app/constants.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/ui/admin/home_screens/admin_home_screen.dart';
+import 'package:gim_system/ui/coach/coach_home_screen.dart';
+import 'package:gim_system/ui/user/user_home_screen.dart';
 
 import '../../controller/auth/auth_cubit.dart';
 import '../componnents/const_widget.dart';
 import '../componnents/show_flutter_toast.dart';
+import '../gym/home_screens/gym_home_screen.dart';
 import 'widgets/build_auth_bottom.dart';
 import 'widgets/build_text_form_filed.dart';
 
@@ -39,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               message: 'Login Successfully ${state.message}',
               toastColor: Colors.green,
             );
-            if (state.message == 'admin') {
+            if (state.message == Constants.admin) {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -47,29 +51,37 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 (route) => false,
               );
+            } else if (state.message == Constants.gym) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GymHomeScreen(),
+                ),
+                (route) => false,
+              );
+            } else if (state.message == Constants.coach) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CoachHomeScreen(),
+                ),
+                (route) => false,
+              );
+            } else if (state.message == Constants.user) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UserHomeScreen(),
+                ),
+                (route) => false,
+              );
             }
-            //else if (state.message == 'parent') {
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       Routers.PARENTS_LAYOUT_SCREEN,
-            //       (route) => false,
-            //     );
-            //   } else if (state.message == 'teacher') {
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       Routers.TEACHERS_LAYOUT_SCREEN,
-            //       (route) => false,
-            //     );
-            //   } else if (state.message == 'supervisor') {
-            //     Navigator.pushNamedAndRemoveUntil(
-            //         context, Routers.SUPERVISORS_LAYOUT_SCREEN, (route) => false);
-            //   }
-            // }
-            // if (state is AuthGetUserAfterLoginErrorState) {
-            //   showFlutterToast(
-            //     message: state.error,
-            //     toastColor: Colors.red,
-            //   );
+          }
+          if (state is AuthGetUserAfterLoginErrorState) {
+            showFlutterToast(
+              message: state.error,
+              toastColor: Colors.red,
+            );
           }
         },
         builder: (context, state) {
@@ -121,10 +133,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 validate: (value) {
                                   return Validations.passwordValidation(value,
                                       name: ' your password');
-                                  // if (value!.isEmpty) {
-                                  //   return 'Please enter your password';
-                                  // }
-                                  // return null;
                                 },
                               ),
                               AppSizedBox.h5,

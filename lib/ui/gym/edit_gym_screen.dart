@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:gim_system/controller/gym/gym_cubit.dart';
+import 'package:gim_system/model/users_models.dart';
 
-import '../../controller/admin/admin_cubit.dart';
-import '../../model/users_models.dart';
 import '../auth/widgets/build_auth_bottom.dart';
 import '../componnents/app_textformfiled_widget.dart';
 import '../componnents/const_widget.dart';
@@ -14,22 +14,17 @@ import '../componnents/image_picker/image_widget.dart';
 import '../componnents/show_flutter_toast.dart';
 import '../componnents/widgets.dart';
 
-class AddNewGymScreen extends StatefulWidget {
-  const AddNewGymScreen({super.key});
+class EditGymScreen extends StatefulWidget {
+  const EditGymScreen({super.key});
 
   @override
-  State<AddNewGymScreen> createState() => _AddNewGymScreenState();
+  State<EditGymScreen> createState() => _EditGymScreenState();
 }
 
-class _AddNewGymScreenState extends State<AddNewGymScreen> {
+class _EditGymScreenState extends State<EditGymScreen> {
   TextEditingController nameController = TextEditingController();
-
-  TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
   TextEditingController phoneController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
   TextEditingController openDateController = TextEditingController();
   TextEditingController closeDateController = TextEditingController();
@@ -38,11 +33,22 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
 
   @override
   void initState() {
+    GymCubit cubit = GymCubit.get(context);
+    if (cubit.gymModel != null) {
+      phoneController.text = cubit.gymModel!.phone ?? '';
+      nameController.text = cubit.gymModel!.name ?? '';
+      passwordController.text = cubit.gymModel!.password ?? '';
+      openDateController.text = cubit.gymModel!.openDate ?? '';
+      closeDateController.text = cubit.gymModel!.closeDate ?? '';
+      descriptionController.text = cubit.gymModel!.description ?? '';
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    GymCubit cubit = GymCubit.get(context);
     return BlocProvider(
       create: (context) => ImageCubit(),
       child: Scaffold(
@@ -59,8 +65,11 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSizedBox.h1,
-                    const Align(
-                        alignment: Alignment.center, child: ImageWidget()),
+                    Align(
+                        alignment: Alignment.center,
+                        child: ImageWidget(
+                          init: cubit.gymModel!.image,
+                        )),
                     const Text(
                       "Name",
                       style: TextStyle(
@@ -77,33 +86,6 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       validate: (value) {
                         return Validations.normalValidation(value,
                             name: 'your name');
-                        // if (value!.isEmpty) {
-                        //   return "Please Enter your name";
-                        // }
-                        // return null;
-                      },
-                    ),
-                    AppSizedBox.h3,
-                    const Text(
-                      "Email",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      hintText: "Enter your email",
-                      prefix: Icons.email_rounded,
-                      validate: (value) {
-                        return Validations.emailValidation(value,
-                            name: 'your email');
-                        // if (value!.isEmpty) {
-                        //   return "Please Enter Email";
-                        // }
-                        // return null;
                       },
                     ),
                     AppSizedBox.h3,
@@ -122,12 +104,8 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
-                        return Validations.passwordValidation(value,
+                        return Validations.normalValidation(value,
                             name: 'your password');
-                        // if (value!.isEmpty) {
-                        //   return 'Please enter a password';
-                        // }
-                        // return null;
                       },
                     ),
                     AppSizedBox.h3,
@@ -173,16 +151,16 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       },
                     ),
                     AppSizedBox.h3,
-                    BlocConsumer<AdminCubit, AdminState>(
+                    BlocConsumer<GymCubit, GymState>(
                       listener: (context, state) {
-                        if (state is ScAddGym) {
+                        if (state is ScEditGym) {
                           showFlutterToast(
-                            message: "gym added",
+                            message: "Gym Edited",
                             toastColor: Colors.green,
                           );
-                          Navigator.pop(context);
+                          Navigator.pop(context, 'edit');
                         }
-                        if (state is ErorrAddGym) {
+                        if (state is ErorrEditGym) {
                           showFlutterToast(
                             message: state.error,
                             toastColor: Colors.red,
@@ -190,12 +168,12 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                         }
                       },
                       builder: (context, state) {
-                        AdminCubit adminCubit = AdminCubit.get(context);
-                        return state is LoadingAddGym
+                        GymCubit cubit = GymCubit.get(context);
+                        return state is LoadingEditGym
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Add New Gym',
+                                  'Edit Gym',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -203,24 +181,20 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                                   ),
                                 ),
                                 onPressed: () {
+                                  print("object1");
                                   if (_formKey.currentState!.validate()) {
-                                    adminCubit.addGym(
+                                    print("object2");
+                                    cubit.editGym(
                                         image: ImageCubit.get(context).image,
-                                        gymModel: GymModel(
-                                          ban: false,
+                                        model: GymModel(
                                           closeDate: closeDateController.text,
-                                          coachs: null,
                                           description:
                                               descriptionController.text,
-                                          email: emailController.text,
-                                          id: null,
-                                          image: null,
+                                          image: cubit.gymModel?.image,
                                           name: nameController.text,
-                                          openDate: openDateController.text,
                                           password: passwordController.text,
                                           phone: phoneController.text,
-                                          rate: 0,
-                                          users: null,
+                                          openDate: openDateController.text,
                                         ));
                                   }
                                 },

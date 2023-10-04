@@ -44,6 +44,15 @@ class ErorrAddExercise extends GymState {
   ErorrAddExercise(this.error);
 }
 
+class LoadingEditExercise extends GymState {}
+
+class ScEditExercise extends GymState {}
+
+class ErorrEditExercise extends GymState {
+  final String error;
+  ErorrEditExercise(this.error);
+}
+
 class LoadingGetHomeData extends GymState {}
 
 class ScGetHomeData extends GymState {}

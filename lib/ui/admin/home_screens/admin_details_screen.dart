@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:gim_system/controller/admin/admin_cubit.dart';
+import 'package:gim_system/ui/componnents/const_widget.dart';
 
-import '../../controller/admin/admin_cubit.dart';
-import '../../model/users_models.dart';
-import '../componnents/app_textformfiled_widget.dart';
-import '../componnents/const_widget.dart';
+import '../../../model/users_models.dart';
+import '../../componnents/app_textformfiled_widget.dart';
 
 class AdminDetailsScreen extends StatefulWidget {
   const AdminDetailsScreen({super.key, required this.adminModel});

@@ -6,11 +6,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/constants.dart';
+import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/model/users_models.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../../ui/admin/home_screens/admin_home.dart';
-import '../../ui/admin/home_screens/admin_settings.dart';
+import '../../ui/admin/settings_screens/admin_settings.dart';
 part 'admin_state.dart';
 
 class AdminCubit extends Cubit<AdminState> {
@@ -32,7 +33,7 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   AdminModel? adminModel;
-  Future<void> getCurrentParentData() async {
+  Future<void> getCurrentAdninData() async {
     emit(LoadingGetAdmin());
     try {
       print("getCurrentParentData");
@@ -89,6 +90,7 @@ class AdminCubit extends Cubit<AdminState> {
           );
         }
         emit(ScAddGym());
+        await getHomeData();
       }
     } catch (error) {
       if (error
@@ -139,6 +141,7 @@ class AdminCubit extends Cubit<AdminState> {
           );
         }
         emit(ScAddAdmin());
+        await getHomeData();
       }
     } catch (error) {
       if (error
@@ -188,6 +191,7 @@ class AdminCubit extends Cubit<AdminState> {
       print('EditAdmin userId');
       print(AppPreferences.uId);
       emit(ScEditAdmin());
+      await getCurrentAdninData();
     } catch (error) {
       print('Error: $error');
       if (error
@@ -250,12 +254,24 @@ class AdminCubit extends Cubit<AdminState> {
       print("getAllGyms");
       var value =
           await FirebaseFirestore.instance.collection(Constants.gym).get();
+
       for (var element in value.docs) {
-        element.data().addAll({'id': element.id});
-        gyms.add(GymModel.fromJson(element.data()));
+        var gym = GymModel.fromJson(element.data());
+        var users = await element.reference.collection(Constants.user).get();
+
+        for (var element in users.docs) {
+          gym.users = [];
+          gym.users!.add(UserModel.fromJson(element.data()));
+        }
+        print('user l is ${gym.users.orEmpty().length}');
+        var coachs = await element.reference.collection(Constants.coach).get();
+        for (var element in coachs.docs) {
+          gym.coachs = [];
+          gym.coachs!.add(CoachModel.fromJson(element.data()));
+        }
+        print('coachs l is ${gym.coachs.orEmpty().length}');
+        gyms.add(gym);
       }
-      print("getAllGyms done");
-      print(gyms.length);
       emit(ScGetAdmin());
     } catch (e) {
       print('Get Parent Data Error: $e');

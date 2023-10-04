@@ -14,7 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../../model/exercises_model.dart';
 import '../../ui/gym/home_screens/gym_home.dart';
-import '../../ui/gym/home_screens/gym_settings.dart';
+import '../../ui/gym/settings_screens/gym_settings.dart';
 import '../admin/admin_cubit.dart';
 part 'gym_state.dart';
 
@@ -91,6 +91,7 @@ class GymCubit extends Cubit<GymState> {
       print('EditGym userId');
       print(AppPreferences.uId);
       emit(ScEditGym());
+      await getCurrentGymData();
     } catch (error) {
       print('Error: $error');
       if (error
@@ -142,6 +143,7 @@ class GymCubit extends Cubit<GymState> {
           );
         }
         emit(ScAddCoach());
+        await getHomeData();
       }
     } catch (error) {
       if (error
@@ -193,6 +195,7 @@ class GymCubit extends Cubit<GymState> {
           );
         }
         emit(ScAddUser());
+        await getHomeData();
       }
     } catch (error) {
       if (error
@@ -225,8 +228,28 @@ class GymCubit extends Cubit<GymState> {
 
       print('Exercise added');
       emit(ScAddExercise());
+      await getHomeData();
     } catch (error) {
       emit(ErorrAddExercise(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  Future<void> editExercise({required ExerciseModel model}) async {
+    try {
+      emit(LoadingEditExercise());
+      await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.uId)
+          .collection(Constants.exercise)
+          .doc(model.id)
+          .update(model.toMap());
+      var indxex = exercises.indexWhere((element) => element.id == model.id);
+      exercises[indxex] = model;
+      print('Exercise Edited');
+      emit(ScEditExercise());
+    } catch (error) {
+      emit(ErorrEditExercise(error.toString()));
       print('Error: $error');
     }
   }

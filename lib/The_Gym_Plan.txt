@@ -9,7 +9,7 @@ Users :
 ======================================= Pages =======================================
 Targets :
      # Front-End :
-        => Login Page                                                       Note: For all users
+        => Login Page->Done                                                     Note: For all users
        
        @ Gym
             => Home Page
@@ -56,7 +56,7 @@ Targets :
                 => Chat Screen                                              Note: Show all coaches that he made chat with them before
                     => Messages Screen
 
-       @ Admin
+       @ Admin->Done
             => Home Page
                 => Setting Screen                                           Note: Show info of admin and can edit it
                 => admins Screen                                            Note: Can ban and unban admin from this screen by ban button
@@ -71,7 +71,7 @@ Targets :
 
 ======================================= Tables =======================================
 
-@ Admins
+@ Admins->Done
     => id
     => name
     => email (unique, lowercase)
@@ -161,20 +161,20 @@ Targets :
 ======================================= Permissions =======================================
 
 @ Gym =>    Can do ?
-            # Make Login Note: "Can not login if was banned"
+            # Make Login Note: "Can not login if was banned"->Done
             # Can See Table ( 
-                            his gym info,
-                            his coaches,
-                            his users,
+                            his gym info,->Done
+                            his coaches,->Done
+                            his users,->Done
                             all exercises of his users,
                             diet of his users,
-                            his exercises
+                            his exercises->Done
                            )
-            # Edit His Info--
-            # Create new Coach--
-            # Create new User--
-            # Create, Edit his exercises
-            # Ban (User, Coach)--
+            # Edit His Info->Done
+            # Create new Coach->Done
+            # Create new User->Done
+            # Create, Edit his exercises->Done
+            # Ban (User, Coach)->Done
 
 @ Coach =>    Can do ?
             # Make Login Note: "Can not login if his gym was banned or he was banned"
@@ -203,15 +203,15 @@ Targets :
             # Can make done for each exercise of his user_exercise that coach set it for him
             # Chat communication with his coach of his gym (text or file Message)
 
-@ Admin =>      Can do ?
-            # Make Login  Note: "Can not login if was banned"
+@ Admin =>      Can do ?->Done
+            # Make Login  Note: "Can not login if was banned"->Done
             # Can See Table (
-                Admins,
-                gyms,
-                users of each gym,
-                coaches of each gym
+                Admins,->Done
+                gyms,->Done
+                users of each gym->Done,
+                coaches of each gym->Done
                 )
-            # Edit His Info
-            # Can Create New Admin
-            # Can Create New Gym
-            # Can Ban ( Admins, Gym)
+            # Edit His Info->Done
+            # Can Create New Admin->Done
+            # Can Create New Gym->Done
+            # Can Ban ( Admins, Gym)->Done

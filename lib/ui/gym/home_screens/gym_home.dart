@@ -1,18 +1,16 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
-import 'package:gim_system/model/exercises_model.dart';
-import 'package:gim_system/ui/gym/coach_details_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:gim_system/ui/gym/home_screens/coach_details_screen.dart';
+import 'package:gim_system/ui/gym/home_screens/edit_exercise_screen.dart';
 
 import '../../../app/app_sized_box.dart';
-import '../../../model/users_models.dart';
 import '../../componnents/screen_builder.dart';
 import '../../componnents/show_flutter_toast.dart';
-import '../user_details_screen.dart';
+import '../../componnents/widgets.dart';
+import 'user_details_screen.dart';
 
 class GymHome extends StatefulWidget {
   const GymHome({super.key});
@@ -98,135 +96,30 @@ class _GymHomeState extends State<GymHome> {
         padding: const EdgeInsets.all(0),
         itemCount: cubit.coachs.length,
         itemBuilder: (context, index) {
-          return buildCoachItem(model: cubit.coachs[index]);
+          return BlocConsumer<GymCubit, GymState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return buildHomeItem(
+                ban: cubit.coachs[index].ban.orFalse(),
+                name: cubit.coachs[index].name.orEmpty(),
+                des: cubit.coachs[index].email.orEmpty(),
+                image: cubit.coachs[index].image,
+                ontap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CoachDetailsScreen(
+                        coachModel: cubit.coachs[index],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
         },
       );
     });
-  }
-
-  Widget buildCoachItem({required CoachModel model}) {
-    return FadeInUp(
-      from: 20,
-      delay: const Duration(milliseconds: 400),
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        width: 100.w,
-        height: 16.h,
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Container(
-              width: 100.w,
-              height: 15.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (model.image != null && model.image!.isNotEmpty)
-                      Hero(
-                        tag: model.email.orEmpty(),
-                        child: CircleAvatar(
-                          radius: 33,
-                          backgroundImage: NetworkImage(model.image.orEmpty()),
-                        ),
-                      ),
-                    AppSizedBox.w3,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            model.name.orEmpty(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          AppSizedBox.h1,
-                          Text(
-                            model.email.orEmpty(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          AppSizedBox.h1,
-                          Text(
-                            model.ban.orFalse() ? 'Banned' : '',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.almarai(
-                              color: model.ban.orFalse()
-                                  ? Colors.red
-                                  : Colors.green,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoachDetailsScreen(
-                            coachModel: model,
-                          ),
-                        ),
-                      ),
-                      child: Container(
-                        width: 14.w,
-                        height: 6.5.h,
-                        decoration: BoxDecoration(
-                          color: Colors.teal.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.info_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget buildUserList() {
@@ -238,135 +131,30 @@ class _GymHomeState extends State<GymHome> {
         padding: const EdgeInsets.all(0),
         itemCount: cubit.users.length,
         itemBuilder: (context, index) {
-          return buildUserItem(model: cubit.users[index]);
+          return BlocConsumer<GymCubit, GymState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return buildHomeItem(
+                ban: cubit.users[index].ban.orFalse(),
+                name: cubit.users[index].name.orEmpty(),
+                des: cubit.users[index].email.orEmpty(),
+                image: cubit.users[index].image,
+                ontap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserDetailsScreen(
+                        model: cubit.users[index],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
         },
       );
     });
-  }
-
-  Widget buildUserItem({required UserModel model}) {
-    return FadeInUp(
-      from: 20,
-      delay: const Duration(milliseconds: 400),
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        width: 100.w,
-        height: 16.h,
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Container(
-              width: 100.w,
-              height: 15.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (model.image != null && model.image!.isNotEmpty)
-                      Hero(
-                        tag: model.email.orEmpty(),
-                        child: CircleAvatar(
-                          radius: 33,
-                          backgroundImage: NetworkImage(model.image.orEmpty()),
-                        ),
-                      ),
-                    AppSizedBox.w3,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            model.name.orEmpty(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          AppSizedBox.h1,
-                          Text(
-                            model.email.orEmpty(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          AppSizedBox.h1,
-                          Text(
-                            model.ban.orFalse() ? 'Banned' : '',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.almarai(
-                              color: model.ban.orFalse()
-                                  ? Colors.red
-                                  : Colors.green,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserDetailsScreen(
-                            model: model,
-                          ),
-                        ),
-                      ),
-                      child: Container(
-                        width: 14.w,
-                        height: 6.5.h,
-                        decoration: BoxDecoration(
-                          color: Colors.teal.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.info_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget buildexercisesList() {
@@ -378,113 +166,40 @@ class _GymHomeState extends State<GymHome> {
         padding: const EdgeInsets.all(0),
         itemCount: cubit.exercises.length,
         itemBuilder: (context, index) {
-          return buildexercisesItem(model: cubit.exercises[index]);
+          return BlocConsumer<GymCubit, GymState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return InkWell(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(
+                      text: cubit.exercises[index].videoLink.orEmpty()));
+                  showFlutterToast(
+                    message: "Video link copied",
+                    toastColor: Colors.green,
+                  );
+                },
+                child: buildHomeItem(
+                  ban: false,
+                  name: cubit.exercises[index].name.orEmpty(),
+                  des: cubit.exercises[index].videoLink.orEmpty(),
+                  image: null,
+                  icon: Icons.edit,
+                  ontap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditExercisesScreen(
+                          exerciseModel: cubit.exercises[index],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          );
         },
       );
     });
-  }
-
-  Widget buildexercisesItem({required ExerciseModel model}) {
-    return FadeInUp(
-      from: 20,
-      delay: const Duration(milliseconds: 400),
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        width: 100.w,
-        height: 16.h,
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Container(
-              width: 100.w,
-              height: 15.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            model.name.orEmpty(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          AppSizedBox.h1,
-                          Text(
-                            model.videoLink.orEmpty(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.almarai(
-                              color: Colors.black45,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Clipboard.setData(
-                            ClipboardData(text: model.videoLink.orEmpty()));
-                        showFlutterToast(
-                          message: "Video link copied",
-                          toastColor: Colors.green,
-                        );
-                      },
-                      child: Container(
-                        width: 14.w,
-                        height: 6.5.h,
-                        decoration: BoxDecoration(
-                          color: Colors.teal.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.info_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

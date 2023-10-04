@@ -5,14 +5,14 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/constants.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:gim_system/ui/admin/home_screens/admin_home_screen.dart';
+import 'package:gim_system/ui/admin/admin_main_screen.dart';
 import 'package:gim_system/ui/coach/coach_home_screen.dart';
 import 'package:gim_system/ui/user/user_home_screen.dart';
 
 import '../../controller/auth/auth_cubit.dart';
 import '../componnents/const_widget.dart';
 import '../componnents/show_flutter_toast.dart';
-import '../gym/home_screens/gym_home_screen.dart';
+import '../gym/gym_main_screen.dart';
 import 'widgets/build_auth_bottom.dart';
 import 'widgets/build_text_form_filed.dart';
 

@@ -1,5 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/app_colors.dart';
 import '../../app/app_sized_box.dart';
@@ -304,19 +306,157 @@ Future<TimeOfDay?> showPicker(BuildContext context) async {
   }
 }
 
-// var a = Expanded(
-//   child: Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       const Text(
-//         "Gender",
-//         style: TextStyle(
-//           fontSize: 16,
-//           fontWeight: FontWeight.w400,
-//         ),
-//       ),
-//       AppSizedBox.h2,
-//       genderWidget(genderController),
-//     ],
-//   ),
-// );
+Widget settingbuildListItem(BuildContext context,
+    {required String title,
+    required IconData leadingIcon,
+    IconData? tailIcon,
+    String? subtitle,
+    Function()? onTap}) {
+  return ListTile(
+    onTap: onTap,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    dense: true,
+    splashColor: AppColors.primerColor.withOpacity(0.2),
+    style: ListTileStyle.list,
+    leading: Icon(
+      leadingIcon,
+      color: AppColors.primerColor,
+    ),
+    title: Text(
+      title,
+      style: Theme.of(context).textTheme.bodyLarge,
+    ),
+    subtitle: Text(subtitle ?? ''),
+    trailing: Icon(tailIcon),
+  );
+}
+
+Widget buildHomeItem(
+    {required Function ontap,
+    required String? image,
+    required String name,
+    required bool ban,
+    required String des,
+    IconData icon = Icons.info_outline,
+    bool showOnly = false}) {
+  return Builder(builder: (context) {
+    return FadeInUp(
+      from: 20,
+      delay: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        width: 100.w,
+        height: 16.h,
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Container(
+              width: 100.w,
+              height: 15.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (image != null && image.isNotEmpty)
+                      Hero(
+                        tag: des.orEmpty(),
+                        child: CircleAvatar(
+                          radius: 33,
+                          backgroundImage: NetworkImage(image.orEmpty()),
+                        ),
+                      ),
+                    AppSizedBox.w3,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            name.orEmpty(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.almarai(
+                              color: Colors.black45,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          AppSizedBox.h2,
+                          Text(
+                            des.orEmpty(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.almarai(
+                              color: Colors.black45,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          AppSizedBox.h1,
+                          Text(
+                            ban.orFalse() ? 'Banned' : '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.almarai(
+                              color: ban.orFalse() ? Colors.red : Colors.green,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AppSizedBox.w5,
+                    InkWell(
+                      onTap: () {
+                        ontap();
+                      },
+                      child: Container(
+                        width: 14.w,
+                        height: 6.5.h,
+                        decoration: BoxDecoration(
+                          color: Colors.teal.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 7,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          icon,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  });
+}

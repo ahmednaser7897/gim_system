@@ -6,14 +6,14 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../model/users_models.dart';
-import '../auth/widgets/build_auth_bottom.dart';
-import '../componnents/app_textformfiled_widget.dart';
-import '../componnents/const_widget.dart';
-import '../componnents/image_picker/image_cubit/image_cubit.dart';
-import '../componnents/image_picker/image_widget.dart';
-import '../componnents/show_flutter_toast.dart';
-import '../componnents/widgets.dart';
+import '../../../model/users_models.dart';
+import '../../auth/widgets/build_auth_bottom.dart';
+import '../../componnents/app_textformfiled_widget.dart';
+import '../../componnents/const_widget.dart';
+import '../../componnents/image_picker/image_cubit/image_cubit.dart';
+import '../../componnents/image_picker/image_widget.dart';
+import '../../componnents/show_flutter_toast.dart';
+import '../../componnents/widgets.dart';
 
 class AddNewUserScreen extends StatefulWidget {
   const AddNewUserScreen({super.key});

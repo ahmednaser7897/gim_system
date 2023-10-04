@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../app/icon_broken.dart';
-import '../../../controller/admin/admin_cubit.dart';
+import '../../app/icon_broken.dart';
+import '../../controller/admin/admin_cubit.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -14,7 +14,7 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
-    AdminCubit.get(context).getCurrentParentData();
+    AdminCubit.get(context).getCurrentAdninData();
     AdminCubit.get(context).getHomeData();
     super.initState();
   }

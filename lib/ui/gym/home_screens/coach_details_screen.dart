@@ -5,46 +5,40 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../model/users_models.dart';
-import '../componnents/app_textformfiled_widget.dart';
-import '../componnents/const_widget.dart';
+import '../../../model/users_models.dart';
+import '../../componnents/app_textformfiled_widget.dart';
+import '../../componnents/const_widget.dart';
 
-class UserDetailsScreen extends StatefulWidget {
-  const UserDetailsScreen({super.key, required this.model});
-  final UserModel model;
+class CoachDetailsScreen extends StatefulWidget {
+  const CoachDetailsScreen(
+      {super.key, required this.coachModel, this.canEdit = true});
+  final CoachModel coachModel;
+  final bool canEdit;
   @override
-  State<UserDetailsScreen> createState() => _UserDetailsScreenState();
+  State<CoachDetailsScreen> createState() => _CoachDetailsScreenState();
 }
 
-class _UserDetailsScreenState extends State<UserDetailsScreen> {
+class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
   TextEditingController nameController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
+  TextEditingController bioController = TextEditingController();
   TextEditingController genderController = TextEditingController();
 
-  TextEditingController weightController = TextEditingController();
-  TextEditingController heightController = TextEditingController();
-  TextEditingController bodyFatPercentageController = TextEditingController();
-  TextEditingController goalController = TextEditingController();
-  TextEditingController fitnessLevelController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
-  late UserModel model;
+  late CoachModel coachModel;
   @override
   void initState() {
-    model = widget.model;
-    genderController.text = model.gender ?? 'male';
-    phoneController.text = model.phone ?? '';
-    emailController.text = model.email ?? '';
-    nameController.text = model.name ?? '';
-    agecontroller.text = model.age ?? '';
-
-    weightController.text = model.weight ?? '';
-    heightController.text = model.height ?? '';
-    bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
-    goalController.text = model.goal ?? '';
-    fitnessLevelController.text = model.fitnesLevel ?? '';
+    coachModel = widget.coachModel;
+    genderController.text = coachModel.gender ?? 'male';
+    phoneController.text = coachModel.phone ?? '';
+    emailController.text = coachModel.email ?? '';
+    nameController.text = coachModel.name ?? '';
+    agecontroller.text = coachModel.age ?? '';
+    bioController.text = coachModel.bio ?? '';
 
     super.initState();
   }
@@ -53,13 +47,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Details'),
+        title: const Text('Coach Details'),
       ),
       body: BlocConsumer<GymCubit, GymState>(
         listener: (context, state) {
-          if (state is ScChangeUserBan) {
+          if (state is ScChangeCoachBan) {
             setState(() {
-              model.ban = !model.ban.orFalse();
+              coachModel.ban = !coachModel.ban.orFalse();
             });
           }
         },
@@ -72,34 +66,36 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppSizedBox.h1,
-                  if (model.image != null && model.image!.isNotEmpty)
+                  if (coachModel.image != null && coachModel.image!.isNotEmpty)
                     Align(
                       alignment: Alignment.center,
                       child: Column(
                         children: [
                           Hero(
-                            tag: model.email.orEmpty(),
+                            tag: coachModel.email.orEmpty(),
                             child: CircleAvatar(
                               radius: 15.w,
                               backgroundImage:
-                                  NetworkImage(model.image.orEmpty()),
+                                  NetworkImage(coachModel.image.orEmpty()),
                             ),
                           ),
-                          AppSizedBox.h2,
-                          (state is LoadingChangeUserBan)
-                              ? const CircularProgressComponent()
-                              : Center(
-                                  child: Switch(
-                                    value: model.ban.orFalse(),
-                                    activeColor: Colors.red,
-                                    splashRadius: 18.0,
-                                    onChanged: (value) async {
-                                      await GymCubit.get(context).changeUserBan(
-                                          model.id.orEmpty(),
-                                          !model.ban.orFalse());
-                                    },
+                          if (widget.canEdit) AppSizedBox.h2,
+                          if (widget.canEdit)
+                            (state is LoadingChangeCoachBan)
+                                ? const CircularProgressComponent()
+                                : Center(
+                                    child: Switch(
+                                      value: coachModel.ban.orFalse(),
+                                      activeColor: Colors.red,
+                                      splashRadius: 18.0,
+                                      onChanged: (value) async {
+                                        await GymCubit.get(context)
+                                            .changeCoachBan(
+                                                coachModel.id.orEmpty(),
+                                                !coachModel.ban.orFalse());
+                                      },
+                                    ),
                                   ),
-                                ),
                         ],
                       ),
                     ),
@@ -196,7 +192,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     controller: agecontroller,
                     prefix: Icons.timelapse,
                     keyboardType: TextInputType.number,
-                    hintText: "Enter User age",
+                    hintText: "Enter Coach age",
                     validate: (value) {
                       return Validations.normalValidation(value,
                           name: 'your age');
@@ -204,7 +200,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   ),
                   AppSizedBox.h3,
                   const Text(
-                    "Height",
+                    "bio",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -213,96 +209,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   AppSizedBox.h2,
                   AppTextFormFiledWidget(
                     isEnable: false,
-                    controller: heightController,
-                    prefix: Icons.height,
-                    keyboardType: TextInputType.number,
-                    hintText: "Enter User height",
+                    controller: bioController,
+                    maxLines: 4,
+                    keyboardType: TextInputType.text,
+                    hintText: "Enter coach bio",
                     validate: (value) {
                       return Validations.normalValidation(value,
-                          name: 'User height');
+                          name: 'coach bio');
                     },
-                  ),
-                  AppSizedBox.h3,
-                  const Text(
-                    "Weight",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
                   ),
                   AppSizedBox.h2,
-                  AppTextFormFiledWidget(
-                    isEnable: false,
-                    controller: weightController,
-                    prefix: Icons.monitor_weight_sharp,
-                    keyboardType: TextInputType.number,
-                    hintText: "Enter User weight",
-                    validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'User weight');
-                    },
-                  ),
-                  AppSizedBox.h3,
-                  const Text(
-                    "Body Fat Percentage",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  AppSizedBox.h2,
-                  AppTextFormFiledWidget(
-                    isEnable: false,
-                    controller: bodyFatPercentageController,
-                    prefix: Icons.percent,
-                    keyboardType: TextInputType.number,
-                    hintText: "Enter User body Fat Percentage",
-                    validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'User body Fat Percentage');
-                    },
-                  ),
-                  AppSizedBox.h3,
-                  const Text(
-                    "Goal",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  AppSizedBox.h2,
-                  AppTextFormFiledWidget(
-                    isEnable: false,
-                    controller: goalController,
-                    prefix: Icons.star,
-                    keyboardType: TextInputType.number,
-                    hintText: "Enter User goal",
-                    validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'User goal');
-                    },
-                  ),
-                  AppSizedBox.h3,
-                  const Text(
-                    "Fitness Level",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  AppSizedBox.h2,
-                  AppTextFormFiledWidget(
-                    isEnable: false,
-                    controller: fitnessLevelController,
-                    prefix: Icons.percent,
-                    keyboardType: TextInputType.number,
-                    hintText: "Enter User Fitness Level",
-                    validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'User Fitness Level');
-                    },
-                  ),
-                  AppSizedBox.h3,
                 ],
               ),
             ),

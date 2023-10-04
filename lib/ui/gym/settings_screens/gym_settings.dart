@@ -8,10 +8,11 @@ import '../../../app/icon_broken.dart';
 import '../../../controller/gym/gym_cubit.dart';
 import '../../componnents/log_out_button.dart';
 import '../../componnents/screen_builder.dart';
-import '../add_new_coach_screen.dart';
-import '../add_new_exercises.dart';
-import '../add_new_user_screen.dart';
-import '../edit_gym_screen.dart';
+import '../../componnents/widgets.dart';
+import 'add_new_coach_screen.dart';
+import 'add_new_exercises.dart';
+import 'add_new_user_screen.dart';
+import 'edit_gym_screen.dart';
 
 class GymSettingsScreen extends StatefulWidget {
   const GymSettingsScreen({super.key});
@@ -90,15 +91,11 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
                       alignment: Alignment.bottomRight,
                       child: IconButton(
                         onPressed: () async {
-                          var value = await Navigator.push(
+                          await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const EditGymScreen(),
                               ));
-                          if (value == 'edit') {
-                            await cubit.getCurrentGymData();
-                            //await cubit.getHomeData();
-                          }
                         },
                         icon: const Icon(
                           IconBroken.Edit,
@@ -110,7 +107,7 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
                 ),
               ),
               AppSizedBox.h3,
-              _buildListItem(
+              settingbuildListItem(
                 context,
                 title: 'New coach',
                 leadingIcon: IconBroken.Profile,
@@ -123,7 +120,7 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
                       ));
                 },
               ),
-              _buildListItem(
+              settingbuildListItem(
                 context,
                 title: 'New User',
                 leadingIcon: IconBroken.Profile,
@@ -136,7 +133,7 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
                       ));
                 },
               ),
-              _buildListItem(
+              settingbuildListItem(
                 context,
                 title: 'New Exercise',
                 leadingIcon: Icons.sports_gymnastics,
@@ -164,33 +161,6 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
           isSc: state is ScGetGym || cubit.gymModel != null,
         );
       },
-    );
-  }
-
-  Widget _buildListItem(BuildContext context,
-      {required String title,
-      required IconData leadingIcon,
-      IconData? tailIcon,
-      String? subtitle,
-      Function()? onTap}) {
-    return ListTile(
-      onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      dense: true,
-      splashColor: AppColors.primerColor.withOpacity(0.2),
-      style: ListTileStyle.list,
-      leading: Icon(
-        leadingIcon,
-        color: AppColors.primerColor,
-      ),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      subtitle: Text(subtitle ?? ''),
-      trailing: Icon(tailIcon),
     );
   }
 }

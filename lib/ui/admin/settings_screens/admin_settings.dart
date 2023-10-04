@@ -8,9 +8,10 @@ import '../../../app/icon_broken.dart';
 import '../../../controller/admin/admin_cubit.dart';
 import '../../componnents/log_out_button.dart';
 import '../../componnents/screen_builder.dart';
-import '../add_new_admin_screen.dart';
-import '../add_new_gym_screen.dart';
-import '../edit_admin_screen.dart';
+import '../../componnents/widgets.dart';
+import 'add_new_admin_screen.dart';
+import 'add_new_gym_screen.dart';
+import 'edit_admin_screen.dart';
 
 class AdminSettingsScreen extends StatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -89,16 +90,12 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                       alignment: Alignment.bottomRight,
                       child: IconButton(
                         onPressed: () async {
-                          var value = await Navigator.push(
+                          await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const EditNewAdminScreen(),
                               ));
-                          if (value == 'edit') {
-                            await cubit.getCurrentParentData();
-                            //await cubit.getHomeData();
-                          }
                         },
                         icon: const Icon(
                           IconBroken.Edit,
@@ -110,7 +107,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                 ),
               ),
               AppSizedBox.h3,
-              _buildListItem(
+              settingbuildListItem(
                 context,
                 title: 'New admin',
                 leadingIcon: IconBroken.Profile,
@@ -123,7 +120,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                       ));
                 },
               ),
-              _buildListItem(
+              settingbuildListItem(
                 context,
                 title: 'New Gym',
                 leadingIcon: IconBroken.Profile,
@@ -151,33 +148,6 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
           isSc: state is ScGetAdmin || cubit.adminModel != null,
         );
       },
-    );
-  }
-
-  Widget _buildListItem(BuildContext context,
-      {required String title,
-      required IconData leadingIcon,
-      IconData? tailIcon,
-      String? subtitle,
-      Function()? onTap}) {
-    return ListTile(
-      onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      dense: true,
-      splashColor: AppColors.primerColor.withOpacity(0.2),
-      style: ListTileStyle.list,
-      leading: Icon(
-        leadingIcon,
-        color: AppColors.primerColor,
-      ),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      subtitle: Text(subtitle ?? ''),
-      trailing: Icon(tailIcon),
     );
   }
 }

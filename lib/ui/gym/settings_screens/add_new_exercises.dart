@@ -6,12 +6,12 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../model/exercises_model.dart';
-import '../auth/widgets/build_auth_bottom.dart';
-import '../componnents/app_textformfiled_widget.dart';
-import '../componnents/const_widget.dart';
-import '../componnents/image_picker/image_cubit/image_cubit.dart';
-import '../componnents/show_flutter_toast.dart';
+import '../../../model/exercises_model.dart';
+import '../../auth/widgets/build_auth_bottom.dart';
+import '../../componnents/app_textformfiled_widget.dart';
+import '../../componnents/const_widget.dart';
+import '../../componnents/image_picker/image_cubit/image_cubit.dart';
+import '../../componnents/show_flutter_toast.dart';
 
 class AddNewExercisesScreen extends StatefulWidget {
   const AddNewExercisesScreen({super.key});
@@ -77,10 +77,10 @@ class _AddNewExercisesScreenState extends State<AddNewExercisesScreen> {
                   ),
                   AppSizedBox.h2,
                   AppTextFormFiledWidget(
+                    maxLines: 3,
                     controller: videoLinkController,
                     keyboardType: TextInputType.emailAddress,
                     hintText: "Enter Exercise video Link",
-                    prefix: Icons.video_call,
                     validate: (value) {
                       return Validations.normalValidation(value,
                           name: 'Exercise video link');

@@ -34,9 +34,9 @@ class _LogOutButtonState extends State<LogOutButton> {
               ),
             ),
             onPressed: () async {
-              //widget.onTap();
               await FirebaseAuth.instance.signOut();
               await AppPreferences.logOut();
+              widget.onTap();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

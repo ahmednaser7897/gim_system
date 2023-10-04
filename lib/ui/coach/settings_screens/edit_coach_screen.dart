@@ -1,53 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 
-import '../../controller/admin/admin_cubit.dart';
-import '../../model/users_models.dart';
-import '../auth/widgets/build_auth_bottom.dart';
-import '../componnents/app_textformfiled_widget.dart';
-import '../componnents/const_widget.dart';
-import '../componnents/image_picker/image_cubit/image_cubit.dart';
-import '../componnents/image_picker/image_widget.dart';
-import '../componnents/show_flutter_toast.dart';
-import '../componnents/widgets.dart';
+import '../../../controller/coach/coach_cubit.dart';
+import '../../../model/coach_model.dart';
+import '../../auth/widgets/build_auth_bottom.dart';
+import '../../componnents/app_textformfiled_widget.dart';
+import '../../componnents/const_widget.dart';
+import '../../componnents/image_picker/image_cubit/image_cubit.dart';
+import '../../componnents/image_picker/image_widget.dart';
+import '../../componnents/show_flutter_toast.dart';
+import '../../componnents/widgets.dart';
 
-class AddNewAdminScreen extends StatefulWidget {
-  const AddNewAdminScreen({super.key});
+class EditCoachScreen extends StatefulWidget {
+  const EditCoachScreen({super.key});
 
   @override
-  State<AddNewAdminScreen> createState() => _AddNewAdminScreenState();
+  State<EditCoachScreen> createState() => _EditCoachScreenState();
 }
 
-class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
+class _EditCoachScreenState extends State<EditCoachScreen> {
   TextEditingController nameController = TextEditingController();
-
-  TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
   TextEditingController phoneController = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
-
   TextEditingController genderController = TextEditingController();
-
+  TextEditingController bioController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    genderController.text = 'male';
+    CoachCubit cubit = CoachCubit.get(context);
+    genderController.text = cubit.coachModel!.gender.orEmpty();
+    nameController.text = cubit.coachModel!.name.orEmpty();
+    bioController.text = cubit.coachModel!.bio.orEmpty();
+    agecontroller.text = cubit.coachModel!.age.orEmpty();
+    phoneController.text = cubit.coachModel!.phone.orEmpty();
+    passwordController.text = cubit.coachModel!.password.orEmpty();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    CoachCubit cubit = CoachCubit.get(context);
     return BlocProvider(
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Admin'),
+          title: const Text('Edit New Coach'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -59,8 +63,11 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSizedBox.h1,
-                    const Align(
-                        alignment: Alignment.center, child: ImageWidget()),
+                    Align(
+                        alignment: Alignment.center,
+                        child: ImageWidget(
+                          init: cubit.coachModel!.image,
+                        )),
                     const Text(
                       "Name",
                       style: TextStyle(
@@ -72,36 +79,13 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                     AppTextFormFiledWidget(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-                      hintText: "Enter your name",
+                      hintText: "Enter coach name",
                       prefix: Icons.person,
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'your name');
+                            name: 'coach name');
                         // if (value!.isEmpty) {
-                        //   return "Please Enter your name";
-                        // }
-                        // return null;
-                      },
-                    ),
-                    AppSizedBox.h3,
-                    const Text(
-                      "Email",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      hintText: "Enter your email",
-                      prefix: Icons.email_rounded,
-                      validate: (value) {
-                        return Validations.emailValidation(value,
-                            name: 'your email');
-                        // if (value!.isEmpty) {
-                        //   return "Please Enter Email";
+                        //   return "Please Enter coach name";
                         // }
                         // return null;
                       },
@@ -117,13 +101,13 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                     AppSizedBox.h2,
                     AppTextFormFiledWidget(
                       controller: passwordController,
-                      hintText: "Enter your password",
+                      hintText: "Enter coach password",
                       prefix: Icons.lock,
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
                         return Validations.passwordValidation(value,
-                            name: 'your password');
+                            name: 'coach password');
                       },
                     ),
                     AppSizedBox.h3,
@@ -143,11 +127,11 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                               AppTextFormFiledWidget(
                                 keyboardType: TextInputType.phone,
                                 controller: phoneController,
-                                hintText: "Enter your phone",
+                                hintText: "Enter coach phone",
                                 prefix: Icons.call,
                                 validate: (value) {
                                   return Validations.mobileValidation(value,
-                                      name: 'your phone');
+                                      name: 'coach phone');
                                 },
                               ),
                             ],
@@ -184,23 +168,42 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                       controller: agecontroller,
                       prefix: Icons.timelapse,
                       keyboardType: TextInputType.number,
-                      hintText: "Enter Admin age",
+                      hintText: "Enter coach age",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'your age');
+                            name: 'coach age');
                       },
                     ),
                     AppSizedBox.h3,
-                    BlocConsumer<AdminCubit, AdminState>(
+                    const Text(
+                      "bio",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    AppTextFormFiledWidget(
+                      controller: bioController,
+                      maxLines: 4,
+                      keyboardType: TextInputType.text,
+                      hintText: "Enter coach bio",
+                      validate: (value) {
+                        return Validations.normalValidation(value,
+                            name: 'coach bio');
+                      },
+                    ),
+                    AppSizedBox.h3,
+                    BlocConsumer<CoachCubit, CoachState>(
                       listener: (context, state) {
-                        if (state is ScAddAdmin) {
+                        if (state is ScEditCoach) {
                           showFlutterToast(
-                            message: "admin added",
+                            message: "Coach Edited",
                             toastColor: Colors.green,
                           );
                           Navigator.pop(context);
                         }
-                        if (state is ErorrAddAdmin) {
+                        if (state is ErorrEditCoach) {
                           showFlutterToast(
                             message: state.error,
                             toastColor: Colors.red,
@@ -208,12 +211,12 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                         }
                       },
                       builder: (context, state) {
-                        AdminCubit adminCubit = AdminCubit.get(context);
-                        return state is LoadingAddAdmin
+                        CoachCubit cubit = CoachCubit.get(context);
+                        return state is LoadingEditCoach
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Add New Admin',
+                                  'Edit New Coach',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -222,19 +225,16 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    adminCubit.addAdmin(
+                                    cubit.editCoach(
                                         image: ImageCubit.get(context).image,
-                                        model: AdminModel(
-                                          ban: false,
-                                          email: emailController.text,
-                                          id: null,
-                                          image: null,
+                                        model: CoachModel(
                                           name: nameController.text,
                                           password: passwordController.text,
                                           phone: phoneController.text,
                                           age: agecontroller.text,
                                           gender: genderController.text,
-                                          createdAt: DateTime.now().toString(),
+                                          bio: bioController.text,
+                                          gymId: AppPreferences.gymUid,
                                         ));
                                   }
                                 },

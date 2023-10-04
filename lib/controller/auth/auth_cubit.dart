@@ -30,7 +30,6 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     });
     await getUserType(userId);
-    //emit(AuthGetUserAfterLoginSuccessState(message: 'admin'));
   }
 
   Future<void> getUserType(String userId) async {
@@ -154,6 +153,7 @@ class AuthCubit extends Cubit<AuthState> {
           } else {
             AppPreferences.userType = Constants.coach;
             AppPreferences.uId = userId;
+            AppPreferences.gymUid = gyms.id;
             return true;
           }
         }
@@ -181,6 +181,7 @@ class AuthCubit extends Cubit<AuthState> {
           } else {
             AppPreferences.userType = Constants.user;
             AppPreferences.uId = userId;
+            AppPreferences.gymUid = gyms.id;
             return true;
           }
         }

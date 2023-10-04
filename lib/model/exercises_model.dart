@@ -2,10 +2,11 @@
 
 //flutter packages pub run build_runner build
 //dart run build_runner build
-import 'dart:convert';
 
-//import 'package:json_annotation/json_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'exercises_model.g.dart';
 
+@JsonSerializable(includeIfNull: false)
 class ExerciseModel {
   String? id;
   String? gymId;
@@ -18,26 +19,45 @@ class ExerciseModel {
     this.videoLink,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'gymId': gymId,
-      'name': name,
-      'videoLink': videoLink,
-    };
-  }
+  factory ExerciseModel.fromJson(Map<String, dynamic> json) =>
+      _$ExerciseModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ExerciseModelToJson(this);
+}
 
-  factory ExerciseModel.fromMap(Map<String, dynamic> map) {
-    return ExerciseModel(
-      id: map['id'] != null ? map['id'] as String : null,
-      gymId: map['gymId'] != null ? map['gymId'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      videoLink: map['videoLink'] != null ? map['videoLink'] as String : null,
-    );
-  }
+@JsonSerializable(includeIfNull: false, anyMap: true, explicitToJson: true)
+class UserExercises {
+  String? id;
+  String? userId;
+  String? coachId;
+  bool? done;
+  String? date;
+  List<Exercise>? exercises;
+  UserExercises({
+    this.id,
+    this.userId,
+    this.coachId,
+    this.done,
+    this.date,
+    this.exercises,
+  });
+  factory UserExercises.fromJson(Map<String, dynamic> json) =>
+      _$UserExercisesFromJson(json);
+  Map<String, dynamic> toJson() => _$UserExercisesToJson(this);
+}
 
-  String toJson() => json.encode(toMap());
-
-  factory ExerciseModel.fromJson(String source) =>
-      ExerciseModel.fromMap(json.decode(source) as Map<String, dynamic>);
+@JsonSerializable(includeIfNull: false, anyMap: true, explicitToJson: true)
+class Exercise {
+  double? count;
+  double? total;
+  String? exerciseId;
+  bool? done;
+  Exercise({
+    this.count,
+    this.total,
+    this.exerciseId,
+    this.done,
+  });
+  factory Exercise.fromJson(Map<String, dynamic> json) =>
+      _$ExerciseFromJson(json);
+  Map<String, dynamic> toJson() => _$ExerciseToJson(this);
 }

@@ -177,15 +177,15 @@ Targets :
             # Ban (User, Coach)->Done
 
 @ Coach =>    Can do ?
-            # Make Login Note: "Can not login if his gym was banned or he was banned"
+            # Make Login Note: "Can not login if his gym was banned or he was banned"->Done
             # Can See Table (
-                            his gym info,
-                            coaches of his gym,
-                            users of his gym,
+                            his gym info,->Done
+                            coaches of his gym,->Done
+                            users of his gym,->Done
                             all exercises of users of his gym,
                             diet of users of his gym,
                            )
-            # Edit His Info
+            # Edit His Info->Done
             # Edit Fitness info of each user of his gym
             # Set user_exercise of each user of his gym
             # Set diet of each user of his gym

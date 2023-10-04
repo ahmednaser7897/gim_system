@@ -7,7 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/constants.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:gim_system/model/users_models.dart';
+import 'package:gim_system/model/admin_model.dart';
+import 'package:gim_system/model/coach_model.dart';
+import 'package:gim_system/model/gym_model.dart';
+import 'package:gim_system/model/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../../ui/admin/home_screens/admin_home.dart';
@@ -258,15 +261,14 @@ class AdminCubit extends Cubit<AdminState> {
       for (var element in value.docs) {
         var gym = GymModel.fromJson(element.data());
         var users = await element.reference.collection(Constants.user).get();
-
+        gym.users = [];
         for (var element in users.docs) {
-          gym.users = [];
           gym.users!.add(UserModel.fromJson(element.data()));
         }
         print('user l is ${gym.users.orEmpty().length}');
         var coachs = await element.reference.collection(Constants.coach).get();
+        gym.coachs = [];
         for (var element in coachs.docs) {
-          gym.coachs = [];
           gym.coachs!.add(CoachModel.fromJson(element.data()));
         }
         print('coachs l is ${gym.coachs.orEmpty().length}');

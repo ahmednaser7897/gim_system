@@ -5,7 +5,7 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 
 import '../../../controller/admin/admin_cubit.dart';
-import '../../../model/users_models.dart';
+import '../../../model/gym_model.dart';
 import '../../auth/widgets/build_auth_bottom.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';

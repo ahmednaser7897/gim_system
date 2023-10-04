@@ -9,10 +9,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/constants.dart';
-import 'package:gim_system/model/users_models.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:gim_system/model/coach_model.dart';
 
 import '../../model/exercises_model.dart';
+import '../../model/gym_model.dart';
+import '../../model/user_model.dart';
 import '../../ui/gym/home_screens/gym_home.dart';
 import '../../ui/gym/settings_screens/gym_settings.dart';
 import '../admin/admin_cubit.dart';
@@ -217,7 +219,7 @@ class GymCubit extends Cubit<GymState> {
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
           .collection(Constants.exercise)
-          .add(model.toMap());
+          .add(model.toJson());
 
       await FirebaseFirestore.instance
           .collection(Constants.gym)
@@ -243,7 +245,7 @@ class GymCubit extends Cubit<GymState> {
           .doc(AppPreferences.uId)
           .collection(Constants.exercise)
           .doc(model.id)
-          .update(model.toMap());
+          .update(model.toJson());
       var indxex = exercises.indexWhere((element) => element.id == model.id);
       exercises[indxex] = model;
       print('Exercise Edited');
@@ -357,7 +359,7 @@ class GymCubit extends Cubit<GymState> {
           .collection(Constants.exercise)
           .get();
       for (var element in value.docs) {
-        exercises.add(ExerciseModel.fromMap(element.data()));
+        exercises.add(ExerciseModel.fromJson(element.data()));
       }
       print("getAllexercises done");
       print(exercises.length);

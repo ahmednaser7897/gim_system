@@ -6,7 +6,7 @@ import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/admin/admin_cubit.dart';
 import 'package:gim_system/ui/componnents/const_widget.dart';
 
-import '../../../model/users_models.dart';
+import '../../../model/admin_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 
 class AdminDetailsScreen extends StatefulWidget {

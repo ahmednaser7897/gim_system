@@ -14,14 +14,14 @@ import '../../componnents/image_picker/image_widget.dart';
 import '../../componnents/show_flutter_toast.dart';
 import '../../componnents/widgets.dart';
 
-class EditNewAdminScreen extends StatefulWidget {
-  const EditNewAdminScreen({super.key});
+class AddNewAdminScreen extends StatefulWidget {
+  const AddNewAdminScreen({super.key});
 
   @override
-  State<EditNewAdminScreen> createState() => _EditNewAdminScreenState();
+  State<AddNewAdminScreen> createState() => _AddNewAdminScreenState();
 }
 
-class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
+class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
@@ -37,22 +37,12 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
 
   @override
   void initState() {
-    AdminCubit cubit = AdminCubit.get(context);
-    if (cubit.adminModel != null) {
-      genderController.text = cubit.adminModel!.gender ?? 'male';
-      phoneController.text = cubit.adminModel!.phone ?? '';
-      //emailController.text = cubit.adminModel!.email ?? '';
-      nameController.text = cubit.adminModel!.name ?? '';
-      passwordController.text = cubit.adminModel!.password ?? '';
-      agecontroller.text = cubit.adminModel!.age ?? '';
-    }
-
+    genderController.text = 'male';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    AdminCubit cubit = AdminCubit.get(context);
     return BlocProvider(
       create: (context) => ImageCubit(),
       child: Scaffold(
@@ -69,11 +59,8 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSizedBox.h1,
-                    Align(
-                        alignment: Alignment.center,
-                        child: ImageWidget(
-                          init: cubit.adminModel!.image,
-                        )),
+                    const Align(
+                        alignment: Alignment.center, child: ImageWidget()),
                     const Text(
                       "Name",
                       style: TextStyle(
@@ -90,27 +77,35 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                       validate: (value) {
                         return Validations.normalValidation(value,
                             name: 'your name');
+                        // if (value!.isEmpty) {
+                        //   return "Please Enter your name";
+                        // }
+                        // return null;
                       },
                     ),
-                    // AppSizedBox.h3,
-                    // const Text(
-                    //   "Email",
-                    //   style: TextStyle(
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.w400,
-                    //   ),
-                    // ),
-                    // AppSizedBox.h2,
-                    // AppTextFormFiledWidget(
-                    //   controller: emailController,
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   hintText: "Enter your email",
-                    //   prefix: Icons.email_rounded,
-                    //   validate: (value) {
-                    //     return Validations.emailValidation(value,
-                    //         name: 'your email');
-                    //   },
-                    // ),
+                    AppSizedBox.h3,
+                    const Text(
+                      "Email",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    AppTextFormFiledWidget(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      hintText: "Enter your email",
+                      prefix: Icons.email_rounded,
+                      validate: (value) {
+                        return Validations.emailValidation(value,
+                            name: 'your email');
+                        // if (value!.isEmpty) {
+                        //   return "Please Enter Email";
+                        // }
+                        // return null;
+                      },
+                    ),
                     AppSizedBox.h3,
                     const Text(
                       "Password",
@@ -127,7 +122,7 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
-                        return Validations.normalValidation(value,
+                        return Validations.passwordValidation(value,
                             name: 'your password');
                       },
                     ),
@@ -170,8 +165,7 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                                 ),
                               ),
                               AppSizedBox.h2,
-                              genderWidget(genderController,
-                                  init: genderController.text),
+                              genderWidget(genderController),
                             ],
                           ),
                         ),
@@ -199,14 +193,14 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                     AppSizedBox.h3,
                     BlocConsumer<AdminCubit, AdminState>(
                       listener: (context, state) {
-                        if (state is ScEditAdmin) {
+                        if (state is ScAddAdmin) {
                           showFlutterToast(
-                            message: "admin Edited",
+                            message: "admin added",
                             toastColor: Colors.green,
                           );
-                          Navigator.pop(context, 'edit');
+                          Navigator.pop(context);
                         }
-                        if (state is ErorrEditAdmin) {
+                        if (state is ErorrAddAdmin) {
                           showFlutterToast(
                             message: state.error,
                             toastColor: Colors.red,
@@ -215,11 +209,11 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                       },
                       builder: (context, state) {
                         AdminCubit adminCubit = AdminCubit.get(context);
-                        return state is LoadingEditAdmin
+                        return state is LoadingAddAdmin
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Edit Admin',
+                                  'Add New Admin',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -227,20 +221,20 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  print("object1");
                                   if (_formKey.currentState!.validate()) {
-                                    print("object2");
-                                    adminCubit.editAdmin(
+                                    adminCubit.addAdmin(
                                         image: ImageCubit.get(context).image,
                                         model: AdminModel(
-                                          image: cubit.adminModel?.image,
+                                          ban: false,
+                                          email: emailController.text,
+                                          id: null,
+                                          image: null,
                                           name: nameController.text,
                                           password: passwordController.text,
                                           phone: phoneController.text,
                                           age: agecontroller.text,
                                           gender: genderController.text,
-                                          createdAt:
-                                              cubit.adminModel?.createdAt,
+                                          createdAt: DateTime.now().toString(),
                                         ));
                                   }
                                 },

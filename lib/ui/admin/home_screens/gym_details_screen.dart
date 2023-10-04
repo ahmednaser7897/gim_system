@@ -8,7 +8,7 @@ import 'package:gim_system/ui/componnents/const_widget.dart';
 import 'package:gim_system/ui/gym/home_screens/coach_details_screen.dart';
 import 'package:gim_system/ui/gym/home_screens/user_details_screen.dart';
 
-import '../../../model/users_models.dart';
+import '../../../model/gym_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/widgets.dart';
 

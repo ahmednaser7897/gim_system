@@ -8,6 +8,7 @@ class AppPreferences {
 
   static const String userTokenValue = 'userToken';
   static const String uidValue = 'uid';
+  static const String gymUidValue = 'gymUidValue';
   static const String userTypeValue = 'userType';
 
   static Future<bool> _putData(String key, dynamic value) async {
@@ -33,6 +34,12 @@ class AppPreferences {
     _putData(uidValue, value);
   }
 
+  static String get gymUid => _getData(gymUidValue, "");
+
+  static set gymUid(String value) {
+    _putData(gymUidValue, value);
+  }
+
   static String get userType => _getData(userTypeValue, "");
 
   static set userType(String value) {
@@ -48,6 +55,7 @@ class AppPreferences {
   static Future<void> logOut() async {
     await AppPreferences.remove(AppPreferences.uidValue);
     await AppPreferences.remove(AppPreferences.userTokenValue);
+    await AppPreferences.remove(AppPreferences.gymUidValue);
     await AppPreferences.remove(AppPreferences.userTypeValue);
   }
 

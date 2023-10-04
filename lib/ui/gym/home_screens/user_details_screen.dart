@@ -5,7 +5,7 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
-import '../../../model/users_models.dart';
+import '../../../model/user_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
 

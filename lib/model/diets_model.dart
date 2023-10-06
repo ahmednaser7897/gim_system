@@ -1,3 +1,4 @@
+import 'package:gim_system/model/coach_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'diets_model.g.dart';
 
@@ -11,6 +12,7 @@ class DietModel {
   String? lunch;
   String? notes;
   String? createdAt;
+  CoachModel? coachModel;
   DietModel({
     this.id,
     this.breakfast,

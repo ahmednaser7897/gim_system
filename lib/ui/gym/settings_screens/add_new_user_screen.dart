@@ -41,7 +41,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
   @override
   void initState() {
     genderController.text = 'male';
-    goalController.text = 'Weight loss';
+    goalController.text = goals.first;
     fitnessLevelController.text = 'beginner';
     super.initState();
   }

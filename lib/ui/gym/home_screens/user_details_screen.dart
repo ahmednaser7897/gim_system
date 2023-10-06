@@ -6,8 +6,11 @@ import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
 import '../../../model/user_model.dart';
+import '../../coach/home_screens/show_user_diets.dart';
+import '../../coach/home_screens/show_user_exercises.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
+import '../../componnents/custom_button.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   const UserDetailsScreen(
@@ -106,6 +109,46 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         ],
                       ),
                     ),
+                  if (widget.canEdit) AppSizedBox.h2,
+                  if (widget.canEdit)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          text: 'show Exercises',
+                          width: 40,
+                          fontsize: 12,
+                          iconRight: const Icon(Icons.sports_gymnastics),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowUserExercises(
+                                  user: model,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        CustomButton(
+                          text: 'show Dites',
+                          width: 40,
+                          fontsize: 12,
+                          iconRight: const Icon(Icons.food_bank),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowUserDites(
+                                  user: model,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  AppSizedBox.h1,
                   const Text(
                     "Name",
                     style: TextStyle(

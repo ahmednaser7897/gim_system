@@ -3,6 +3,7 @@
 //flutter packages pub run build_runner build
 //dart run build_runner build
 
+import 'package:gim_system/model/coach_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'exercises_model.g.dart';
 
@@ -29,6 +30,7 @@ class UserExercises {
   String? id;
   String? userId;
   String? coachId;
+  CoachModel? coachModel;
   bool? done;
   String? date;
   List<Exercise>? exercises;
@@ -50,6 +52,7 @@ class Exercise {
   double? count;
   double? total;
   String? exerciseId;
+  ExerciseModel? exerciseModel;
   bool? done;
   Exercise({
     this.count,

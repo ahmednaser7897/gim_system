@@ -160,14 +160,14 @@ Targets :
 
 ======================================= Permissions =======================================
 
-@ Gym =>    Can do ?
+@ Gym =>    Can do ?->Done
             # Make Login Note: "Can not login if was banned"->Done
             # Can See Table ( 
                             his gym info,->Done
                             his coaches,->Done
                             his users,->Done
-                            all exercises of his users,
-                            diet of his users,
+                            all exercises of his users,->Done
+                            diet of his users,->Done
                             his exercises->Done
                            )
             # Edit His Info->Done
@@ -176,19 +176,19 @@ Targets :
             # Create, Edit his exercises->Done
             # Ban (User, Coach)->Done
 
-@ Coach =>    Can do ?
+@ Coach =>    Can do ?->Done exept chat
             # Make Login Note: "Can not login if his gym was banned or he was banned"->Done
             # Can See Table (
                             his gym info,->Done
                             coaches of his gym,->Done
                             users of his gym,->Done
-                            all exercises of users of his gym,
-                            diet of users of his gym,
+                            all exercises of users of his gym,->Done
+                            diet of users of his gym,->Done
                            )
             # Edit His Info->Done
-            # Edit Fitness info of each user of his gym
-            # Set user_exercise of each user of his gym
-            # Set diet of each user of his gym
+            # Edit Fitness info of each user of his gym->Done
+            # Set user_exercise of each user of his gym->Done
+            # Set diet of each user of his gym->Done
             # Chat communication with users of his gym (text or file Message)
 
 @ User =>   Can do? 

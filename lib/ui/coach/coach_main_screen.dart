@@ -29,9 +29,9 @@ class _CoachHomeScreenState extends State<CoachHomeScreen> {
           appBar: AppBar(
             title: Text(cubit.titles[cubit.currentIndex]),
           ),
-          floatingActionButton: FloatingActionButton(onPressed: () {
-            cubit.getHomeData();
-          }),
+          // floatingActionButton: FloatingActionButton(onPressed: () {
+          //   cubit.getHomeData();
+          // }),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: cubit.currentIndex,

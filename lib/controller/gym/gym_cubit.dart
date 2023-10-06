@@ -1,10 +1,8 @@
-//import 'dart:io';
-
 import 'dart:io';
+import 'package:gim_system/app/extensions.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
@@ -12,6 +10,7 @@ import 'package:gim_system/app/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:gim_system/model/coach_model.dart';
 
+import '../../model/diets_model.dart';
 import '../../model/exercises_model.dart';
 import '../../model/gym_model.dart';
 import '../../model/user_model.dart';
@@ -340,7 +339,54 @@ class GymCubit extends Cubit<GymState> {
           .collection(Constants.user)
           .get();
       for (var element in value.docs) {
-        users.add(UserModel.fromJson(element.data()));
+        var user = UserModel.fromJson(element.data());
+        var dites = await element.reference
+            .collection(Constants.dite)
+            .orderBy('createdAt', descending: true)
+            .get();
+        print('dites.docs.length l is ${dites.docs.length}');
+        user.dites = [];
+        for (var element in dites.docs) {
+          var dite = DietModel.fromJson(element.data());
+          var value = await FirebaseFirestore.instance
+              .collection(Constants.gym)
+              .doc(AppPreferences.uId)
+              .collection(Constants.coach)
+              .doc(dite.coachId)
+              .get();
+          dite.coachModel = CoachModel.fromJson(value.data() ?? {});
+          user.dites.orEmpty().add(dite);
+        }
+        print('dites l is ${user.dites.orEmpty().length}');
+
+        var userExercise = await element.reference
+            .collection(Constants.userExercise)
+            .orderBy('date', descending: true)
+            .get();
+        user.userExercises = [];
+        for (var element in userExercise.docs) {
+          var userExercises = UserExercises.fromJson(element.data());
+          var value = await FirebaseFirestore.instance
+              .collection(Constants.gym)
+              .doc(AppPreferences.uId)
+              .collection(Constants.coach)
+              .doc(userExercises.coachId)
+              .get();
+          userExercises.coachModel = CoachModel.fromJson(value.data() ?? {});
+          userExercises.exercises.orEmpty().forEach((element) async {
+            var value2 = await FirebaseFirestore.instance
+                .collection(Constants.gym)
+                .doc(AppPreferences.uId)
+                .collection(Constants.exercise)
+                .doc(element.exerciseId)
+                .get();
+            var exerciseModel = ExerciseModel.fromJson(value2.data() ?? {});
+            element.exerciseModel = exerciseModel;
+          });
+          user.userExercises!.add(userExercises);
+        }
+        print('userExercises l is ${user.userExercises.orEmpty().length}');
+        users.add(user);
       }
       print("getAllusers done");
       print(users.length);
@@ -348,6 +394,24 @@ class GymCubit extends Cubit<GymState> {
       print('Get Parent Data Error: $e');
     }
   }
+
+  // Future<void> getAllusers() async {
+  //   try {
+  //     print("getAllusers");
+  //     var value = await FirebaseFirestore.instance
+  //         .collection(Constants.gym)
+  //         .doc(AppPreferences.uId)
+  //         .collection(Constants.user)
+  //         .get();
+  //     for (var element in value.docs) {
+  //       users.add(UserModel.fromJson(element.data()));
+  //     }
+  //     print("getAllusers done");
+  //     print(users.length);
+  //   } catch (e) {
+  //     print('Get Parent Data Error: $e');
+  //   }
+  // }
 
   List<ExerciseModel> exercises = [];
   Future<void> getAllexercises() async {

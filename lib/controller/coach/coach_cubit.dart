@@ -150,21 +150,52 @@ class CoachCubit extends Cubit<CoachState> {
           .get();
       for (var element in value.docs) {
         var user = UserModel.fromJson(element.data());
-        var dites = await element.reference.collection(Constants.dite).get();
+        var dites = await element.reference
+            .collection(Constants.dite)
+            .orderBy('createdAt', descending: true)
+            .get();
+        print('dites.docs.length l is ${dites.docs.length}');
         user.dites = [];
         for (var element in dites.docs) {
-          user.dites!.add(DietModel.fromJson(element.data()));
+          var dite = DietModel.fromJson(element.data());
+          var value = await FirebaseFirestore.instance
+              .collection(Constants.gym)
+              .doc(AppPreferences.gymUid)
+              .collection(Constants.coach)
+              .doc(dite.coachId)
+              .get();
+          dite.coachModel = CoachModel.fromJson(value.data() ?? {});
+          user.dites.orEmpty().add(dite);
         }
         print('dites l is ${user.dites.orEmpty().length}');
 
-        var userExercise =
-            await element.reference.collection(Constants.userExercise).get();
+        var userExercise = await element.reference
+            .collection(Constants.userExercise)
+            .orderBy('date', descending: true)
+            .get();
         user.userExercises = [];
         for (var element in userExercise.docs) {
-          user.userExercises!.add(UserExercises.fromJson(element.data()));
+          var userExercises = UserExercises.fromJson(element.data());
+          var value = await FirebaseFirestore.instance
+              .collection(Constants.gym)
+              .doc(AppPreferences.gymUid)
+              .collection(Constants.coach)
+              .doc(userExercises.coachId)
+              .get();
+          userExercises.coachModel = CoachModel.fromJson(value.data() ?? {});
+          userExercises.exercises.orEmpty().forEach((element) async {
+            var value2 = await FirebaseFirestore.instance
+                .collection(Constants.gym)
+                .doc(AppPreferences.gymUid)
+                .collection(Constants.exercise)
+                .doc(element.exerciseId)
+                .get();
+            var exerciseModel = ExerciseModel.fromJson(value2.data() ?? {});
+            element.exerciseModel = exerciseModel;
+          });
+          user.userExercises!.add(userExercises);
         }
         print('userExercises l is ${user.userExercises.orEmpty().length}');
-
         users.add(user);
       }
       print("getAllusers done");
@@ -241,7 +272,8 @@ class CoachCubit extends Cubit<CoachState> {
       model.id = value.id;
       await value.set(model.toJson());
       var indxex = users.indexWhere((element) => element.id == model.userId);
-      users[indxex].dites.orEmpty().add(model);
+      model.coachModel = coachModel;
+      users[indxex].dites.orEmpty().insert(0, model);
       print('Dite added');
       print('dites l is ${users[indxex].dites.orEmpty().length}');
       emit(ScAddDite());
@@ -264,7 +296,20 @@ class CoachCubit extends Cubit<CoachState> {
       model.id = doc.id;
       await doc.set(model.toJson());
       var indxex = users.indexWhere((element) => element.id == model.userId);
-      users[indxex].userExercises.orEmpty().add(model);
+      users[indxex].userExercises.orEmpty().insert(0, model);
+      users[indxex].userExercises.orEmpty().forEach((element) async {
+        element.coachModel = coachModel;
+        element.exercises.orEmpty().forEach((element) async {
+          var value2 = await FirebaseFirestore.instance
+              .collection(Constants.gym)
+              .doc(AppPreferences.gymUid)
+              .collection(Constants.exercise)
+              .doc(element.exerciseId)
+              .get();
+          var exerciseModel = ExerciseModel.fromJson(value2.data() ?? {});
+          element.exerciseModel = exerciseModel;
+        });
+      });
       print('Exercise added');
       print('Exercises l is ${users[indxex].userExercises.orEmpty().length}');
       emit(ScAddExercise());
@@ -274,150 +319,27 @@ class CoachCubit extends Cubit<CoachState> {
     }
   }
 
-  // Future<void> addCoach(
-  //     {required CoachModel model, required File? image}) async {
-  //   try {
-  //     emit(LoadingAddCoach());
-  //     var value =
-  //         await FirebaseFirestore.instance.collection('phoneNumbers').get();
-  //     if (checkPhone(model.phone ?? '', value.docs)) {
-  //       emit(ErorrAddCoach('Phone number is already used'));
-  //       return;
-  //     } else {
-  //       var value1 = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //         email: model.email ?? '',
-  //         password: model.password ?? '',
-  //       );
-  //       await FirebaseFirestore.instance
-  //           .collection('phoneNumbers')
-  //           .doc(value1.user!.uid)
-  //           .set({
-  //         'phone': model.phone,
-  //       });
-  //       model.id = value1.user!.uid;
-  //       await FirebaseFirestore.instance
-  //           .collection(Constants.gym)
-  //           .doc(AppPreferences.uId)
-  //           .collection(Constants.coach)
-  //           .doc(value1.user?.uid)
-  //           .set(model.toJson());
-  //       print('coach Register Success 😎');
-  //       print('AddCoach userId');
-  //       print(value1.user?.uid);
-  //       if (image != null) {
-  //         await addImageSub(
-  //           type: Constants.coach,
-  //           userId: value1.user!.uid,
-  //           parentImageFile: image,
-  //         );
-  //       }
-  //       emit(ScAddCoach());
-  //       await getHomeData();
-  //     }
-  //   } catch (error) {
-  //     if (error
-  //         .toString()
-  //         .contains('The email address is already in use by another account')) {
-  //       emit(ErorrAddCoach(
-  //           'The email address is already in use by another account'));
-  //     } else {
-  //       emit(ErorrAddCoach(error.toString()));
-  //     }
-  //     print('Error: $error');
-  //   }
-  // }
-
-  // Future<void> addUser({required UserModel model, required File? image}) async {
-  //   try {
-  //     emit(LoadingAddUser());
-  //     var value =
-  //         await FirebaseFirestore.instance.collection('phoneNumbers').get();
-  //     if (checkPhone(model.phone ?? '', value.docs)) {
-  //       emit(ErorrAddUser('Phone number is already used'));
-  //       return;
-  //     } else {
-  //       var value1 = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //         email: model.email ?? '',
-  //         password: model.password ?? '',
-  //       );
-  //       await FirebaseFirestore.instance
-  //           .collection('phoneNumbers')
-  //           .doc(value1.user!.uid)
-  //           .set({
-  //         'phone': model.phone,
-  //       });
-  //       model.id = value1.user!.uid;
-  //       await FirebaseFirestore.instance
-  //           .collection(Constants.gym)
-  //           .doc(AppPreferences.uId)
-  //           .collection(Constants.user)
-  //           .doc(value1.user?.uid)
-  //           .set(model.toJson());
-  //       print('user Register Success 😎');
-  //       print('Adduser userId');
-  //       print(value1.user?.uid);
-  //       if (image != null) {
-  //         await addImageSub(
-  //           type: Constants.user,
-  //           userId: value1.user!.uid,
-  //           parentImageFile: image,
-  //         );
-  //       }
-  //       emit(ScAddUser());
-  //       await getHomeData();
-  //     }
-  //   } catch (error) {
-  //     if (error
-  //         .toString()
-  //         .contains('The email address is already in use by another account')) {
-  //       emit(ErorrAddUser(
-  //           'The email address is already in use by another account'));
-  //     } else {
-  //       emit(ErorrAddUser(error.toString()));
-  //     }
-  //     print('Error: $error');
-  //   }
-  // }
-
-  // Future<void> addDite({required ExerciseModel model}) async {
-  //   try {
-  //     emit(LoadingAddExercise());
-  //     var value = await FirebaseFirestore.instance
-  //         .collection(Constants.gym)
-  //         .doc(AppPreferences.uId)
-  //         .collection(Constants.exercise)
-  //         .add(model.toMap());
-  //     await FirebaseFirestore.instance
-  //         .collection(Constants.gym)
-  //         .doc(AppPreferences.uId)
-  //         .collection(Constants.exercise)
-  //         .doc(value.id)
-  //         .update({'id': value.id});
-  //     print('Exercise added');
-  //     emit(ScAddExercise());
-  //     await getHomeData();
-  //   } catch (error) {
-  //     emit(ErorrAddExercise(error.toString()));
-  //     print('Error: $error');
-  //   }
-  // }
-
-  // Future<void> editExercise({required ExerciseModel model}) async {
-  //   try {
-  //     emit(LoadingEditExercise());
-  //     await FirebaseFirestore.instance
-  //         .collection(Constants.gym)
-  //         .doc(AppPreferences.uId)
-  //         .collection(Constants.exercise)
-  //         .doc(model.id)
-  //         .update(model.toMap());
-  //     var indxex = exercises.indexWhere((element) => element.id == model.id);
-  //     exercises[indxex] = model;
-  //     print('Exercise Edited');
-  //     emit(ScEditExercise());
-  //   } catch (error) {
-  //     emit(ErorrEditExercise(error.toString()));
-  //     print('Error: $error');
-  //   }
-  // }
+  Future<void> updateUserFitnessInfo(
+      {required UserModel newModel, required UserModel oldModel}) async {
+    try {
+      print(newModel.id);
+      emit(LoadingUpdateUserFitnessInfo());
+      await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.user)
+          .doc(newModel.id)
+          .update(newModel.toJson());
+      print('ScUpdateUserFitnessInfo');
+      oldModel.goal = newModel.goal;
+      oldModel.fitnesLevel = newModel.fitnesLevel;
+      oldModel.height = newModel.height;
+      oldModel.weight = newModel.weight;
+      oldModel.bodyFatPercentage = newModel.bodyFatPercentage;
+      emit(ScUpdateUserFitnessInfo());
+    } catch (error) {
+      emit(ErorrUpdateUserFitnessInfo(error.toString()));
+      print('Error: $error');
+    }
+  }
 }

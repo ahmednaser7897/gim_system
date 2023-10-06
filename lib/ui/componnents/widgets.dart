@@ -170,13 +170,9 @@ Widget genderWidget(TextEditingController genderController,
   });
 }
 
+var goals = ['Weight loss', 'Get muscles', 'both of them'];
 Widget userGoalWidget(TextEditingController golaController,
     {String init = 'Weight loss'}) {
-  // var list = ['male', 'female'];
-  // if (init == 'female') {
-  //   list = ['female', 'male'];
-  // }
-  var list = ['Weight loss', 'Get muscles', 'both of them'];
   return StatefulBuilder(builder: (context, setState) {
     return Container(
       width: 40.w,
@@ -206,7 +202,7 @@ Widget userGoalWidget(TextEditingController golaController,
               golaController.text = value.toString();
             });
           },
-          items: list.map((value) {
+          items: goals.map((value) {
             return DropdownMenuItem(
               value: value,
               child: Text(

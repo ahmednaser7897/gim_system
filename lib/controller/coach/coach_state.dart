@@ -35,13 +35,13 @@ class ErorrAddExercise extends CoachState {
   ErorrAddExercise(this.error);
 }
 
-class LoadingEditExercise extends CoachState {}
+class LoadingUpdateUserFitnessInfo extends CoachState {}
 
-class ScEditExercise extends CoachState {}
+class ScUpdateUserFitnessInfo extends CoachState {}
 
-class ErorrEditExercise extends CoachState {
+class ErorrUpdateUserFitnessInfo extends CoachState {
   final String error;
-  ErorrEditExercise(this.error);
+  ErorrUpdateUserFitnessInfo(this.error);
 }
 
 class LoadingGetHomeData extends CoachState {}
@@ -60,22 +60,4 @@ class ScEditCoach extends CoachState {}
 class ErorrEditCoach extends CoachState {
   final String error;
   ErorrEditCoach(this.error);
-}
-
-class LoadingChangeUserBan extends CoachState {}
-
-class ScChangeUserBan extends CoachState {}
-
-class ErorrChangeUserBan extends CoachState {
-  final String error;
-  ErorrChangeUserBan(this.error);
-}
-
-class LoadingChangeCoachBan extends CoachState {}
-
-class ScChangeCoachBan extends CoachState {}
-
-class ErorrChangeCoachBan extends CoachState {
-  final String error;
-  ErorrChangeCoachBan(this.error);
 }

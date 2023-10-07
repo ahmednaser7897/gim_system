@@ -88,7 +88,7 @@ class _ShowUserDitesState extends State<ShowUserDites> {
           isEnable: false,
           keyboardType: TextInputType.text,
           hintText: "Enter Dite Break fast",
-          prefix: Icons.sports_gymnastics,
+          prefix: Icons.food_bank,
           validate: (value) {
             return Validations.normalValidation(value, name: 'Break fast');
           },
@@ -107,7 +107,7 @@ class _ShowUserDitesState extends State<ShowUserDites> {
           isEnable: false,
           keyboardType: TextInputType.text,
           hintText: "Enter Dinner",
-          prefix: Icons.sports_gymnastics,
+          prefix: Icons.food_bank,
           validate: (value) {
             return Validations.normalValidation(value, name: 'Dinner');
           },
@@ -126,7 +126,7 @@ class _ShowUserDitesState extends State<ShowUserDites> {
           isEnable: false,
           keyboardType: TextInputType.text,
           hintText: "Enter  Lunch",
-          prefix: Icons.sports_gymnastics,
+          prefix: Icons.food_bank,
           validate: (value) {
             return Validations.normalValidation(value, name: 'Lunch');
           },

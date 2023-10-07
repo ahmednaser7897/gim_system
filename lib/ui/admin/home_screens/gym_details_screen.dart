@@ -13,8 +13,10 @@ import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/widgets.dart';
 
 class GymDetailsScreen extends StatefulWidget {
-  const GymDetailsScreen({super.key, required this.gymModel});
+  const GymDetailsScreen(
+      {super.key, required this.gymModel, this.canEdit = true});
   final GymModel gymModel;
+  final bool canEdit;
 
   @override
   State<GymDetailsScreen> createState() => _GymDetailsScreenState();
@@ -86,21 +88,23 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                                     NetworkImage(gymModel.image.orEmpty()),
                               ),
                             ),
-                            AppSizedBox.h2,
-                            (state is LoadingChangeGymBan)
-                                ? const CircularProgressComponent()
-                                : Center(
-                                    child: Switch(
-                                      value: gymModel.ban.orFalse(),
-                                      activeColor: Colors.red,
-                                      splashRadius: 18.0,
-                                      onChanged: (value) async {
-                                        await AdminCubit.get(context)
-                                            .changeGymBan(gymModel.id.orEmpty(),
-                                                !gymModel.ban.orFalse());
-                                      },
+                            if (widget.canEdit) AppSizedBox.h2,
+                            if (widget.canEdit)
+                              (state is LoadingChangeGymBan)
+                                  ? const CircularProgressComponent()
+                                  : Center(
+                                      child: Switch(
+                                        value: gymModel.ban.orFalse(),
+                                        activeColor: Colors.red,
+                                        splashRadius: 18.0,
+                                        onChanged: (value) async {
+                                          await AdminCubit.get(context)
+                                              .changeGymBan(
+                                                  gymModel.id.orEmpty(),
+                                                  !gymModel.ban.orFalse());
+                                        },
+                                      ),
                                     ),
-                                  ),
                           ],
                         ),
                       ),

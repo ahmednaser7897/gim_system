@@ -4,14 +4,15 @@ import 'package:gim_system/app/app_prefs.dart';
 import 'package:gim_system/app/constants.dart';
 import 'package:gim_system/ui/admin/admin_main_screen.dart';
 import 'package:gim_system/ui/coach/coach_main_screen.dart';
-import 'package:gim_system/ui/user/user_home_screen.dart';
 
 import 'app/style.dart';
 import 'controller/admin/admin_cubit.dart';
 import 'controller/coach/coach_cubit.dart';
 import 'controller/gym/gym_cubit.dart';
+import 'controller/user/user_cubit.dart';
 import 'ui/auth/login_screen.dart';
 import 'ui/gym/gym_main_screen.dart';
+import 'ui/user/user_main_screen.dart';
 
 class MyApp extends StatelessWidget {
   static late bool isDark;
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CoachCubit(),
+        ),
+        BlocProvider(
+          create: (context) => UserCubit(),
         )
       ],
       child: MaterialApp(

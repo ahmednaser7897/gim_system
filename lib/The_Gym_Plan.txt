@@ -159,6 +159,21 @@ Targets :
     => created_at (date)
 
 ======================================= Permissions =======================================
+admin :
+ahmednaser321@gmail.com
+1234567
+
+gym:
+ahmednaser123@gmail.com
+1234567
+
+coach
+ahmednaser@gmail.com
+1234567
+
+user
+ahmednaser1@gmail.com
+1234567
 
 @ Gym =>    Can do ?->Done
             # Make Login Note: "Can not login if was banned"->Done
@@ -192,13 +207,13 @@ Targets :
             # Chat communication with users of his gym (text or file Message)
 
 @ User =>   Can do? 
-            # Make Login Note: "Can not login if his gym was banned or he was banned"
+            # Make Login Note: "Can not login if his gym was banned or he was banned"->Done
             # Can See Table (
-                            info of his gym,
-                            coaches of his gym,
-                            all of his user_exercises,
+                            info of his gym,->Done
+                            coaches of his gym,->Done
+                            all of his user_exercises,->Done
                             )
-            # Edit His Info
+            # Edit His Info->Done
             # Get Notification if he get new exercise
             # Can make done for each exercise of his user_exercise that coach set it for him
             # Chat communication with his coach of his gym (text or file Message)
@@ -215,3 +230,4 @@ Targets :
             # Can Create New Admin->Done
             # Can Create New Gym->Done
             # Can Ban ( Admins, Gym)->Done
+            

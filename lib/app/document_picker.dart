@@ -35,8 +35,8 @@ class DocumentHelper {
         bool isImage = ext == 'jpg' || ext == 'png' || ext == 'jpeg';
         if (isImage) {
           isValid = true;
-          pickedFile =
-              await compressFile(filePath: filePickerResult.files.single.path!);
+          // pickedFile =
+          //   await compressFile(filePath: filePickerResult.files.single.path!);
         }
 
         return pickedFile;
@@ -55,7 +55,7 @@ class DocumentHelper {
       return null;
     } else {
       await printFileData(image: File(photo.path), title: "image");
-      pickedImage = await compressFile(filePath: photo.path);
+      //pickedImage = await compressFile(filePath: photo.path);
       await printFileData(image: pickedImage!, title: "compressedImage");
       return pickedImage;
     }
@@ -70,11 +70,6 @@ class DocumentHelper {
       targetHeight: imageSize.height.toInt(),
       targetWidth: imageSize.width.toInt(),
     );
-    //print(compressedFile.path);
-    //var compressedImage = await compressedFile.readAsBytes();
-    //var picked = await File(filePath).readAsBytes();
-    //print(compressedImage.length);
-    //print(picked.length);
     return compressedFile;
   }
 

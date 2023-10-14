@@ -98,7 +98,7 @@ class ImageWidget extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primaryColor,
+            color: AppColors.primer,
           ),
           child: Material(
             color: Colors.transparent,

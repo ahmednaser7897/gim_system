@@ -84,6 +84,7 @@ class _UserHomeState extends State<UserHome> {
                       builder: (context) => CoachDetailsScreen(
                         coachModel: cubit.coachs[index],
                         canEdit: false,
+                        isUser: true,
                       ),
                     ),
                   );

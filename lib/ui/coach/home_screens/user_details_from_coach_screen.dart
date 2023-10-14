@@ -7,8 +7,10 @@ import 'package:gim_system/controller/coach/coach_cubit.dart';
 import 'package:gim_system/ui/coach/home_screens/add_new_dite.dart';
 import 'package:gim_system/ui/componnents/custom_button.dart';
 
+import '../../../app/icon_broken.dart';
 import '../../../model/user_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
+import '../chat/coach_message_user_screen.dart';
 import 'add_new_user_exercises.dart';
 import 'show_user_diets.dart';
 import 'show_user_exercises.dart';
@@ -197,6 +199,26 @@ class _UserDetailsFromCoachScreenState
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          CoachCubit.get(context).getMessages(
+            userModel: model,
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CoachMessageUserScreen(
+                user: model,
+              ),
+            ),
+          );
+        },
+        backgroundColor: Colors.teal.withOpacity(0.8),
+        child: const Icon(
+          IconBroken.Chat,
+          color: Colors.white,
+        ),
       ),
     );
   }

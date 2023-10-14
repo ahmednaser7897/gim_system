@@ -3,17 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
+import 'package:gim_system/controller/user/user_cubit.dart';
 
+import '../../../app/icon_broken.dart';
 import '../../../controller/gym/gym_cubit.dart';
 import '../../../model/coach_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
+import '../../user/user_chat/user_message_coach_screen.dart';
 
 class CoachDetailsScreen extends StatefulWidget {
   const CoachDetailsScreen(
-      {super.key, required this.coachModel, this.canEdit = true});
+      {super.key,
+      required this.coachModel,
+      this.canEdit = true,
+      this.isUser = false});
   final CoachModel coachModel;
   final bool canEdit;
+  final bool isUser;
   @override
   State<CoachDetailsScreen> createState() => _CoachDetailsScreenState();
 }
@@ -225,6 +232,28 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
           ),
         ),
       ),
+      floatingActionButton: widget.isUser
+          ? FloatingActionButton(
+              onPressed: () {
+                UserCubit.get(context).getMessages(
+                  coachModel: coachModel,
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserMessageCoachScreen(
+                      coach: coachModel,
+                    ),
+                  ),
+                );
+              },
+              backgroundColor: Colors.teal.withOpacity(0.8),
+              child: const Icon(
+                IconBroken.Chat,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 }

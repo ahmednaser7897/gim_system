@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,8 +11,9 @@ import 'package:gim_system/model/diets_model.dart';
 import 'package:gim_system/model/exercises_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:gim_system/ui/coach/settings_screens/coach_settings.dart';
-
+import 'package:http/http.dart' as http;
 import '../../model/coach_model.dart';
+import '../../model/message_model.dart';
 import '../../model/user_model.dart';
 import '../../ui/coach/home_screens/coach_home.dart';
 import '../admin/admin_cubit.dart';
@@ -341,5 +343,132 @@ class CoachCubit extends Cubit<CoachState> {
       emit(ErorrUpdateUserFitnessInfo(error.toString()));
       print('Error: $error');
     }
+  }
+
+  Future<void> sendMessage(
+      {required MessageModel messageModel, File? file}) async {
+    try {
+      emit(LoadingCoachSendMessage());
+      if (file != null) {
+        messageModel.file = await uploadFile(file);
+      }
+      var value = FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.coach)
+          .doc(coachModel!.id)
+          .collection(Constants.chats)
+          .doc(messageModel.userId)
+          .collection(Constants.messages)
+          .doc();
+      messageModel.id = value.id;
+      await value.set(messageModel.toMap());
+      var value1 = FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.user)
+          .doc(messageModel.userId)
+          .collection(Constants.chats)
+          .doc(coachModel!.id)
+          .collection(Constants.messages)
+          .doc();
+      messageModel.id = value1.id;
+      await value1.set(messageModel.toMap());
+      emit(ScCoachSendMessage());
+    } catch (error) {
+      emit(ErorrCoachSendMessage(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  Future<String?> uploadFile(File file) async {
+    try {
+      emit(LoadingUploadFile());
+      var value = await firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('files/${file.path.split('/').last}')
+          .putFile(file);
+      emit(ScUploadFile());
+      return value.ref.getDownloadURL();
+    } catch (e) {
+      emit(ErorrUploadFile(e.toString()));
+      return null;
+    }
+  }
+
+  List<MessageModel> messages = [];
+  Future<void> getMessages({required UserModel userModel}) async {
+    try {
+      emit(LoadingCoachGetdMessages());
+      FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.coach)
+          .doc(coachModel!.id)
+          .collection(Constants.chats)
+          .doc(userModel.id)
+          .collection(Constants.messages)
+          .orderBy('dateTime')
+          .snapshots()
+          .listen((event) {
+        messages = [];
+        for (var element in event.docs) {
+          messages.add(MessageModel.fromJson(element.data()));
+        }
+        emit(ScCoachGetdMessages());
+      });
+      emit(ScCoachGetdMessages());
+    } catch (error) {
+      emit(ErorrCoachGetdMessages(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  void sendNotificationsToUser() async {
+    // Get all the parent documents from the parent collection
+    var userDocs = await FirebaseFirestore.instance
+        .collection(Constants.gym)
+        .doc(AppPreferences.gymUid)
+        .collection(Constants.user)
+        .get();
+    // Get all the token documents from the token collection
+    var tokenDocs = await FirebaseFirestore.instance.collection('tokens').get();
+    // Convert the token documents to a map for easier lookup later
+    var tokensMap = {for (var doc in tokenDocs.docs) doc['id']: doc['token']};
+
+    // Loop through each parent document
+    for (var userDoc in userDocs.docs) {
+      var usertId = userDoc.id;
+      if (tokensMap.containsKey(usertId)) {
+        var token = tokensMap[usertId];
+        // Send a notification to the parent's token
+        sendNotificationToUser(token);
+      } else {
+        print('No token found for user $usertId');
+      }
+    }
+  }
+
+  String TOKEN_MESSAGE =
+      "key=AAAArRR-L4o:APA91bFIDIihAOvoDnrpGUlWFG9k2XUKmeWht8sIQD_zGfBz35anNyaQyjJscLEByBolXR9oeoSC7CqNTdBlfZaEq2yPCtdDvPK2e1GhOL5Jjgv0cVKjzvzgP7q6HlryEkO5ws1BgJHM";
+
+  void sendNotificationToUser(String token) async {
+    var response = await http.post(
+      Uri.parse("https://fcm.googleapis.com/fcm/send"),
+      headers: <String, String>{
+        "content-type": "application/json",
+        "Authorization": TOKEN_MESSAGE,
+      },
+      body: jsonEncode({
+        "to": token,
+        "notification": {
+          "body":
+              "👋 A new activity has been added. Log in to your account to view the details and participate.",
+          "title": "New Activity Added🎉"
+        },
+      }),
+    );
+    // Check the response for errors or other information
+    print(response.body);
   }
 }

@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:gim_system/model/gym_model.dart';
 
 import '../../model/coach_model.dart';
+import '../../model/message_model.dart';
 import '../../model/user_model.dart';
 import '../../ui/user/home_screens/user_home.dart';
 import '../../ui/user/settings_screens/user_settings.dart';
@@ -252,7 +253,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> setExerciseAsRead({
+  Future<void> setExerciseAsDone({
     required UserExercises userExercises,
     required int index,
   }) async {
@@ -268,10 +269,120 @@ class UserCubit extends Cubit<UserState> {
           .collection(Constants.userExercise)
           .doc(userExercises.id)
           .update(userExercises.toJson());
+      bool isAllDone = true;
+      userExercises.exercises.orEmpty().forEach((element) {
+        if (!element.done.orFalse()) {
+          isAllDone = false;
+        }
+      });
+      if (isAllDone) {
+        await setAllExerciseAsDone(userExercises: userExercises);
+      }
       emit(ScSetExerciseAsRead());
     } catch (error) {
       userExercises.exercises.orEmpty()[index].done = false;
       emit(ErorrSetExerciseAsRead(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  Future<void> setAllExerciseAsDone({
+    required UserExercises userExercises,
+  }) async {
+    try {
+      emit(LoadingSetAllExerciseAsRead());
+      await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.user)
+          .doc(userExercises.userId)
+          .collection(Constants.userExercise)
+          .doc(userExercises.id)
+          .update({'done': true});
+      userExercises.done = true;
+      emit(ScSetAllExerciseAsRead());
+    } catch (error) {
+      emit(ErorrSetAllExerciseAsRead(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  Future<void> sendMessage(
+      {required MessageModel messageModel, File? file}) async {
+    try {
+      emit(LoadingUserSendMessage());
+      if (file != null) {
+        messageModel.file = await uploadFile(file);
+      }
+      var value = FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.user)
+          .doc(userModel!.id)
+          .collection(Constants.chats)
+          .doc(messageModel.coachId)
+          .collection(Constants.messages)
+          .doc();
+      messageModel.id = value.id;
+      await value.set(messageModel.toMap());
+      var value1 = FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.coach)
+          .doc(messageModel.coachId)
+          .collection(Constants.chats)
+          .doc(userModel!.id)
+          .collection(Constants.messages)
+          .doc();
+      messageModel.id = value1.id;
+      await value1.set(messageModel.toMap());
+      emit(ScUserSendMessage());
+    } catch (error) {
+      emit(ErorrUserSendMessage(error.toString()));
+      print('Error: $error');
+    }
+  }
+
+  Future<String?> uploadFile(File file) async {
+    try {
+      emit(LoadingUploadFile());
+      var value = await firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('files/${file.path.split('/').last}')
+          .putFile(file);
+      emit(ScUploadFile());
+      return value.ref.getDownloadURL();
+    } catch (e) {
+      emit(ErorrUploadFile(e.toString()));
+      return null;
+    }
+  }
+
+  List<MessageModel> messages = [];
+  Future<void> getMessages({required CoachModel coachModel}) async {
+    try {
+      // messages = [];
+      emit(LoadingUserGetdMessages());
+      FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .collection(Constants.user)
+          .doc(userModel!.id)
+          .collection(Constants.chats)
+          .doc(coachModel.id)
+          .collection(Constants.messages)
+          .orderBy('dateTime')
+          .snapshots()
+          .listen((event) {
+        messages = [];
+        for (var element in event.docs) {
+          messages.add(MessageModel.fromJson(element.data()));
+        }
+        emit(ScUserGetdMessages());
+      });
+      emit(ScUserGetdMessages());
+    } catch (error) {
+      emit(ErorrUserGetdMessages(error.toString()));
       print('Error: $error');
     }
   }

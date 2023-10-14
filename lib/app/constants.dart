@@ -15,4 +15,6 @@ class Constants {
   static const String dite = "dite";
   static const String userExercise = "userExercise";
   static const String exercise = "Exercise";
+  static const String chats = "chats";
+  static const String messages = "messages";
 }

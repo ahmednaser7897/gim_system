@@ -61,3 +61,30 @@ class ErorrEditCoach extends CoachState {
   final String error;
   ErorrEditCoach(this.error);
 }
+
+class LoadingCoachSendMessage extends CoachState {}
+
+class ScCoachSendMessage extends CoachState {}
+
+class ErorrCoachSendMessage extends CoachState {
+  final String error;
+  ErorrCoachSendMessage(this.error);
+}
+
+class LoadingCoachGetdMessages extends CoachState {}
+
+class ScCoachGetdMessages extends CoachState {}
+
+class ErorrCoachGetdMessages extends CoachState {
+  final String error;
+  ErorrCoachGetdMessages(this.error);
+}
+
+class LoadingUploadFile extends CoachState {}
+
+class ScUploadFile extends CoachState {}
+
+class ErorrUploadFile extends CoachState {
+  final String error;
+  ErorrUploadFile(this.error);
+}

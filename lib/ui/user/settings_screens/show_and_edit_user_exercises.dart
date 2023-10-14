@@ -67,8 +67,8 @@ class _ShowAndEditUserExercisesState extends State<ShowAndEditUserExercises> {
   }
 
   Widget userEsercisesWidget(UserExercises model) {
-    String date =
-        DateFormat('yMMMMEEEEd').format(DateTime.parse(model.date.orEmpty()));
+    String date = DateFormat('dd MMM yyyy - hh:mm a')
+        .format(DateTime.parse(model.date.orEmpty()));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +124,7 @@ class _ShowAndEditUserExercisesState extends State<ShowAndEditUserExercises> {
     UserExercises userExercises,
   ) {
     return Builder(builder: (context) {
-      var cubit = UserCubit.get(context);
+      //var cubit = UserCubit.get(context);
       return InkWell(
         onTap: () {
           Clipboard.setData(
@@ -198,42 +198,49 @@ class _ShowAndEditUserExercisesState extends State<ShowAndEditUserExercises> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                BlocConsumer<UserCubit, UserState>(
-                  listener: (context, state) {
-                    if (state is ScSetExerciseAsRead) {
-                      showFlutterToast(
-                        message: "Exercise Set As Read",
-                        toastColor: Colors.green,
-                      );
-                      Navigator.pop(context);
-                    }
-                    if (state is ErorrSetExerciseAsRead) {
-                      showFlutterToast(
-                        message: state.error,
-                        toastColor: Colors.red,
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    UserCubit cubit = UserCubit.get(context);
-                    return state is LoadingSetExerciseAsRead &&
-                            state.id ==
-                                userExercises.id.orEmpty() + index.toString()
-                        ? const CircularProgressComponent()
-                        : SizedBox(
-                            width: 30.w,
-                            height: 6.h,
-                            child: CustomButton(
-                              onTap: () {
-                                cubit.setExerciseAsRead(
-                                    userExercises: userExercises, index: index);
-                              },
-                              fontsize: 10,
-                              text: 'set as finished',
-                            ),
-                          );
-                  },
-                ),
+                if (!(model.done ?? false))
+                  BlocConsumer<UserCubit, UserState>(
+                    listener: (context, state) {
+                      if (state is ScSetExerciseAsRead) {
+                        showFlutterToast(
+                          message: "Sub Exercise Set As Done",
+                          toastColor: Colors.green,
+                        );
+                      }
+                      if (state is ScSetAllExerciseAsRead) {
+                        showFlutterToast(
+                          message: "All Exercise Set As Done",
+                          toastColor: Colors.green,
+                        );
+                      }
+                      if (state is ErorrSetExerciseAsRead) {
+                        showFlutterToast(
+                          message: state.error,
+                          toastColor: Colors.red,
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      UserCubit cubit = UserCubit.get(context);
+                      return state is LoadingSetExerciseAsRead &&
+                              state.id ==
+                                  userExercises.id.orEmpty() + index.toString()
+                          ? const CircularProgressComponent()
+                          : SizedBox(
+                              width: 30.w,
+                              height: 6.h,
+                              child: CustomButton(
+                                onTap: () {
+                                  cubit.setExerciseAsDone(
+                                      userExercises: userExercises,
+                                      index: index);
+                                },
+                                fontsize: 10,
+                                text: 'set as finished',
+                              ),
+                            );
+                    },
+                  ),
               ],
             ),
           ],

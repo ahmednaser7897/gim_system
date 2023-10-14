@@ -42,7 +42,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: fontSize,
         fontFamily: mainArFont,
-        color: color ?? AppColors.primaryColor,
+        color: color ?? AppColors.primer,
         height: 1.2,
         fontWeight: fontWeight);
   }
@@ -50,17 +50,13 @@ class AppTextStyle {
 // regular style
 
   static TextStyle getRegularStyle(
-      {double fontSize = 12,
-       required Color color
-       , double height = 1.2}) {
+      {double fontSize = 12, required Color color, double height = 1.2}) {
     return getTextStyle(fontSize, FontWeight.w400, color);
   }
 
 // bold style
 
-  static TextStyle getBoldStyle({double fontSize = 12, 
-  required Color color
-  }) {
+  static TextStyle getBoldStyle({double fontSize = 12, required Color color}) {
     return getTextStyle(fontSize, FontWeight.w800, color);
   }
 }

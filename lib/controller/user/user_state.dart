@@ -64,3 +64,30 @@ class ErorrSetAllExerciseAsRead extends UserState {
   final String error;
   ErorrSetAllExerciseAsRead(this.error);
 }
+
+class LoadingUserSendMessage extends UserState {}
+
+class ScUserSendMessage extends UserState {}
+
+class ErorrUserSendMessage extends UserState {
+  final String error;
+  ErorrUserSendMessage(this.error);
+}
+
+class LoadingUserGetdMessages extends UserState {}
+
+class ScUserGetdMessages extends UserState {}
+
+class ErorrUserGetdMessages extends UserState {
+  final String error;
+  ErorrUserGetdMessages(this.error);
+}
+
+class LoadingUploadFile extends UserState {}
+
+class ScUploadFile extends UserState {}
+
+class ErorrUploadFile extends UserState {
+  final String error;
+  ErorrUploadFile(this.error);
+}

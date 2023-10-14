@@ -191,7 +191,7 @@ ahmednaser1@gmail.com
             # Create, Edit his exercises->Done
             # Ban (User, Coach)->Done
 
-@ Coach =>    Can do ?->Done exept chat
+@ Coach =>    Can do ?->Done
             # Make Login Note: "Can not login if his gym was banned or he was banned"->Done
             # Can See Table (
                             his gym info,->Done
@@ -204,7 +204,7 @@ ahmednaser1@gmail.com
             # Edit Fitness info of each user of his gym->Done
             # Set user_exercise of each user of his gym->Done
             # Set diet of each user of his gym->Done
-            # Chat communication with users of his gym (text or file Message)
+            # Chat communication with users of his gym (text or file Message)->Done
 
 @ User =>   Can do? 
             # Make Login Note: "Can not login if his gym was banned or he was banned"->Done
@@ -215,8 +215,8 @@ ahmednaser1@gmail.com
                             )
             # Edit His Info->Done
             # Get Notification if he get new exercise
-            # Can make done for each exercise of his user_exercise that coach set it for him
-            # Chat communication with his coach of his gym (text or file Message)
+            # Can make done for each exercise of his user_exercise that coach set it for him->Done
+            # Chat communication with his coach of his gym (text or file Message)->Done
 
 @ Admin =>      Can do ?->Done
             # Make Login  Note: "Can not login if was banned"->Done

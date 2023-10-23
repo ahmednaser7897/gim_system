@@ -5,6 +5,8 @@ import 'package:gim_system/app/constants.dart';
 import 'package:gim_system/ui/admin/admin_main_screen.dart';
 import 'package:gim_system/ui/coach/coach_main_screen.dart';
 
+import 'app/notification/firebase_notification.dart';
+import 'app/notification/local_notification.dart';
 import 'app/style.dart';
 import 'controller/admin/admin_cubit.dart';
 import 'controller/coach/coach_cubit.dart';
@@ -21,6 +23,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HandleFirebaseNotification.handleNotifications(context);
+    HandleLocalNotification notification = HandleLocalNotification();
+    notification.initializeFlutterNotification(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider(

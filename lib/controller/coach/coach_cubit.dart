@@ -357,6 +357,7 @@ class CoachCubit extends Cubit<CoachState> {
       });
       print('Exercise added');
       print('Exercises l is ${users[indxex].userExercises.orEmpty().length}');
+      await sendNotificationsToUser(users[indxex]);
       emit(ScAddExercise());
     } catch (error) {
       emit(ErorrAddExercise(error.toString()));
@@ -467,51 +468,71 @@ class CoachCubit extends Cubit<CoachState> {
     }
   }
 
-  void sendNotificationsToUser() async {
-    // Get all the parent documents from the parent collection
-    var userDocs = await FirebaseFirestore.instance
-        .collection(Constants.gym)
-        .doc(AppPreferences.gymUid)
-        .collection(Constants.user)
-        .get();
-    // Get all the token documents from the token collection
-    var tokenDocs = await FirebaseFirestore.instance.collection('tokens').get();
-    // Convert the token documents to a map for easier lookup later
-    var tokensMap = {for (var doc in tokenDocs.docs) doc['id']: doc['token']};
-
-    // Loop through each parent document
-    for (var userDoc in userDocs.docs) {
-      var usertId = userDoc.id;
-      if (tokensMap.containsKey(usertId)) {
-        var token = tokensMap[usertId];
-        // Send a notification to the parent's token
-        sendNotificationToUser(token);
-      } else {
-        print('No token found for user $usertId');
-      }
+  Future<void> sendNotificationsToUser(UserModel userModel) async {
+    try {
+      // Get all the parent documents from the parent collection
+      // var userDocs = await FirebaseFirestore.instance
+      //     .collection(Constants.gym)
+      //     .doc(AppPreferences.gymUid)
+      //     .collection(Constants.user)
+      //     .get();
+      // Get all the token documents from the token collection
+      print("sendNotificationsToUser1");
+      var tokenDocs =
+          await FirebaseFirestore.instance.collection('tokens').get();
+      // Convert the token documents to a map for easier lookup later
+      //var tokensMap = {for (var doc in tokenDocs.docs) doc['id']: doc['token']};
+      //var token='';
+      tokenDocs.docs.forEach((element) async {
+        if (element.id == userModel.id) {
+          print("sendNotificationsToUser2");
+          print(element.data()['token']);
+          await sendNotificationToUser(element.data()['token']);
+        }
+      });
+      // Loop through each parent document
+      // for (var userDoc in userDocs.docs) {
+      //   var usertId = userDoc.id;
+      //   if (tokensMap.containsKey(usertId)) {
+      //     var token = tokensMap[usertId];
+      //     // Send a notification to the parent's token
+      //     sendNotificationToUser(token);
+      //   } else {
+      //     print('No token found for user $usertId');
+      //   }
+      // }
+    } catch (e) {
+      print("erorr sendNotificationsToUser $e");
     }
   }
 
-  String TOKEN_MESSAGE =
-      "key=AAAArRR-L4o:APA91bFIDIihAOvoDnrpGUlWFG9k2XUKmeWht8sIQD_zGfBz35anNyaQyjJscLEByBolXR9oeoSC7CqNTdBlfZaEq2yPCtdDvPK2e1GhOL5Jjgv0cVKjzvzgP7q6HlryEkO5ws1BgJHM";
+  String authorization =
+      "key=AAAAd2vXNyY:APA91bGddOGr4r1Y9CAWFlT5onvbv6scxr_ouuGK7sv3AJNSYBvvdnz76-0kYcE3-FgoPvfYxX2yvvB-n4txf8CLrw1H31eF38Gh-ejEMVZZcXa5kKWe1XRP_g06j-6BT2hfcjKU_-PS";
 
-  void sendNotificationToUser(String token) async {
-    var response = await http.post(
-      Uri.parse("https://fcm.googleapis.com/fcm/send"),
-      headers: <String, String>{
-        "content-type": "application/json",
-        "Authorization": TOKEN_MESSAGE,
-      },
-      body: jsonEncode({
-        "to": token,
-        "notification": {
-          "body":
-              "👋 A new activity has been added. Log in to your account to view the details and participate.",
-          "title": "New Activity Added🎉"
+  Future<void> sendNotificationToUser(String token) async {
+    try {
+      print("sendNotificationToUserrrr1");
+      var response = await http.post(
+        Uri.parse("https://fcm.googleapis.com/fcm/send"),
+        headers: <String, String>{
+          "content-type": "application/json",
+          "Authorization": authorization,
         },
-      }),
-    );
-    // Check the response for errors or other information
-    print(response.body);
+        body: jsonEncode({
+          "to": token,
+          "notification": {
+            "body":
+                "👋 A new exercise has been added. Log in to your account to view the details and participate.",
+            "title": "New Exercise Added🎉"
+          },
+        }),
+      );
+      print("sendNotificationToUserrrr2");
+      // Check the response for errors or other information
+      print(response.statusCode);
+      print(response.body);
+    } catch (e) {
+      print("erorr sendNotificationToUserrrrr $e");
+    }
   }
 }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:gim_system/ui/admin/home_screens/gym_details_screen.dart';
+import 'package:gim_system/ui/admin/gyms_screen/gym_details_screen.dart';
 
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/user/user_cubit.dart';
-import '../../coach/home_screens/show_user_diets.dart';
+import '../../coach/users/show_user_diets.dart';
 import '../../componnents/log_out_button.dart';
 import '../../componnents/screen_builder.dart';
 import '../../componnents/widgets.dart';

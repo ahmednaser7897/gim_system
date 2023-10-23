@@ -183,8 +183,8 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       keyboardType: TextInputType.number,
                       hintText: "Enter User age",
                       validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'User age');
+                        return Validations.numberValidation(value,
+                            name: 'Age', isInt: true);
                       },
                     ),
                     AppSizedBox.h3,
@@ -312,6 +312,9 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
+                                    emailController.text = emailController.text
+                                        .replaceAll(' ', '')
+                                        .toLowerCase();
                                     cubit.addUser(
                                         image: ImageCubit.get(context).image,
                                         model: UserModel(

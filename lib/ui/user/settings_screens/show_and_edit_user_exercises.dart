@@ -1,23 +1,28 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_colors.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/app_sized_box.dart';
-import '../../../app/app_validation.dart';
+import '../../../app/fuctions.dart';
+import '../../../controller/coach/coach_cubit.dart';
 import '../../../controller/user/user_cubit.dart';
 import '../../../model/exercises_model.dart';
 import '../../../model/user_model.dart';
-import '../../componnents/app_textformfiled_widget.dart';
-import '../../componnents/const_widget.dart';
-import '../../componnents/custom_button.dart';
-import '../../componnents/show_flutter_toast.dart';
+import '../../coach/users/add_new_user_exercises.dart';
+import 'exercise_details.dart';
 
 class ShowAndEditUserExercises extends StatefulWidget {
-  const ShowAndEditUserExercises({super.key, required this.user});
+  const ShowAndEditUserExercises(
+      {super.key,
+      required this.user,
+      this.canEdit = true,
+      this.canAdd = false});
   final UserModel user;
+  final bool canEdit;
+  final bool canAdd;
 
   @override
   State<ShowAndEditUserExercises> createState() =>
@@ -37,18 +42,36 @@ class _ShowAndEditUserExercisesState extends State<ShowAndEditUserExercises> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Show User Exercises'),
+          actions: [
+            if (widget.canAdd)
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddNewUserExercisesScreen(
+                          user: user,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add))
+          ],
         ),
         body: BlocConsumer<UserCubit, UserState>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
+          listener: (context, state) {},
           builder: (context, state) {
-            return esercisesWidget();
+            return BlocConsumer<CoachCubit, CoachState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return esercisesList();
+              },
+            );
           },
         ));
   }
 
-  Widget esercisesWidget() {
+  Widget esercisesList() {
     return ListView.separated(
         padding: EdgeInsets.all(5.w),
         itemBuilder: (context, index) =>
@@ -67,183 +90,97 @@ class _ShowAndEditUserExercisesState extends State<ShowAndEditUserExercises> {
   }
 
   Widget userEsercisesWidget(UserExercises model) {
-    String date = DateFormat('dd MMM yyyy - hh:mm a')
-        .format(DateTime.parse(model.date.orEmpty()));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (model.coachModel != null)
-              Text(
-                'Coach : ${model.coachModel!.name.orEmpty()}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            AppSizedBox.w5,
-            Expanded(
-              child: Text(
-                date,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-          ],
-        ),
-        AppSizedBox.h1,
-        Text(
-          "Main Exercise Status : ${model.done.orFalse() ? "finished" : "not finish"}",
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppColors.grey,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        AppSizedBox.h1,
-        ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return eserciseItem(
-                  model.exercises.orEmpty()[index], index, model);
-            },
-            separatorBuilder: (context, index) => AppSizedBox.h1,
-            itemCount: model.exercises.orEmpty().length),
-      ],
-    );
-  }
-
-  Widget eserciseItem(
-    Exercise model,
-    int index,
-    UserExercises userExercises,
-  ) {
     return Builder(builder: (context) {
-      //var cubit = UserCubit.get(context);
       return InkWell(
         onTap: () {
-          Clipboard.setData(
-              ClipboardData(text: model.exerciseModel!.videoLink.orEmpty()));
-          showFlutterToast(
-            message: "Video link copied",
-            toastColor: Colors.green,
-          );
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExerciseDetails(
+                  canEdit: widget.canEdit,
+                  model: model,
+                ),
+              ));
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (model.exerciseModel != null)
-              Text(
-                "Exercise name : ${model.exerciseModel!.name.orEmpty()}",
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w600,
+        child: FadeInUp(
+          from: 20,
+          delay: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 500),
+          child: Container(
+            width: 100.w,
+            margin: const EdgeInsets.symmetric(
+              vertical: 5,
+            ),
+            decoration: BoxDecoration(
+              color: model.done.orFalse() ? Colors.white : Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
                 ),
-              ),
-            AppSizedBox.h1,
-            const Text(
-              'Count :',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.grey,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            AppSizedBox.h1,
-            AppTextFormFiledWidget(
-              controller: TextEditingController(text: model.count.toString()),
-              isEnable: false,
-              keyboardType: TextInputType.number,
-              hintText: "Enter Exercises count",
-              prefix: Icons.numbers,
-              validate: (value) {
-                return Validations.normalValidation(value, name: 'count');
-              },
-            ),
-            AppSizedBox.h1,
-            const Text(
-              'Total :',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.grey,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            AppSizedBox.h1,
-            AppTextFormFiledWidget(
-              controller: TextEditingController(text: model.total.toString()),
-              isEnable: false,
-              keyboardType: TextInputType.number,
-              hintText: "Enter Exercises total",
-              prefix: Icons.numbers,
-              validate: (value) {
-                return Validations.normalValidation(value, name: 'total');
-              },
-            ),
-            AppSizedBox.h1,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "sub exercise Status : ${model.done.orFalse() ? "finished" : "not finish"}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.grey,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                if (!(model.done ?? false))
-                  BlocConsumer<UserCubit, UserState>(
-                    listener: (context, state) {
-                      if (state is ScSetExerciseAsRead) {
-                        showFlutterToast(
-                          message: "Sub Exercise Set As Done",
-                          toastColor: Colors.green,
-                        );
-                      }
-                      if (state is ScSetAllExerciseAsRead) {
-                        showFlutterToast(
-                          message: "All Exercise Set As Done",
-                          toastColor: Colors.green,
-                        );
-                      }
-                      if (state is ErorrSetExerciseAsRead) {
-                        showFlutterToast(
-                          message: state.error,
-                          toastColor: Colors.red,
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      UserCubit cubit = UserCubit.get(context);
-                      return state is LoadingSetExerciseAsRead &&
-                              state.id ==
-                                  userExercises.id.orEmpty() + index.toString()
-                          ? const CircularProgressComponent()
-                          : SizedBox(
-                              width: 30.w,
-                              height: 6.h,
-                              child: CustomButton(
-                                onTap: () {
-                                  cubit.setExerciseAsDone(
-                                      userExercises: userExercises,
-                                      index: index);
-                                },
-                                fontsize: 10,
-                                text: 'set as finished',
-                              ),
-                            );
-                    },
-                  ),
               ],
             ),
-          ],
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppSizedBox.w3,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Coach : ${model.coachModel!.name.orEmpty()}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.almarai(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                      AppSizedBox.w1,
+                      Text(
+                        getDate(model.date.orEmpty()),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.almarai(
+                          color: Colors.grey,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSizedBox.h1,
+                  Text(
+                    "Exercise Status : ${model.done.orFalse() ? "Finished" : "Not Finish"}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  AppSizedBox.h1,
+                  Text(
+                    "Exercises count : ${model.exercises.orEmpty().length}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       );
     });

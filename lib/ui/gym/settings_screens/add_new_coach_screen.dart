@@ -187,8 +187,8 @@ class _AddNewCoachScreenState extends State<AddNewCoachScreen> {
                       keyboardType: TextInputType.number,
                       hintText: "Enter coach age",
                       validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'coach age');
+                        return Validations.numberValidation(value,
+                            name: 'Age', isInt: true);
                       },
                     ),
                     AppSizedBox.h3,
@@ -242,6 +242,9 @@ class _AddNewCoachScreenState extends State<AddNewCoachScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
+                                    emailController.text = emailController.text
+                                        .replaceAll(' ', '')
+                                        .toLowerCase();
                                     cubit.addCoach(
                                         image: ImageCubit.get(context).image,
                                         model: CoachModel(

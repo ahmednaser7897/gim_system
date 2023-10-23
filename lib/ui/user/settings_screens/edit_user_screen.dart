@@ -166,8 +166,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
                     keyboardType: TextInputType.number,
                     hintText: "Enter User age",
                     validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'your age');
+                      return Validations.numberValidation(value,
+                          name: 'Age', isInt: true);
                     },
                   ),
                   AppSizedBox.h3,

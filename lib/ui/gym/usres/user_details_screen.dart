@@ -6,11 +6,12 @@ import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
 import '../../../model/user_model.dart';
-import '../../coach/home_screens/show_user_diets.dart';
-import '../../coach/home_screens/show_user_exercises.dart';
+import '../../coach/users/show_user_diets.dart';
 import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
 import '../../componnents/custom_button.dart';
+import '../../componnents/show_flutter_toast.dart';
+import '../../user/settings_screens/show_and_edit_user_exercises.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   const UserDetailsScreen(
@@ -66,6 +67,17 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             setState(() {
               model.ban = !model.ban.orFalse();
             });
+            if (model.ban.orFalse()) {
+              showFlutterToast(
+                message: "User is banned",
+                toastColor: Colors.green,
+              );
+            } else {
+              showFlutterToast(
+                message: "User is unbanned",
+                toastColor: Colors.green,
+              );
+            }
           }
         },
         builder: (context, state) => SingleChildScrollView(
@@ -83,7 +95,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                       child: Column(
                         children: [
                           Hero(
-                            tag: model.email.orEmpty(),
+                            tag: model.id.orEmpty(),
                             child: CircleAvatar(
                               radius: 15.w,
                               backgroundImage:
@@ -123,8 +135,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ShowUserExercises(
+                                builder: (context) => ShowAndEditUserExercises(
                                   user: model,
+                                  canEdit: false,
                                 ),
                               ),
                             );
@@ -244,8 +257,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     keyboardType: TextInputType.number,
                     hintText: "Enter User age",
                     validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'your age');
+                      return Validations.numberValidation(value,
+                          name: 'Age', isInt: true);
                     },
                   ),
                   AppSizedBox.h3,

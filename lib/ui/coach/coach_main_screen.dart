@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gim_system/app/extensions.dart';
 
 import '../../../app/icon_broken.dart';
+import '../../app/app_assets.dart';
 import '../../controller/coach/coach_cubit.dart';
 
 class CoachHomeScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class _CoachHomeScreenState extends State<CoachHomeScreen> {
   @override
   void initState() {
     CoachCubit.get(context).getCurrentCoachData();
+    CoachCubit.get(context).getCurrentGymData();
     CoachCubit.get(context).getHomeData();
     super.initState();
   }
@@ -29,21 +32,30 @@ class _CoachHomeScreenState extends State<CoachHomeScreen> {
           appBar: AppBar(
             title: Text(cubit.titles[cubit.currentIndex]),
           ),
-          // floatingActionButton: FloatingActionButton(onPressed: () {
-          //   cubit.getHomeData();
-          // }),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: cubit.currentIndex,
             onTap: (index) {
               cubit.changeBottomNavBar(index);
             },
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(IconBroken.Home),
-                label: 'Home',
+                icon: Image.asset(
+                  AppAssets.uoach,
+                  height: 7.w,
+                  width: 7.w,
+                ),
+                label: 'Coachs',
               ),
               BottomNavigationBarItem(
+                icon: Image.asset(
+                  AppAssets.user,
+                  height: 7.w,
+                  width: 7.w,
+                ),
+                label: 'Users',
+              ),
+              const BottomNavigationBarItem(
                 icon: Icon(IconBroken.Setting),
                 label: 'Settings',
               ),

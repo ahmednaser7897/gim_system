@@ -230,4 +230,74 @@ ahmednaser1@gmail.com
             # Can Create New Admin->Done
             # Can Create New Gym->Done
             # Can Ban ( Admins, Gym)->Done
+------------------------------------------------------
+
+@ Global
+    # Make inputs of login page empty by default
+    # Make password minimum 8
+    # Show each data of each table into new screen like i explained it into plan (Home Page)
+    # Hash Password before save it
+    # Age must to be unsigned integer 
+    # Make image not required for all users
+    # =>FOCUS<= When take any screen copy and paste it to any other user don't forget to change name of this screen
+    # =>FOCUS<= with english spelling
+
+@ Login Page
+    # ignore spaces into email input to make login is easer->Done
+    # Convert user not found alert to be invalid account->Done
+
+@ Admin 
+
+    => Home Page
+        # Don't show data of admin that made sign in into admins page->Done
+        # 
+
+    => Add New Admin Screen
+        # Make image not required to create new admin and use default image for admin that i sent it to you->Done
+        # I tried to enter word into age input and it's passed must to make validation into age input to take only numbers->Done 
+
+    => Add New Gym
+        # Don't make user must to enter lowercase letters into email you can convert it by yourself before save it into database->Done
+        # Make image not required to create new gym and use default image for gym that i sent it to you->Done
+        # make validation on close date to make it required to be after open date->Done
+
+    => Admin Details Screen
+        # When make ban to admin show alert admin is banned or admin is unbanned->Done
+
+
+@ Gym
+    => Show User Exercises Screen
+        # Show user_exercises into cards and into each card show (coach name, date of user_exercise, status)->Done
+            # When gym click on any user_exercise open a new screen show all exercises into card of this user_exercise (coach name, date of user_exercise, status of user_exercise, exercise_name, count, total, status each exercise)   Note : show count and total as an integer not as a decimal->Done
+    
+    
+    => Show User Diet
+        # Show all diets into cards and into each card (coach_name, date of diet)->Done
+            # When gym click on any diet open new screen show into it all info of this diet (coach_name, date of diet, breakfast, dinner, lunch, notes)
+
+    => Edit Gym Info
+        # Name of screen is wrong =>FOCUS<=->Done
+        # make validation on close date to make it required to be after open date->Done
+
+@ Coach
+    => forget to show data of his gym to him make it into Setting screen (Gym Information)->Done
+    
+    => Setting Screen->Done
+        # Remove into of coach from this screen and set link Gym Information->Done
+
+    => User Details->Done 
+        # =>UI Edit<= Remove add diet button and set it into top of (show User diet screen) 
+        # =>UI Edit<= Remove add exercise button and set it into top of (show User exercise screen) 
+        # =>UI Edit<= Set Edit Fitness button into bottom of (User Details screen)
+
+    => Show User Exercises Screen->Done
+        # Show user_exercises into cards and into each card show (coach name, date of user_exercise, status)->Done
+            # When gym click on any user_exercise open a new screen show all exercises into card of this user_exercise (coach name, date of user_exercise, status of user_exercise, exercise_name, count, total, status each exercise)   Note : show count and total as an integer not as a decimal->Done
+
+    => Show User Diet->Done
+        # Show all diets into cards and into each card (coach_name, date of diet)
+            # When gym click on any diet open new screen show into it all info of this diet (coach_name, date of diet, breakfast, dinner, lunch, notes)
+    
+    => Add new user_exercise->Done
+        # =>UI Edit<= show each exercise into card to make it more ease to read
             

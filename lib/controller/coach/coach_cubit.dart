@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
@@ -13,9 +14,11 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:gim_system/ui/coach/settings_screens/coach_settings.dart';
 import 'package:http/http.dart' as http;
 import '../../model/coach_model.dart';
+import '../../model/gym_model.dart';
 import '../../model/message_model.dart';
 import '../../model/user_model.dart';
 import '../../ui/coach/home_screens/coach_home.dart';
+import '../../ui/coach/users/users_list.dart';
 import '../admin/admin_cubit.dart';
 part 'coach_state.dart';
 
@@ -25,10 +28,12 @@ class CoachCubit extends Cubit<CoachState> {
   int currentIndex = 0;
   List<Widget> screens = [
     const CochHome(),
+    const UsersList(),
     const CoachSettingsScreen(),
   ];
   List titles = [
-    'Home',
+    'Coachs',
+    'Users',
     'Settings',
   ];
   void changeBottomNavBar(int index) {
@@ -79,6 +84,8 @@ class CoachCubit extends Cubit<CoachState> {
           });
         }
       }
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser!.updatePassword(model.password.orEmpty());
       print(model.toJson());
       await FirebaseFirestore.instance
           .collection(Constants.gym)
@@ -217,6 +224,9 @@ class CoachCubit extends Cubit<CoachState> {
           .collection(Constants.coach)
           .get();
       for (var element in value.docs) {
+        if (element.id == AppPreferences.uId) {
+          continue;
+        }
         coachs.add(CoachModel.fromJson(element.data()));
       }
       print("getAllcoachs done");
@@ -258,6 +268,39 @@ class CoachCubit extends Cubit<CoachState> {
     } catch (e) {
       print('Get Parent Data Error: $e');
       emit(ErorrGetHomeData(e.toString()));
+    }
+  }
+
+  GymModel? gymModel;
+  Future<void> getCurrentGymData() async {
+    emit(LoadingGetGym());
+    try {
+      print("getCurrentGymData");
+      print(AppPreferences.uId);
+      var value = await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .get();
+      gymModel = GymModel.fromJson(value.data() ?? {});
+      var users = await value.reference.collection(Constants.user).get();
+      gymModel!.users = [];
+      for (var element in users.docs) {
+        gymModel!.users!.add(UserModel.fromJson(element.data()));
+      }
+      print('user l is ${gymModel!.users.orEmpty().length}');
+      var coachs = await value.reference.collection(Constants.coach).get();
+      gymModel!.coachs = [];
+      for (var element in coachs.docs) {
+        gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
+      }
+      print('coachs l is ${gymModel!.coachs.orEmpty().length}');
+      print("object2");
+      print(value.data());
+      emit(ScGetGym());
+      print("getCurrentGymData done");
+    } catch (e) {
+      print('getCurrentGymData Error: $e');
+      emit(ErorrGetGym(e.toString()));
     }
   }
 

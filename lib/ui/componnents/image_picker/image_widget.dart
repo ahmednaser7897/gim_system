@@ -28,63 +28,61 @@ class ImageWidget extends StatelessWidget {
         initialValue: cubit.image,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (File? value) {
-          if (init != null && init!.isNotEmpty) {
-            return null;
-          }
-          if (cubit.image == null) {
-            return "add photo";
-          }
+          // if (init != null && init!.isNotEmpty) {
+          //   return null;
+          // }
+          // if (cubit.image == null) {
+          //   return "add photo";
+          // }
           return null;
         },
-        builder: (state) => InkWell(
-          child: Column(
-            children: [
-              SizedBox(
-                width: 40.w,
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 20.w,
-                      backgroundColor: Colors.grey[200],
-                      foregroundImage:
-                          cubit.image != null ? FileImage(cubit.image!) : null,
-                      child: (init != null && init!.isNotEmpty)
-                          ? Container(
-                              width: 40.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(init!),
-                                ),
+        builder: (state) => Column(
+          children: [
+            SizedBox(
+              width: 40.w,
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 20.w,
+                    backgroundColor: Colors.grey[200],
+                    foregroundImage:
+                        cubit.image != null ? FileImage(cubit.image!) : null,
+                    child: (init != null && init!.isNotEmpty)
+                        ? Container(
+                            width: 40.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(init!),
                               ),
-                            )
-                          : Icon(
-                              Icons.photo_library_outlined,
-                              size: 20.w,
-                              color: AppColors.primerColor,
                             ),
-                    ),
-                    cameraIconWidget(state),
-                  ],
-                ),
-              ),
-              AppSizedBox.h3,
-              if (init == null &&
-                  state.hasError &&
-                  state.errorText != null &&
-                  state.errorText != "")
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Text(
-                    state.errorText!,
-                    style: AppTextStyle.getRegularStyle(
-                        color: AppColors.errorColor, fontSize: 10.sp),
+                          )
+                        : Icon(
+                            Icons.photo_library_outlined,
+                            size: 20.w,
+                            color: AppColors.primerColor,
+                          ),
                   ),
-                )
-            ],
-          ),
+                  cameraIconWidget(state),
+                ],
+              ),
+            ),
+            AppSizedBox.h3,
+            if (init == null &&
+                state.hasError &&
+                state.errorText != null &&
+                state.errorText != "")
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  state.errorText!,
+                  style: AppTextStyle.getRegularStyle(
+                      color: AppColors.errorColor, fontSize: 10.sp),
+                ),
+              )
+          ],
         ),
       );
     });
@@ -117,6 +115,7 @@ class ImageWidget extends StatelessWidget {
                             await cubit.pickImage(PickImageFromEnum.gallery);
                           } else {
                             await cubit.pickImage(PickImageFromEnum.camera);
+                            print("object");
                           }
                           state.didChange(cubit.image);
                         }

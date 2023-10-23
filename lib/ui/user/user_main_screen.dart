@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gim_system/app/extensions.dart';
 
 import '../../../app/icon_broken.dart';
+import '../../app/app_assets.dart';
 import '../../controller/user/user_cubit.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -30,21 +32,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           appBar: AppBar(
             title: Text(cubit.titles[cubit.currentIndex]),
           ),
-          // floatingActionButton: FloatingActionButton(onPressed: () {
-          //   cubit.getHomeData();
-          // }),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: cubit.currentIndex,
             onTap: (index) {
               cubit.changeBottomNavBar(index);
             },
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(IconBroken.Home),
-                label: 'Home',
+                icon: Image.asset(
+                  AppAssets.uoach,
+                  height: 7.w,
+                  width: 7.w,
+                ),
+                label: 'Coachs',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(IconBroken.Setting),
                 label: 'Settings',
               ),

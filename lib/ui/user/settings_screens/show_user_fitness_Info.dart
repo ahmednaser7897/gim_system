@@ -67,7 +67,6 @@ class _ShowUserFitnessInfoState extends State<ShowUserFitnessInfo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSizedBox.h3,
         const Text(
           "Height",
           style: TextStyle(

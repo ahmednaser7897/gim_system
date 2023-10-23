@@ -170,8 +170,8 @@ class _EditCoachScreenState extends State<EditCoachScreen> {
                       keyboardType: TextInputType.number,
                       hintText: "Enter coach age",
                       validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'coach age');
+                        return Validations.numberValidation(value,
+                            name: 'Age', isInt: true);
                       },
                     ),
                     AppSizedBox.h3,

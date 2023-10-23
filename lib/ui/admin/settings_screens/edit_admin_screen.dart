@@ -192,8 +192,8 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                       keyboardType: TextInputType.number,
                       hintText: "Enter Admin age",
                       validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'your age');
+                        return Validations.numberValidation(value,
+                            name: 'Age', isInt: true);
                       },
                     ),
                     AppSizedBox.h3,

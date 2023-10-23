@@ -20,16 +20,16 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthGetUserAfterLoginLoadingState());
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
+        .then((value) async {
       userId = value.user!.uid;
       print('on log in');
       print(AppPreferences.uId);
       print(AppPreferences.userType);
+      await getUserType(userId);
     }).catchError((error) {
       catchError(error);
       return;
     });
-    await getUserType(userId);
   }
 
   Future<void> getUserType(String userId) async {
@@ -58,7 +58,7 @@ class AuthCubit extends Cubit<AuthState> {
           print('User is a user');
         }
       } else {
-        emit(AuthGetUserAfterLoginErrorState(error: 'User is not found'));
+        emit(AuthGetUserAfterLoginErrorState(error: 'invalid account'));
         userId = '';
         print('User is not found😎');
       }
@@ -68,12 +68,16 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void catchError(error) {
-    if (error.code == 'user-not-found') {
+    if (error.code.toString().contains('INVALID_LOGIN_CREDENTIALS')) {
+      emit(AuthGetUserAfterLoginErrorState(
+          error: 'invalid user name or password'));
+      return;
+    } else if (error.code == 'user-not-found') {
       emit(AuthGetUserAfterLoginErrorState(
           error: 'No user found for that email.'));
       return;
     } else if (error.code == 'wrong-password') {
-      emit(AuthGetUserAfterLoginErrorState(error: 'Invalid Account'));
+      emit(AuthGetUserAfterLoginErrorState(error: 'Invalid Password'));
       return;
     } else if (error.code == 'invalid-email') {
       emit(AuthGetUserAfterLoginErrorState(error: 'Invalid Email'));

@@ -5,7 +5,7 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../model/exercises_model.dart';
 import '../../auth/widgets/build_auth_bottom.dart';
 import '../../componnents/app_textformfiled_widget.dart';
@@ -138,4 +138,18 @@ class _AddNewExercisesScreenState extends State<AddNewExercisesScreen> {
       ),
     );
   }
+}
+
+Future<bool> validateImage(String imageUrl) async {
+  http.Response res;
+  try {
+    res = await http.get(Uri.parse(imageUrl));
+  } catch (e) {
+    return false;
+  }
+
+  if (res.statusCode != 200) return false;
+  return true;
+  // Map<String, dynamic> data = res.headers;
+  // return checkIfImage(data['content-type']);
 }

@@ -48,9 +48,6 @@ class Validations {
     if (value == null || value.isEmpty) {
       return 'Please enter $name';
     }
-    if (capitalLettersRegix.hasMatch(value)) {
-      return ' $name must not have capital letters';
-    }
     if (!value.contains('@')) {
       return 'Please enter a valid email';
     }
@@ -85,33 +82,31 @@ class Validations {
     return RegExp(r'^\d{8}$').hasMatch(number.substring(2));
   }
 
-  // static String? numberValidation(
-  //     {String? value, required String name, bool isInt = false}) {
-  //   RegExp specialcharactersRegex =
-  //       RegExp(r'^(?=.*[*"!@#$%^&(){}:;<>,?/~_+-]).{1,}$');
-  //   if (value == null || value.isEmpty) {
-  //     print(value);
-  //     return '${MyApp.tr.pleaseEnter} $name';
-  //   }
-  //   if (value.contains(' ')) {
-  //     return ' $name ${MyApp.tr.mustNotHaveSpace} ';
-  //   }
-  //   if (isInt) {
-  //     if (int.tryParse(value) == null) {
-  //       return ' $name ${MyApp.tr.mustBeInt} ';
-  //     }
-  //   }
-  //   if (capitalLettersRegix.hasMatch(value) ||
-  //       smallLettersRegix.hasMatch(value)) {
-  //     return ' $name ${MyApp.tr.mustNotHaveLitters} ';
-  //   }
+  static String? numberValidation(String? value,
+      {required String name, bool isInt = false}) {
+    RegExp specialcharactersRegex =
+        RegExp(r'^(?=.*[*"!@#$%^&(){}:;<>,?/~_+-]).{1,}$');
+    if (value == null || value.isEmpty) {
+      print(value);
+      return 'Please enter $name';
+    }
 
-  //   if (specialcharactersRegex.hasMatch(value)) {
-  //     return ' $name  ${MyApp.tr.mustNotHaveSpecialcharacters}';
-  //   } else {
-  //     return null;
-  //   }
-  // }
+    if (isInt) {
+      if (int.tryParse(value) == null) {
+        return '$name must Be integer';
+      }
+    }
+    if (capitalLettersRegix.hasMatch(value) ||
+        smallLettersRegix.hasMatch(value)) {
+      return ' $name must not have  letters';
+    }
+
+    if (specialcharactersRegex.hasMatch(value)) {
+      return ' $name must not have special characters';
+    } else {
+      return null;
+    }
+  }
 
   // static String? passwordValidation(String? value) {
   //   if (value == null || value.isEmpty) {

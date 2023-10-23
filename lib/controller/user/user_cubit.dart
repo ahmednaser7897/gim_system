@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
@@ -28,7 +29,7 @@ class UserCubit extends Cubit<UserState> {
     const UserSettingsScreen(),
   ];
   List titles = [
-    'Home',
+    'Coachs',
     'Settings',
   ];
   void changeBottomNavBar(int index) {
@@ -160,6 +161,8 @@ class UserCubit extends Cubit<UserState> {
           });
         }
       }
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser!.updatePassword(model.password.orEmpty());
       print(model.toJson());
       await FirebaseFirestore.instance
           .collection(Constants.gym)

@@ -4,16 +4,14 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/coach/coach_cubit.dart';
-import 'package:gim_system/ui/coach/home_screens/add_new_dite.dart';
 import 'package:gim_system/ui/componnents/custom_button.dart';
 
 import '../../../app/icon_broken.dart';
 import '../../../model/user_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
+import '../../user/settings_screens/show_and_edit_user_exercises.dart';
 import '../chat/coach_message_user_screen.dart';
-import 'add_new_user_exercises.dart';
 import 'show_user_diets.dart';
-import 'show_user_exercises.dart';
 import 'update_user_fitness_Info.dart';
 
 class UserDetailsFromCoachScreen extends StatefulWidget {
@@ -85,7 +83,7 @@ class _UserDetailsFromCoachScreenState
                         child: Column(
                           children: [
                             Hero(
-                              tag: model.email.orEmpty(),
+                              tag: model.id.orEmpty(),
                               child: CircleAvatar(
                                 radius: 15.w,
                                 backgroundImage:
@@ -100,54 +98,17 @@ class _UserDetailsFromCoachScreenState
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CustomButton(
-                          text: 'Add Dite',
+                          text: 'show Dites',
                           width: 40,
                           fontsize: 12,
-                          iconRight: const Icon(Icons.add),
+                          iconRight: const Icon(Icons.food_bank),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AddNewDiteScreen(
+                                builder: (context) => ShowUserDites(
                                   user: model,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Add Exercises',
-                          width: 40,
-                          fontsize: 12,
-                          iconRight: const Icon(Icons.add),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddNewUserExercisesScreen(
-                                  user: model,
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                    AppSizedBox.h1,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomButton(
-                          text: 'Edit Fitness Info',
-                          width: 40,
-                          fontsize: 12,
-                          iconRight: const Icon(Icons.edit),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UpdateUserFitnessInfo(
-                                  model: model,
+                                  canAdd: true,
                                 ),
                               ),
                             );
@@ -162,34 +123,16 @@ class _UserDetailsFromCoachScreenState
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ShowUserExercises(
+                                builder: (context) => ShowAndEditUserExercises(
                                   user: model,
+                                  canEdit: false,
+                                  canAdd: true,
                                 ),
                               ),
                             );
                           },
                         )
                       ],
-                    ),
-                    AppSizedBox.h1,
-                    Align(
-                      alignment: Alignment.center,
-                      child: CustomButton(
-                        text: 'show Dites',
-                        width: 40,
-                        fontsize: 12,
-                        iconRight: const Icon(Icons.food_bank),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShowUserDites(
-                                user: model,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
                     ),
                     AppSizedBox.h2,
                     userData(),
@@ -321,7 +264,8 @@ class _UserDetailsFromCoachScreenState
               keyboardType: TextInputType.number,
               hintText: "Enter User age",
               validate: (value) {
-                return Validations.normalValidation(value, name: 'your age');
+                return Validations.numberValidation(value,
+                    name: 'Age', isInt: true);
               },
             ),
             AppSizedBox.h3,
@@ -421,7 +365,24 @@ class _UserDetailsFromCoachScreenState
                     name: 'User Fitness Level');
               },
             ),
-            AppSizedBox.h3,
+            AppSizedBox.h2,
+            CustomButton(
+              text: 'Edit Fitness Info',
+              width: 100,
+              fontsize: 12,
+              iconRight: const Icon(Icons.edit),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateUserFitnessInfo(
+                      model: model,
+                    ),
+                  ),
+                );
+              },
+            ),
+            AppSizedBox.h2,
           ],
         );
       },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/admin/admin_cubit.dart';
@@ -50,20 +51,24 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (cubit.adminModel!.image != null &&
-                              cubit.adminModel!.image!.isNotEmpty)
-                            Container(
-                              width: 20.w,
-                              height: 12.h,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(cubit.adminModel!.image!),
-                                ),
+                          Container(
+                            width: 20.w,
+                            height: 12.h,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: (cubit.adminModel!.image != null &&
+                                        cubit.adminModel!.image!.isNotEmpty)
+                                    ? NetworkImage(
+                                        cubit.adminModel!.image.orEmpty())
+                                    : AssetImage(
+                                        AppAssets.admin,
+                                      ) as ImageProvider,
                               ),
                             ),
+                          ),
                           AppSizedBox.w5,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

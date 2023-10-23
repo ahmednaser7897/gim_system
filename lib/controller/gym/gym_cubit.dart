@@ -14,7 +14,9 @@ import '../../model/diets_model.dart';
 import '../../model/exercises_model.dart';
 import '../../model/gym_model.dart';
 import '../../model/user_model.dart';
-import '../../ui/gym/home_screens/gym_home.dart';
+import '../../ui/gym/coachs/gym_coacts_home.dart';
+import '../../ui/gym/exercises/gym_exercises_home.dart';
+import '../../ui/gym/usres/gym_users_home.dart';
 import '../../ui/gym/settings_screens/gym_settings.dart';
 import '../admin/admin_cubit.dart';
 part 'gym_state.dart';
@@ -24,11 +26,15 @@ class GymCubit extends Cubit<GymState> {
   static GymCubit get(context) => BlocProvider.of(context);
   int currentIndex = 0;
   List<Widget> screens = [
-    const GymHome(),
+    const GymUsersList(),
+    const GymCoachsList(),
+    const GymExercisesList(),
     const GymSettingsScreen(),
   ];
   List titles = [
-    'Home',
+    'Users',
+    'Coachs',
+    'Exercises',
     'Settings',
   ];
   void changeBottomNavBar(int index) {
@@ -76,6 +82,8 @@ class GymCubit extends Cubit<GymState> {
           });
         }
       }
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser!.updatePassword(model.password.orEmpty());
       print(model.toJson());
       await FirebaseFirestore.instance
           .collection(Constants.gym)
@@ -320,6 +328,9 @@ class GymCubit extends Cubit<GymState> {
           .collection(Constants.coach)
           .get();
       for (var element in value.docs) {
+        if (element.id == AppPreferences.uId) {
+          continue;
+        }
         coachs.add(CoachModel.fromJson(element.data()));
       }
       print("getAllcoachs done");

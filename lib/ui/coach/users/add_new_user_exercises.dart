@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gim_system/app/app_prefs.dart';
@@ -5,6 +6,7 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/model/user_model.dart';
 
+import '../../../app/app_colors.dart';
 import '../../../app/app_validation.dart';
 import '../../../controller/coach/coach_cubit.dart';
 import '../../../model/exercises_model.dart';
@@ -148,80 +150,116 @@ class _AddNewUserExercisesScreenState extends State<AddNewUserExercisesScreen> {
     return Expanded(
       child: ListView.separated(
           itemBuilder: (context, index) => eserciseItem(index),
-          separatorBuilder: (context, index) => AppSizedBox.h1,
+          separatorBuilder: (context, index) => Column(
+                children: [
+                  AppSizedBox.h1,
+                  const Divider(
+                    color: AppColors.black,
+                    height: 2,
+                  ),
+                  AppSizedBox.h2,
+                ],
+              ),
           itemCount: exercises.length),
     );
   }
 
-  Column eserciseItem(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget eserciseItem(int index) {
+    return FadeInUp(
+      from: 20,
+      delay: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        width: 100.w,
+        margin: const EdgeInsets.symmetric(
+          vertical: 5,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              names[index],
-              style: const TextStyle(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  names[index],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        exercises.removeAt(index);
+                        names.removeAt(index);
+                        counts.removeAt(index);
+                        totals.removeAt(index);
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ))
+              ],
+            ),
+            AppSizedBox.h1,
+            const Text(
+              'count',
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
             ),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    exercises.removeAt(index);
-                    names.removeAt(index);
-                    counts.removeAt(index);
-                    totals.removeAt(index);
-                  });
-                },
-                icon: const Icon(Icons.delete))
+            AppSizedBox.h1,
+            AppTextFormFiledWidget(
+              controller: counts[index],
+              onChanged: (p0) {
+                exercises[index].count = double.tryParse(p0) ?? 0;
+              },
+              keyboardType: TextInputType.number,
+              hintText: "Enter Exercises count",
+              prefix: Icons.numbers,
+              validate: (value) {
+                return Validations.normalValidation(value, name: 'count');
+              },
+            ),
+            AppSizedBox.h1,
+            const Text(
+              'total',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            AppSizedBox.h1,
+            AppTextFormFiledWidget(
+              controller: totals[index],
+              onChanged: (p0) {
+                exercises[index].total = double.tryParse(p0) ?? 0;
+              },
+              keyboardType: TextInputType.number,
+              hintText: "Enter Exercises total",
+              prefix: Icons.numbers,
+              validate: (value) {
+                return Validations.normalValidation(value, name: 'total');
+              },
+            ),
           ],
         ),
-        AppSizedBox.h1,
-        const Text(
-          'count',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        AppSizedBox.h1,
-        AppTextFormFiledWidget(
-          controller: counts[index],
-          onChanged: (p0) {
-            exercises[index].count = double.tryParse(p0) ?? 0;
-          },
-          keyboardType: TextInputType.number,
-          hintText: "Enter Exercises count",
-          prefix: Icons.numbers,
-          validate: (value) {
-            return Validations.normalValidation(value, name: 'count');
-          },
-        ),
-        AppSizedBox.h1,
-        const Text(
-          'total',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        AppSizedBox.h1,
-        AppTextFormFiledWidget(
-          controller: totals[index],
-          onChanged: (p0) {
-            exercises[index].total = double.tryParse(p0) ?? 0;
-          },
-          keyboardType: TextInputType.number,
-          hintText: "Enter Exercises total",
-          prefix: Icons.numbers,
-          validate: (value) {
-            return Validations.normalValidation(value, name: 'total');
-          },
-        ),
-      ],
+      ),
     );
   }
 

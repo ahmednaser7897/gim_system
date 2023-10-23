@@ -150,7 +150,7 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       },
                     ),
                     AppSizedBox.h3,
-                    timesRow(
+                    TimesRow(
                         closeDateController: closeDateController,
                         openDateController: openDateController),
                     AppSizedBox.h3,
@@ -204,6 +204,9 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
+                                    emailController.text = emailController.text
+                                        .replaceAll(' ', '')
+                                        .toLowerCase();
                                     adminCubit.addGym(
                                         image: ImageCubit.get(context).image,
                                         gymModel: GymModel(

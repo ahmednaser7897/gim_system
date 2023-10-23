@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 import 'api_urls.dart';
 
@@ -29,4 +30,11 @@ String getImageUrl(String? url) {
   } else {
     return '';
   }
+}
+
+String getDate(String date) {
+  if (date.isNotEmpty && DateTime.tryParse(date) != null) {
+    return DateFormat('dd MMM yyyy - hh:mm a').format(DateTime.parse(date));
+  }
+  return '';
 }

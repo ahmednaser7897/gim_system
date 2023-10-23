@@ -54,24 +54,25 @@ class DocumentHelper {
     if (photo == null) {
       return null;
     } else {
-      await printFileData(image: File(photo.path), title: "image");
+      pickedImage = File(photo.path);
+      await printFileData(image: pickedImage!, title: "image");
       //pickedImage = await compressFile(filePath: photo.path);
-      await printFileData(image: pickedImage!, title: "compressedImage");
+      // await printFileData(image: pickedImage!, title: "compressedImage");
       return pickedImage;
     }
   }
 
-  Future<File> compressFile({required String filePath}) async {
-    Size imageSize = await getImageSize(filePath: filePath);
-    File compressedFile = await FlutterNativeImage.compressImage(
-      filePath,
-      quality: 100,
-      percentage: 60,
-      targetHeight: imageSize.height.toInt(),
-      targetWidth: imageSize.width.toInt(),
-    );
-    return compressedFile;
-  }
+  // Future<File> compressFile({required String filePath}) async {
+  //   Size imageSize = await getImageSize(filePath: filePath);
+  //   File compressedFile = await FlutterNativeImage.compressImage(
+  //     filePath,
+  //     quality: 100,
+  //     percentage: 60,
+  //     targetHeight: imageSize.height.toInt(),
+  //     targetWidth: imageSize.width.toInt(),
+  //   );
+  //   return compressedFile;
+  // }
 
   Future<Size> getImageSize({required String filePath}) async {
     const double mainSize = 1024;

@@ -7,6 +7,7 @@ import 'package:gim_system/ui/coach/settings_screens/edit_Coach_screen.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/coach/coach_cubit.dart';
+import '../../admin/gyms_screen/gym_details_screen.dart';
 import '../../componnents/log_out_button.dart';
 import '../../componnents/screen_builder.dart';
 import '../../componnents/widgets.dart';
@@ -104,29 +105,45 @@ class _CoachSettingsScreenState extends State<CoachSettingsScreen> {
                 ),
               ),
               AppSizedBox.h3,
+              // settingbuildListItem(
+              //   context,
+              //   title: 'Phone',
+              //   leadingIcon: Icons.phone,
+              //   subtitle: cubit.coachModel!.phone.orEmpty(),
+              // ),
+              // settingbuildListItem(
+              //   context,
+              //   title: 'age',
+              //   leadingIcon: Icons.timelapse,
+              //   subtitle: cubit.coachModel!.age.orEmpty(),
+              // ),
+              // settingbuildListItem(
+              //   context,
+              //   title: 'gender',
+              //   leadingIcon: Icons.person,
+              //   subtitle: cubit.coachModel!.gender.orEmpty(),
+              // ),
+              // settingbuildListItem(
+              //   context,
+              //   title: 'Bio',
+              //   leadingIcon: Icons.biotech,
+              //   subtitle: cubit.coachModel!.bio.orEmpty(),
+              // ),
               settingbuildListItem(
                 context,
-                title: 'Phone',
-                leadingIcon: Icons.phone,
-                subtitle: cubit.coachModel!.phone.orEmpty(),
-              ),
-              settingbuildListItem(
-                context,
-                title: 'age',
-                leadingIcon: Icons.timelapse,
-                subtitle: cubit.coachModel!.age.orEmpty(),
-              ),
-              settingbuildListItem(
-                context,
-                title: 'gender',
-                leadingIcon: Icons.person,
-                subtitle: cubit.coachModel!.gender.orEmpty(),
-              ),
-              settingbuildListItem(
-                context,
-                title: 'Bio',
-                leadingIcon: Icons.biotech,
-                subtitle: cubit.coachModel!.bio.orEmpty(),
+                title: 'My Gym',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GymDetailsScreen(
+                          gymModel: cubit.gymModel!,
+                          canEdit: false,
+                        ),
+                      ));
+                },
+                leadingIcon: Icons.sports_gymnastics,
+                subtitle: 'Show your gym info',
               ),
               const Spacer(),
               LogOutButton(

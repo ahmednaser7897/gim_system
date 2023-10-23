@@ -186,8 +186,8 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                       keyboardType: TextInputType.number,
                       hintText: "Enter Admin age",
                       validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'your age');
+                        return Validations.numberValidation(value,
+                            name: 'Age', isInt: true);
                       },
                     ),
                     AppSizedBox.h3,
@@ -222,6 +222,9 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
+                                    emailController.text = emailController.text
+                                        .replaceAll(' ', '')
+                                        .toLowerCase();
                                     adminCubit.addAdmin(
                                         image: ImageCubit.get(context).image,
                                         model: AdminModel(

@@ -19,7 +19,7 @@ class AppColors {
   static const Color grey = Color.fromRGBO(117, 117, 117, 1);
   static const Color primerColor = Color(0xFF009688);
   static const Color primer = Color(0xFF1EC6B5);
-  static const Color blue = const Color(0xff7BB3FF);
+  static const Color blue = Color(0xff7BB3FF);
 
   /// example to how make colors aware of app brightness
   static Color get appBackground =>

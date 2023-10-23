@@ -5,11 +5,13 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/admin/admin_cubit.dart';
 import 'package:gim_system/ui/componnents/const_widget.dart';
-import 'package:gim_system/ui/gym/home_screens/coach_details_screen.dart';
-import 'package:gim_system/ui/gym/home_screens/user_details_screen.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../model/gym_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
+import '../../componnents/custom_button.dart';
+import '../../componnents/show_flutter_toast.dart';
+import '../../componnents/users_lists.dart';
 import '../../componnents/widgets.dart';
 
 class GymDetailsScreen extends StatefulWidget {
@@ -64,6 +66,17 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
             setState(() {
               gymModel.ban = !gymModel.ban.orFalse();
             });
+            if (gymModel.ban.orFalse()) {
+              showFlutterToast(
+                message: "Gym is banned",
+                toastColor: Colors.green,
+              );
+            } else {
+              showFlutterToast(
+                message: "Gym is unbanned",
+                toastColor: Colors.green,
+              );
+            }
           }
         },
         builder: (context, state) => Center(
@@ -75,39 +88,79 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (gymModel.image != null && gymModel.image!.isNotEmpty)
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            Hero(
-                              tag: gymModel.email.orEmpty(),
-                              child: CircleAvatar(
-                                radius: 15.w,
-                                backgroundImage:
-                                    NetworkImage(gymModel.image.orEmpty()),
-                              ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          Hero(
+                            tag: gymModel.id.orEmpty(),
+                            child: CircleAvatar(
+                              radius: 15.w,
+                              backgroundImage: (gymModel.image != null &&
+                                      gymModel.image!.isNotEmpty)
+                                  ? NetworkImage(gymModel.image.orEmpty())
+                                  : AssetImage(
+                                      AppAssets.admin,
+                                    ) as ImageProvider,
                             ),
-                            if (widget.canEdit) AppSizedBox.h2,
-                            if (widget.canEdit)
-                              (state is LoadingChangeGymBan)
-                                  ? const CircularProgressComponent()
-                                  : Center(
-                                      child: Switch(
-                                        value: gymModel.ban.orFalse(),
-                                        activeColor: Colors.red,
-                                        splashRadius: 18.0,
-                                        onChanged: (value) async {
-                                          await AdminCubit.get(context)
-                                              .changeGymBan(
-                                                  gymModel.id.orEmpty(),
-                                                  !gymModel.ban.orFalse());
-                                        },
-                                      ),
+                          ),
+                          if (widget.canEdit) AppSizedBox.h2,
+                          if (widget.canEdit)
+                            (state is LoadingChangeGymBan)
+                                ? const CircularProgressComponent()
+                                : Center(
+                                    child: Switch(
+                                      value: gymModel.ban.orFalse(),
+                                      activeColor: Colors.red,
+                                      splashRadius: 18.0,
+                                      onChanged: (value) async {
+                                        await AdminCubit.get(context)
+                                            .changeGymBan(gymModel.id.orEmpty(),
+                                                !gymModel.ban.orFalse());
+                                      },
                                     ),
-                          ],
-                        ),
+                                  ),
+                        ],
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          text: 'show users',
+                          width: 40,
+                          fontsize: 12,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowUsersScreen(
+                                  users: gymModel.users ?? [],
+                                  canEdit: false,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        CustomButton(
+                          text: 'show coachs',
+                          width: 40,
+                          fontsize: 12,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowCoachsScreen(
+                                  coachs: gymModel.coachs ?? [],
+                                  canEdit: false,
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                    AppSizedBox.h2,
                     const Text(
                       "Name",
                       style: TextStyle(
@@ -176,7 +229,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       },
                     ),
                     AppSizedBox.h3,
-                    timesRow(
+                    TimesRow(
                         isEnable: false,
                         closeDateController: closeDateController,
                         openDateController: openDateController),
@@ -200,26 +253,6 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             name: 'your description');
                       },
                     ),
-                    AppSizedBox.h3,
-                    const Text(
-                      "Users :",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    buildusersList(),
-                    AppSizedBox.h2,
-                    const Text(
-                      "Coacs :",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    buildCoachsList(),
                     AppSizedBox.h2,
                   ],
                 ),
@@ -229,65 +262,5 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
         ),
       ),
     );
-  }
-
-  Widget buildusersList() {
-    return Builder(builder: (context) {
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(0),
-        itemCount: gymModel.users.orEmpty().length,
-        itemBuilder: (context, index) {
-          return buildHomeItem(
-            ban: gymModel.users.orEmpty()[index].ban.orFalse(),
-            name: gymModel.users.orEmpty()[index].name.orEmpty(),
-            des: gymModel.users.orEmpty()[index].email.orEmpty(),
-            image: gymModel.users.orEmpty()[index].image,
-            ontap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserDetailsScreen(
-                    model: gymModel.users.orEmpty()[index],
-                    canEdit: false,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      );
-    });
-  }
-
-  Widget buildCoachsList() {
-    return Builder(builder: (context) {
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(0),
-        itemCount: gymModel.coachs.orEmpty().length,
-        itemBuilder: (context, index) {
-          return buildHomeItem(
-            ban: gymModel.coachs.orEmpty()[index].ban.orFalse(),
-            name: gymModel.coachs.orEmpty()[index].name.orEmpty(),
-            des: gymModel.coachs.orEmpty()[index].email.orEmpty(),
-            image: gymModel.coachs.orEmpty()[index].image,
-            ontap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CoachDetailsScreen(
-                    coachModel: gymModel.coachs.orEmpty()[index],
-                    canEdit: false,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      );
-    });
   }
 }

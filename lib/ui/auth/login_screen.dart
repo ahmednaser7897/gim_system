@@ -149,6 +149,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
+                                          emailController.text = emailController
+                                              .text
+                                              .replaceAll(' ', '')
+                                              .toLowerCase();
+                                          setState(() {});
                                           authCubit.userMakLogin(
                                             email: emailController.text,
                                             password: passwordController.text,

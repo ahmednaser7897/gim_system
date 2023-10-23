@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gim_system/app/app_assets.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -90,9 +91,9 @@ class BuildMyMessageWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
+            image: DecorationImage(
                 image: AssetImage(
-                  'assets/images/icons/request.png',
+                  AppAssets.request,
                 ),
                 fit: BoxFit.contain),
             boxShadow: [

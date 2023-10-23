@@ -7,16 +7,38 @@ import '../../app/app_colors.dart';
 import '../../app/app_sized_box.dart';
 import '../../app/app_validation.dart';
 import 'app_textformfiled_widget.dart';
+import 'show_flutter_toast.dart';
 
-Widget timesRow({
-  required TextEditingController openDateController,
-  required TextEditingController closeDateController,
-  bool isEnable = true,
-}) {
+class TimesRow extends StatefulWidget {
+  const TimesRow(
+      {super.key,
+      required this.openDateController,
+      required this.closeDateController,
+      this.isEnable = true});
+  final TextEditingController openDateController;
+  final TextEditingController closeDateController;
+  final bool isEnable;
+
+  @override
+  State<TimesRow> createState() => _TimesRowState();
+}
+
+class _TimesRowState extends State<TimesRow> {
+  late TextEditingController openDateController;
+  late TextEditingController closeDateController;
+  late bool isEnable;
   TimeOfDay open = TimeOfDay.now();
   TimeOfDay close = TimeOfDay.now();
+  @override
+  void initState() {
+    openDateController = widget.openDateController;
+    closeDateController = widget.closeDateController;
+    isEnable = widget.isEnable;
+    super.initState();
+  }
 
-  return Builder(builder: (context) {
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -35,9 +57,10 @@ Widget timesRow({
                 onTap: isEnable
                     ? () async {
                         TimeOfDay? value = await showPicker(context);
-
                         if (value != null) {
                           open = value;
+                          print('open');
+                          print(open);
                           openDateController.text = open.format(context);
                         }
                       }
@@ -76,6 +99,8 @@ Widget timesRow({
                         TimeOfDay? value = await showPicker(context);
                         if (value != null) {
                           close = value;
+                          print('close');
+                          print(close);
                           closeDateController.text = close.format(context);
                         }
                       }
@@ -87,15 +112,22 @@ Widget timesRow({
                   hintText: "Enter close Time",
                   prefix: Icons.date_range,
                   validate: (value) {
-                    // print('object33');
-                    // print(open.isAfter(close));
-                    // if ((open.isAfter(close) ?? false)) {
-                    //   print('object33');
-                    //   print(open.isAfter(close));
-                    //   return 'open time must be befor close tome';
-                    // }
-                    return Validations.normalValidation(value,
-                        name: 'your close time');
+                    print('object33');
+                    print(open);
+                    print(close);
+                    double openVal = toDouble(open);
+                    double closeVal = toDouble(close);
+                    if (openVal > closeVal) {
+                      print('open time must be befor close tome');
+                      showFlutterToast(
+                        message: 'open time must be befor close time',
+                        toastColor: Colors.red,
+                      );
+                      return Validations.normalValidation(value,
+                          name: 'open time must be befor close time');
+                    }
+                    print('object44');
+                    return null;
                   },
                 ),
               ),
@@ -104,18 +136,130 @@ Widget timesRow({
         ),
       ],
     );
-  });
-}
-
-extension TimeOfDayExtension on TimeOfDay {
-  bool? isAfter(TimeOfDay other) {
-    if (hour < other.hour) return false;
-    if (hour > other.hour) return true;
-    if (minute < other.minute) return false;
-    if (minute > other.minute) return true;
-    return null;
   }
 }
+
+// Widget timesRow({
+//   required TextEditingController openDateController,
+//   required TextEditingController closeDateController,
+//   bool isEnable = true,
+// }) {
+//   TimeOfDay open = TimeOfDay.now();
+//   TimeOfDay close = TimeOfDay.now();
+
+//   return Builder(builder: (context) {
+//     return
+//     Row(
+//       children: [
+//         Expanded(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const Text(
+//                 "Open Time",
+//                 style: TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w400,
+//                 ),
+//               ),
+//               AppSizedBox.h2,
+//               InkWell(
+//                 onTap: isEnable
+//                     ? () async {
+//                         TimeOfDay? value = await showPicker(context);
+//                         if (value != null) {
+//                           open = value;
+//                           print('open');
+//                           print(open);
+//                           openDateController.text = open.format(context);
+//                         }
+//                       }
+//                     : null,
+//                 child: AppTextFormFiledWidget(
+//                   isEnable: false,
+//                   controller: openDateController,
+//                   keyboardType: TextInputType.text,
+//                   hintText: "Enter open Time",
+//                   prefix: Icons.date_range,
+//                   validate: (value) {
+//                     return Validations.normalValidation(value,
+//                         name: 'your open time');
+//                   },
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         AppSizedBox.w5,
+//         Expanded(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const Text(
+//                 "Close Time",
+//                 style: TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w400,
+//                 ),
+//               ),
+//               AppSizedBox.h2,
+//               InkWell(
+//                 onTap: isEnable
+//                     ? () async {
+//                         TimeOfDay? value = await showPicker(context);
+//                         if (value != null) {
+//                           close = value;
+//                           print('close');
+//                           print(close);
+//                           closeDateController.text = close.format(context);
+//                         }
+//                       }
+//                     : null,
+//                 child: AppTextFormFiledWidget(
+//                   isEnable: false,
+//                   controller: closeDateController,
+//                   keyboardType: TextInputType.text,
+//                   hintText: "Enter close Time",
+//                   prefix: Icons.date_range,
+//                   validate: (value) {
+//                     print('object33');
+//                     print(open);
+//                     print(close);
+//                     double openVal = toDouble(open);
+//                     double closeVal = toDouble(close);
+//                     if (openVal == closeVal) {
+//                       print('open time must be befor close tome');
+//                       return Validations.normalValidation(value,
+//                           name: 'your close time');
+//                     }
+//                     print('object44');
+//                     return null;
+//                   },
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+
+//   });
+// }
+
+double toDouble(TimeOfDay timeOfDay) {
+  print('time');
+  print(timeOfDay);
+  return timeOfDay.hour + timeOfDay.minute / 60.0;
+}
+// extension TimeOfDayExtension on TimeOfDay {
+//   bool? isAfter(TimeOfDay other) {
+//     if (hour < other.hour) return false;
+//     if (hour > other.hour) return true;
+//     if (minute < other.minute) return false;
+//     if (minute > other.minute) return true;
+//     return null;
+//   }
+// }
 
 Widget genderWidget(TextEditingController genderController,
     {String init = 'male'}) {
@@ -332,9 +476,11 @@ Widget settingbuildListItem(BuildContext context,
 Widget buildHomeItem(
     {required Function ontap,
     required String? image,
+    required String assetImage,
     required String name,
     required bool ban,
     required String des,
+    required String id,
     IconData icon = Icons.info_outline,
     bool showOnly = false}) {
   return Builder(builder: (context) {
@@ -369,14 +515,17 @@ Widget buildHomeItem(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (image != null && image.isNotEmpty)
-                      Hero(
-                        tag: des.orEmpty(),
-                        child: CircleAvatar(
-                          radius: 33,
-                          backgroundImage: NetworkImage(image.orEmpty()),
-                        ),
+                    Hero(
+                      tag: id,
+                      child: CircleAvatar(
+                        radius: 33,
+                        backgroundImage: (image != null && image.isNotEmpty)
+                            ? NetworkImage(image.orEmpty())
+                            : AssetImage(
+                                assetImage,
+                              ) as ImageProvider,
                       ),
+                    ),
                     AppSizedBox.w3,
                     Expanded(
                       child: Column(

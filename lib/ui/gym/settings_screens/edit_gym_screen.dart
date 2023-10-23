@@ -53,7 +53,7 @@ class _EditGymScreenState extends State<EditGymScreen> {
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Gym'),
+          title: const Text('Edit Gym'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -128,7 +128,7 @@ class _EditGymScreenState extends State<EditGymScreen> {
                       },
                     ),
                     AppSizedBox.h3,
-                    timesRow(
+                    TimesRow(
                         closeDateController: closeDateController,
                         openDateController: openDateController),
                     AppSizedBox.h3,

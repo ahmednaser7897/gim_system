@@ -13,7 +13,8 @@ import 'package:gim_system/model/gym_model.dart';
 import 'package:gim_system/model/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import '../../ui/admin/home_screens/admin_home.dart';
+import '../../ui/admin/admins/admins_home.dart';
+import '../../ui/admin/gyms_screen/admin_gyms.dart';
 import '../../ui/admin/settings_screens/admin_settings.dart';
 part 'admin_state.dart';
 
@@ -22,11 +23,13 @@ class AdminCubit extends Cubit<AdminState> {
   static AdminCubit get(context) => BlocProvider.of(context);
   int currentIndex = 0;
   List<Widget> screens = [
-    const AdminHome(),
+    const AdminsHome(),
+    const AdminGyms(),
     const AdminSettingsScreen(),
   ];
   List titles = [
-    'Home',
+    'Admins',
+    'Gyms',
     'Settings',
   ];
   void changeBottomNavBar(int index) {
@@ -178,6 +181,8 @@ class AdminCubit extends Cubit<AdminState> {
           });
         }
       }
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser!.updatePassword(model.password.orEmpty());
       print(model.toJson());
       await FirebaseFirestore.instance
           .collection(Constants.admin)
@@ -240,7 +245,10 @@ class AdminCubit extends Cubit<AdminState> {
       var value =
           await FirebaseFirestore.instance.collection(Constants.admin).get();
       for (var element in value.docs) {
-        element.data().addAll({'id': element.id});
+        if (element.id == AppPreferences.uId) {
+          continue;
+        }
+
         admins.add(AdminModel.fromJson(element.data()));
       }
       print("getAllAdmins done");

@@ -1,51 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gim_system/app/app_assets.dart';
 import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
-import 'package:gim_system/controller/user/user_cubit.dart';
+import 'package:gim_system/controller/admin/admin_cubit.dart';
+import 'package:gim_system/ui/componnents/const_widget.dart';
 
-import '../../../app/icon_broken.dart';
-import '../../../controller/gym/gym_cubit.dart';
-import '../../../model/coach_model.dart';
+import '../../../model/admin_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
-import '../../componnents/const_widget.dart';
-import '../../user/user_chat/user_message_coach_screen.dart';
+import '../../componnents/show_flutter_toast.dart';
 
-class CoachDetailsScreen extends StatefulWidget {
-  const CoachDetailsScreen(
-      {super.key,
-      required this.coachModel,
-      this.canEdit = true,
-      this.isUser = false});
-  final CoachModel coachModel;
-  final bool canEdit;
-  final bool isUser;
+class AdminDetailsScreen extends StatefulWidget {
+  const AdminDetailsScreen({super.key, required this.adminModel});
+  final AdminModel adminModel;
   @override
-  State<CoachDetailsScreen> createState() => _CoachDetailsScreenState();
+  State<AdminDetailsScreen> createState() => _AdminDetailsScreenState();
 }
 
-class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
+class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
-  TextEditingController bioController = TextEditingController();
+
   TextEditingController genderController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  late CoachModel coachModel;
+  late AdminModel adminModel;
   @override
   void initState() {
-    coachModel = widget.coachModel;
-    genderController.text = coachModel.gender ?? 'male';
-    phoneController.text = coachModel.phone ?? '';
-    emailController.text = coachModel.email ?? '';
-    nameController.text = coachModel.name ?? '';
-    agecontroller.text = coachModel.age ?? '';
-    bioController.text = coachModel.bio ?? '';
+    adminModel = widget.adminModel;
+
+    genderController.text = adminModel.gender ?? 'male';
+    phoneController.text = adminModel.phone ?? '';
+    emailController.text = adminModel.email ?? '';
+    nameController.text = adminModel.name ?? '';
+    agecontroller.text = adminModel.age ?? '';
 
     super.initState();
   }
@@ -54,14 +47,25 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coach Details'),
+        title: const Text('Admin Details'),
       ),
-      body: BlocConsumer<GymCubit, GymState>(
+      body: BlocConsumer<AdminCubit, AdminState>(
         listener: (context, state) {
-          if (state is ScChangeCoachBan) {
+          if (state is ScChangeAdminBan) {
             setState(() {
-              coachModel.ban = !coachModel.ban.orFalse();
+              adminModel.ban = !adminModel.ban.orFalse();
             });
+            if (adminModel.ban.orFalse()) {
+              showFlutterToast(
+                message: "admin is banned",
+                toastColor: Colors.green,
+              );
+            } else {
+              showFlutterToast(
+                message: "admin is unbanned",
+                toastColor: Colors.green,
+              );
+            }
           }
         },
         builder: (context, state) => SingleChildScrollView(
@@ -73,39 +77,40 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppSizedBox.h1,
-                  if (coachModel.image != null && coachModel.image!.isNotEmpty)
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Hero(
-                            tag: coachModel.email.orEmpty(),
-                            child: CircleAvatar(
-                              radius: 15.w,
-                              backgroundImage:
-                                  NetworkImage(coachModel.image.orEmpty()),
-                            ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Hero(
+                          tag: adminModel.id.orEmpty(),
+                          child: CircleAvatar(
+                            radius: 15.w,
+                            backgroundImage: (adminModel.image != null &&
+                                    adminModel.image!.isNotEmpty)
+                                ? NetworkImage(adminModel.image.orEmpty())
+                                : AssetImage(
+                                    AppAssets.admin,
+                                  ) as ImageProvider,
                           ),
-                          if (widget.canEdit) AppSizedBox.h2,
-                          if (widget.canEdit)
-                            (state is LoadingChangeCoachBan)
-                                ? const CircularProgressComponent()
-                                : Center(
-                                    child: Switch(
-                                      value: coachModel.ban.orFalse(),
-                                      activeColor: Colors.red,
-                                      splashRadius: 18.0,
-                                      onChanged: (value) async {
-                                        await GymCubit.get(context)
-                                            .changeCoachBan(
-                                                coachModel.id.orEmpty(),
-                                                !coachModel.ban.orFalse());
-                                      },
-                                    ),
-                                  ),
-                        ],
-                      ),
+                        ),
+                        AppSizedBox.h2,
+                        (state is LoadingChangeAdminBan)
+                            ? const CircularProgressComponent()
+                            : Center(
+                                child: Switch(
+                                  value: adminModel.ban.orFalse(),
+                                  activeColor: Colors.red,
+                                  splashRadius: 18.0,
+                                  onChanged: (value) async {
+                                    await AdminCubit.get(context)
+                                        .changeAdminBan(adminModel.id.orEmpty(),
+                                            !adminModel.ban.orFalse());
+                                  },
+                                ),
+                              ),
+                      ],
                     ),
+                  ),
                   const Text(
                     "Name",
                     style: TextStyle(
@@ -199,61 +204,19 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
                     controller: agecontroller,
                     prefix: Icons.timelapse,
                     keyboardType: TextInputType.number,
-                    hintText: "Enter Coach age",
+                    hintText: "Enter Admin age",
                     validate: (value) {
                       return Validations.normalValidation(value,
                           name: 'your age');
                     },
                   ),
                   AppSizedBox.h3,
-                  const Text(
-                    "bio",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  AppSizedBox.h2,
-                  AppTextFormFiledWidget(
-                    isEnable: false,
-                    controller: bioController,
-                    maxLines: 4,
-                    keyboardType: TextInputType.text,
-                    hintText: "Enter coach bio",
-                    validate: (value) {
-                      return Validations.normalValidation(value,
-                          name: 'coach bio');
-                    },
-                  ),
-                  AppSizedBox.h2,
                 ],
               ),
             ),
           ),
         ),
       ),
-      floatingActionButton: widget.isUser
-          ? FloatingActionButton(
-              onPressed: () {
-                UserCubit.get(context).getMessages(
-                  coachModel: coachModel,
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserMessageCoachScreen(
-                      coach: coachModel,
-                    ),
-                  ),
-                );
-              },
-              backgroundColor: Colors.teal.withOpacity(0.8),
-              child: const Icon(
-                IconBroken.Chat,
-                color: Colors.white,
-              ),
-            )
-          : null,
     );
   }
 }

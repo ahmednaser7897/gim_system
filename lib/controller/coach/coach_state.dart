@@ -88,3 +88,12 @@ class ErorrUploadFile extends CoachState {
   final String error;
   ErorrUploadFile(this.error);
 }
+
+class LoadingGetGym extends CoachState {}
+
+class ScGetGym extends CoachState {}
+
+class ErorrGetGym extends CoachState {
+  final String error;
+  ErorrGetGym(this.error);
+}

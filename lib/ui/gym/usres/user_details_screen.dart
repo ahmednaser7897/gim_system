@@ -5,6 +5,7 @@ import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../model/user_model.dart';
 import '../../coach/users/show_user_diets.dart';
 import '../../componnents/app_textformfiled_widget.dart';
@@ -89,38 +90,42 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppSizedBox.h1,
-                  if (model.image != null && model.image!.isNotEmpty)
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Hero(
-                            tag: model.id.orEmpty(),
-                            child: CircleAvatar(
-                              radius: 15.w,
-                              backgroundImage:
-                                  NetworkImage(model.image.orEmpty()),
-                            ),
+                  //if (model.image != null && model.image!.isNotEmpty)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Hero(
+                          tag: model.id.orEmpty(),
+                          child: CircleAvatar(
+                            radius: 15.w,
+                            backgroundImage:
+                                (model.image != null && model.image!.isNotEmpty)
+                                    ? NetworkImage(model.image.orEmpty())
+                                    : AssetImage(
+                                        AppAssets.user,
+                                      ) as ImageProvider,
                           ),
-                          if (widget.canEdit) AppSizedBox.h2,
-                          if (widget.canEdit)
-                            (state is LoadingChangeUserBan)
-                                ? const CircularProgressComponent()
-                                : Center(
-                                    child: Switch(
-                                      value: model.ban.orFalse(),
-                                      activeColor: Colors.red,
-                                      splashRadius: 18.0,
-                                      onChanged: (value) async {
-                                        await GymCubit.get(context)
-                                            .changeUserBan(model.id.orEmpty(),
-                                                !model.ban.orFalse());
-                                      },
-                                    ),
+                        ),
+                        if (widget.canEdit) AppSizedBox.h2,
+                        if (widget.canEdit)
+                          (state is LoadingChangeUserBan)
+                              ? const CircularProgressComponent()
+                              : Center(
+                                  child: Switch(
+                                    value: model.ban.orFalse(),
+                                    activeColor: Colors.red,
+                                    splashRadius: 18.0,
+                                    onChanged: (value) async {
+                                      await GymCubit.get(context).changeUserBan(
+                                          model.id.orEmpty(),
+                                          !model.ban.orFalse());
+                                    },
                                   ),
-                        ],
-                      ),
+                                ),
+                      ],
                     ),
+                  ),
                   if (widget.canEdit) AppSizedBox.h2,
                   if (widget.canEdit)
                     Row(

@@ -4,6 +4,7 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/ui/coach/settings_screens/edit_Coach_screen.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/coach/coach_cubit.dart';
@@ -49,20 +50,37 @@ class _CoachSettingsScreenState extends State<CoachSettingsScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (cubit.coachModel!.image != null &&
-                              cubit.coachModel!.image!.isNotEmpty)
-                            Container(
-                              width: 20.w,
-                              height: 12.h,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(cubit.coachModel!.image!),
-                                ),
+                          Container(
+                            width: 12.h,
+                            height: 12.h,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: (cubit.coachModel!.image != null &&
+                                        cubit.coachModel!.image!.isNotEmpty)
+                                    ? NetworkImage(
+                                        cubit.coachModel!.image.orEmpty())
+                                    : AssetImage(
+                                        AppAssets.uoach,
+                                      ) as ImageProvider,
                               ),
                             ),
+                          ),
+
+                          // Container(
+                          //   width: 20.w,
+                          //   height: 12.h,
+                          //   decoration: BoxDecoration(
+                          //     color: Colors.grey.shade200,
+                          //     shape: BoxShape.circle,
+                          //     image: DecorationImage(
+                          //       fit: BoxFit.fill,
+                          //       image: NetworkImage(cubit.coachModel!.image!),
+                          //     ),
+                          //   ),
+                          // ),
                           AppSizedBox.w5,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

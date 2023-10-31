@@ -127,53 +127,37 @@ class _AddNewAdminScreenState extends State<AddNewAdminScreen> {
                       },
                     ),
                     AppSizedBox.h3,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Phone",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              AppSizedBox.h2,
-                              AppTextFormFiledWidget(
-                                keyboardType: TextInputType.phone,
-                                controller: phoneController,
-                                hintText: "Enter your phone",
-                                prefix: Icons.call,
-                                validate: (value) {
-                                  return Validations.mobileValidation(value,
-                                      name: 'your phone');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        AppSizedBox.w5,
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Gender",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              AppSizedBox.h2,
-                              genderWidget(genderController),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    AppSizedBox.h3,
                     const Text(
-                      "age",
+                      "Phone",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    AppTextFormFiledWidget(
+                      keyboardType: TextInputType.phone,
+                      controller: phoneController,
+                      hintText: "Enter your phone",
+                      prefix: Icons.call,
+                      validate: (value) {
+                        return Validations.mobileValidation(value,
+                            name: 'your phone');
+                      },
+                    ),
+                    AppSizedBox.h2,
+                    const Text(
+                      "Gender",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    genderWidget(genderController),
+                    AppSizedBox.h2,
+                    const Text(
+                      "Age",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,

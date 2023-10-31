@@ -52,7 +52,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 20.w,
+                            width: 12.h,
                             height: 12.h,
                             decoration: BoxDecoration(
                               color: Colors.grey.shade200,

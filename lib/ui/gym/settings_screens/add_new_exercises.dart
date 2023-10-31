@@ -32,6 +32,7 @@ class _AddNewExercisesScreenState extends State<AddNewExercisesScreen> {
     super.initState();
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -106,7 +107,7 @@ class _AddNewExercisesScreenState extends State<AddNewExercisesScreen> {
                     },
                     builder: (context, state) {
                       GymCubit cubit = GymCubit.get(context);
-                      return state is LoadingAddExercise
+                      return state is LoadingAddExercise || isLoading
                           ? const CircularProgressComponent()
                           : BottomComponent(
                               child: const Text(
@@ -117,14 +118,30 @@ class _AddNewExercisesScreenState extends State<AddNewExercisesScreen> {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  cubit.addExercise(
-                                      model: ExerciseModel(
-                                    gymId: AppPreferences.uId,
-                                    name: nameController.text,
-                                    videoLink: videoLinkController.text,
-                                  ));
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  var value = await validateImage(
+                                      videoLinkController.text);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  print(value);
+                                  if (!value) {
+                                    showFlutterToast(
+                                      message: 'you must add a validate link',
+                                      toastColor: Colors.red,
+                                    );
+                                  } else {
+                                    cubit.addExercise(
+                                        model: ExerciseModel(
+                                      gymId: AppPreferences.uId,
+                                      name: nameController.text,
+                                      videoLink: videoLinkController.text,
+                                    ));
+                                  }
                                 }
                               },
                             );
@@ -150,6 +167,4 @@ Future<bool> validateImage(String imageUrl) async {
 
   if (res.statusCode != 200) return false;
   return true;
-  // Map<String, dynamic> data = res.headers;
-  // return checkIfImage(data['content-type']);
 }

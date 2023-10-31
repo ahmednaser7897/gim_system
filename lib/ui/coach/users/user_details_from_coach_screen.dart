@@ -6,6 +6,7 @@ import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/coach/coach_cubit.dart';
 import 'package:gim_system/ui/componnents/custom_button.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/icon_broken.dart';
 import '../../../model/user_model.dart';
 import '../../componnents/app_textformfiled_widget.dart';
@@ -77,22 +78,25 @@ class _UserDetailsFromCoachScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSizedBox.h1,
-                    if (model.image != null && model.image!.isNotEmpty)
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            Hero(
-                              tag: model.id.orEmpty(),
-                              child: CircleAvatar(
+                    //if (model.image != null && model.image!.isNotEmpty)
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          Hero(
+                            tag: model.id.orEmpty(),
+                            child: CircleAvatar(
                                 radius: 15.w,
-                                backgroundImage:
-                                    NetworkImage(model.image.orEmpty()),
-                              ),
-                            ),
-                          ],
-                        ),
+                                backgroundImage: (model.image != null &&
+                                        model.image!.isNotEmpty)
+                                    ? NetworkImage(model.image.orEmpty())
+                                    : AssetImage(
+                                        AppAssets.user,
+                                      ) as ImageProvider),
+                          ),
+                        ],
                       ),
+                    ),
                     AppSizedBox.h1,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

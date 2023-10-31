@@ -123,8 +123,7 @@ class _TimesRowState extends State<TimesRow> {
                         message: 'open time must be befor close time',
                         toastColor: Colors.red,
                       );
-                      return Validations.normalValidation(value,
-                          name: 'open time must be befor close time');
+                      return 'open time must be befor close time';
                     }
                     print('object44');
                     return null;

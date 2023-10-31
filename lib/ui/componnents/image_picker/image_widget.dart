@@ -179,10 +179,12 @@ class ImageWidget extends StatelessWidget {
                   color: AppColors.primerColor,
                 ),
                 AppSizedBox.h2,
-                Text(
-                  text,
-                  style: AppTextStyle.getRegularStyle(
-                      color: AppColors.primerColor, fontSize: 15.sp),
+                FittedBox(
+                  child: Text(
+                    text,
+                    style: AppTextStyle.getRegularStyle(
+                        color: AppColors.primerColor, fontSize: 15.sp),
+                  ),
                 )
               ],
             ),

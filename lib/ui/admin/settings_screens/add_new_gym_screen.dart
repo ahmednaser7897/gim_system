@@ -177,7 +177,7 @@ class _AddNewGymScreenState extends State<AddNewGymScreen> {
                       listener: (context, state) {
                         if (state is ScAddGym) {
                           showFlutterToast(
-                            message: "gym added",
+                            message: "Gym added",
                             toastColor: Colors.green,
                           );
                           Navigator.pop(context);

@@ -168,7 +168,7 @@ Widget buildCoachsList(
           des: coachs.orEmpty()[index].email.orEmpty(),
           image: coachs.orEmpty()[index].image,
           id: coachs[index].id.orEmpty(),
-          assetImage: AppAssets.user,
+          assetImage: AppAssets.uoach,
           ontap: () {
             Navigator.push(
               context,

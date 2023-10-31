@@ -13,6 +13,7 @@ import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
 import '../../componnents/image_picker/image_cubit/image_cubit.dart';
 import '../../componnents/show_flutter_toast.dart';
+import '../settings_screens/add_new_exercises.dart';
 
 class EditExercisesScreen extends StatefulWidget {
   const EditExercisesScreen({super.key, required this.exerciseModel});
@@ -35,6 +36,7 @@ class _EditExercisesScreenState extends State<EditExercisesScreen> {
     super.initState();
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -109,7 +111,7 @@ class _EditExercisesScreenState extends State<EditExercisesScreen> {
                     },
                     builder: (context, state) {
                       GymCubit cubit = GymCubit.get(context);
-                      return state is LoadingEditExercise
+                      return state is LoadingEditExercise || isLoading
                           ? const CircularProgressComponent()
                           : BottomComponent(
                               child: const Text(
@@ -120,15 +122,32 @@ class _EditExercisesScreenState extends State<EditExercisesScreen> {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  cubit.editExercise(
-                                      model: ExerciseModel(
-                                    gymId: AppPreferences.uId,
-                                    id: widget.exerciseModel.id,
-                                    name: nameController.text,
-                                    videoLink: videoLinkController.text,
-                                  ));
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  print(videoLinkController.text);
+                                  var value = await validateImage(
+                                      videoLinkController.text);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  print(value);
+                                  if (!value) {
+                                    showFlutterToast(
+                                      message: 'you must add a validate link',
+                                      toastColor: Colors.red,
+                                    );
+                                  } else {
+                                    cubit.editExercise(
+                                        model: ExerciseModel(
+                                      gymId: AppPreferences.uId,
+                                      id: widget.exerciseModel.id,
+                                      name: nameController.text,
+                                      videoLink: videoLinkController.text,
+                                    ));
+                                  }
                                 }
                               },
                             );

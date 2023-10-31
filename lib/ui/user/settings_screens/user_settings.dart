@@ -4,6 +4,7 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/ui/admin/gyms_screen/gym_details_screen.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/app_colors.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/user/user_cubit.dart';
@@ -52,20 +53,24 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (cubit.userModel!.image != null &&
-                              cubit.userModel!.image!.isNotEmpty)
-                            Container(
-                              width: 20.w,
-                              height: 12.h,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(cubit.userModel!.image!),
-                                ),
+                          Container(
+                            width: 12.h,
+                            height: 12.h,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: (cubit.userModel!.image != null &&
+                                        cubit.userModel!.image!.isNotEmpty)
+                                    ? NetworkImage(
+                                        cubit.userModel!.image.orEmpty())
+                                    : AssetImage(
+                                        AppAssets.user,
+                                      ) as ImageProvider,
                               ),
                             ),
+                          ),
                           AppSizedBox.w5,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

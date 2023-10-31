@@ -6,6 +6,7 @@ import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/user/user_cubit.dart';
 import 'package:gim_system/ui/componnents/show_flutter_toast.dart';
 
+import '../../../app/app_assets.dart';
 import '../../../app/icon_broken.dart';
 import '../../../controller/gym/gym_cubit.dart';
 import '../../../model/coach_model.dart';
@@ -85,39 +86,43 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppSizedBox.h1,
-                  if (coachModel.image != null && coachModel.image!.isNotEmpty)
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Hero(
-                            tag: coachModel.id.orEmpty(),
-                            child: CircleAvatar(
-                              radius: 15.w,
-                              backgroundImage:
-                                  NetworkImage(coachModel.image.orEmpty()),
-                            ),
+                  //if (coachModel.image != null && coachModel.image!.isNotEmpty)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Hero(
+                          tag: coachModel.id.orEmpty(),
+                          child: CircleAvatar(
+                            radius: 15.w,
+                            backgroundImage: (coachModel.image != null &&
+                                    coachModel.image!.isNotEmpty)
+                                ? NetworkImage(coachModel.image.orEmpty())
+                                : AssetImage(
+                                    AppAssets.uoach,
+                                  ) as ImageProvider,
                           ),
-                          if (widget.canEdit) AppSizedBox.h2,
-                          if (widget.canEdit)
-                            (state is LoadingChangeCoachBan)
-                                ? const CircularProgressComponent()
-                                : Center(
-                                    child: Switch(
-                                      value: coachModel.ban.orFalse(),
-                                      activeColor: Colors.red,
-                                      splashRadius: 18.0,
-                                      onChanged: (value) async {
-                                        await GymCubit.get(context)
-                                            .changeCoachBan(
-                                                coachModel.id.orEmpty(),
-                                                !coachModel.ban.orFalse());
-                                      },
-                                    ),
+                        ),
+                        if (widget.canEdit) AppSizedBox.h2,
+                        if (widget.canEdit)
+                          (state is LoadingChangeCoachBan)
+                              ? const CircularProgressComponent()
+                              : Center(
+                                  child: Switch(
+                                    value: coachModel.ban.orFalse(),
+                                    activeColor: Colors.red,
+                                    splashRadius: 18.0,
+                                    onChanged: (value) async {
+                                      await GymCubit.get(context)
+                                          .changeCoachBan(
+                                              coachModel.id.orEmpty(),
+                                              !coachModel.ban.orFalse());
+                                    },
                                   ),
-                        ],
-                      ),
+                                ),
+                      ],
                     ),
+                  ),
                   const Text(
                     "Name",
                     style: TextStyle(

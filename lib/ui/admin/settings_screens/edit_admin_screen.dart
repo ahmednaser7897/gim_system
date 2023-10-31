@@ -57,7 +57,7 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New Admin'),
+          title: const Text('Edit Admin'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -131,53 +131,84 @@ class _EditNewAdminScreenState extends State<EditNewAdminScreen> {
                             name: 'your password');
                       },
                     ),
-                    AppSizedBox.h3,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Phone",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              AppSizedBox.h2,
-                              AppTextFormFiledWidget(
-                                keyboardType: TextInputType.phone,
-                                controller: phoneController,
-                                hintText: "Enter your phone",
-                                prefix: Icons.call,
-                                validate: (value) {
-                                  return Validations.mobileValidation(value,
-                                      name: 'your phone');
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        AppSizedBox.w5,
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Gender",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              AppSizedBox.h2,
-                              genderWidget(genderController,
-                                  init: genderController.text),
-                            ],
-                          ),
-                        ),
-                      ],
+                    AppSizedBox.h2,
+                    const Text(
+                      "Phone",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                    AppSizedBox.h3,
+                    AppSizedBox.h2,
+                    AppTextFormFiledWidget(
+                      keyboardType: TextInputType.phone,
+                      controller: phoneController,
+                      hintText: "Enter your phone",
+                      prefix: Icons.call,
+                      validate: (value) {
+                        return Validations.mobileValidation(value,
+                            name: 'your phone');
+                      },
+                    ),
+                    AppSizedBox.h2,
+                    const Text(
+                      "Gender",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    AppSizedBox.h2,
+                    genderWidget(genderController),
+                    AppSizedBox.h2,
+                    // AppSizedBox.h3,
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Column(
+                    //         children: [
+                    //           const Text(
+                    //             "Phone",
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //               fontWeight: FontWeight.w400,
+                    //             ),
+                    //           ),
+                    //           AppSizedBox.h2,
+                    //           AppTextFormFiledWidget(
+                    //             keyboardType: TextInputType.phone,
+                    //             controller: phoneController,
+                    //             hintText: "Enter your phone",
+                    //             prefix: Icons.call,
+                    //             validate: (value) {
+                    //               return Validations.mobileValidation(value,
+                    //                   name: 'your phone');
+                    //             },
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     AppSizedBox.w5,
+                    //     Expanded(
+                    //       child: Column(
+                    //         children: [
+                    //           const Text(
+                    //             "Gender",
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //               fontWeight: FontWeight.w400,
+                    //             ),
+                    //           ),
+                    //           AppSizedBox.h2,
+                    //           genderWidget(genderController,
+                    //               init: genderController.text),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // AppSizedBox.h3,
+
                     const Text(
                       "age",
                       style: TextStyle(

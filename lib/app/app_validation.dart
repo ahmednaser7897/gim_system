@@ -35,8 +35,8 @@ class Validations {
     if (value == null || value.isEmpty) {
       return "Please Enter $name";
     }
-    if (value.length < 6) {
-      return ' $name must  have at least 6 letters';
+    if (value.length < 8) {
+      return ' $name must  have at least 8 letters';
     }
     if (capitalLettersRegix.hasMatch(value)) {
       return ' $name must not have capital letters';

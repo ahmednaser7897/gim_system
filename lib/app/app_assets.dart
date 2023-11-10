@@ -8,7 +8,7 @@ class AppAssets {
   /// App Images
   static String appLogo = "${imagesPath}logo.png";
   static String admin = "${imagesPath}admin.png";
-  static String uoach = "${imagesPath}Coach.png";
+  static String coach = "${imagesPath}Coach.png";
   static String exercise = "${imagesPath}exercise.png";
   static String gym = "${imagesPath}Gym.png";
   static String user = "${imagesPath}user.png";

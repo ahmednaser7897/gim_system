@@ -63,7 +63,7 @@ class _CoachSettingsScreenState extends State<CoachSettingsScreen> {
                                     ? NetworkImage(
                                         cubit.coachModel!.image.orEmpty())
                                     : AssetImage(
-                                        AppAssets.uoach,
+                                        AppAssets.coach,
                                       ) as ImageProvider,
                               ),
                             ),

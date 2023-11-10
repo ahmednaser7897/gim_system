@@ -127,9 +127,9 @@ class _GymSettingsScreenState extends State<GymSettingsScreen> {
               ),
               settingbuildListItem(
                 context,
-                title: 'New User',
+                title: 'New Trainee',
                 leadingIcon: IconBroken.Profile,
-                subtitle: 'Create new User account',
+                subtitle: 'Create new Trainee account',
                 onTap: () {
                   Navigator.push(
                       context,

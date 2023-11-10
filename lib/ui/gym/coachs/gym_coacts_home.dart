@@ -48,40 +48,4 @@ class _GymCoachsListState extends State<GymCoachsList> {
       },
     );
   }
-
-  // Widget buildCoachsList() {
-  //   return Builder(builder: (context) {
-  //     var cubit = GymCubit.get(context);
-  //     return ListView.builder(
-  //       shrinkWrap: true,
-  //       physics: const NeverScrollableScrollPhysics(),
-  //       padding: const EdgeInsets.all(0),
-  //       itemCount: cubit.coachs.length,
-  //       itemBuilder: (context, index) {
-  //         return BlocConsumer<GymCubit, GymState>(
-  //           listener: (context, state) {},
-  //           builder: (context, state) {
-  //             return buildHomeItem(
-  //               ban: cubit.coachs[index].ban.orFalse(),
-  //               name: cubit.coachs[index].name.orEmpty(),
-  //               des: cubit.coachs[index].email.orEmpty(),
-  //               image: cubit.coachs[index].image,
-  //               assetImage: AppAssets.uoach,
-  //               ontap: () {
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) => CoachDetailsScreen(
-  //                       coachModel: cubit.coachs[index],
-  //                     ),
-  //                   ),
-  //                 );
-  //               },
-  //             );
-  //           },
-  //         );
-  //       },
-  //     );
-  //   });
-  // }
 }

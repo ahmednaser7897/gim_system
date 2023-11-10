@@ -44,11 +44,11 @@ class _GymHomeScreenState extends State<GymHomeScreen> {
                   height: 7.w,
                   width: 7.w,
                 ),
-                label: 'Users',
+                label: 'Trainees',
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  AppAssets.uoach,
+                  AppAssets.coach,
                   height: 7.w,
                   width: 7.w,
                 ),

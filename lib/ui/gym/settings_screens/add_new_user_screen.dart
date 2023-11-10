@@ -52,7 +52,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
       create: (context) => ImageCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New User'),
+          title: const Text('Add New Trainee'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -77,11 +77,11 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                     AppTextFormFiledWidget(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-                      hintText: "Enter User name",
+                      hintText: "Enter Trainee name",
                       prefix: Icons.person,
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'User name');
+                            name: 'Trainee name');
                       },
                     ),
                     AppSizedBox.h3,
@@ -96,11 +96,11 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                     AppTextFormFiledWidget(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      hintText: "Enter User email",
+                      hintText: "Enter Trainee email",
                       prefix: Icons.email_rounded,
                       validate: (value) {
                         return Validations.emailValidation(value,
-                            name: 'User email');
+                            name: 'Trainee email');
                       },
                     ),
                     AppSizedBox.h3,
@@ -114,16 +114,15 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                     AppSizedBox.h2,
                     AppTextFormFiledWidget(
                       controller: passwordController,
-                      hintText: "Enter User password",
+                      hintText: "Enter Trainee password",
                       prefix: Icons.lock,
                       suffix: Icons.visibility,
                       isPassword: true,
                       validate: (value) {
                         return Validations.passwordValidation(value,
-                            name: 'User password');
+                            name: 'Trainee password');
                       },
                     ),
-
                     AppSizedBox.h2,
                     const Text(
                       "Phone",
@@ -154,52 +153,6 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                     AppSizedBox.h2,
                     genderWidget(genderController),
                     AppSizedBox.h2,
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: Column(
-                    //         children: [
-                    //           const Text(
-                    //             "Phone",
-                    //             style: TextStyle(
-                    //               fontSize: 16,
-                    //               fontWeight: FontWeight.w400,
-                    //             ),
-                    //           ),
-                    //           AppSizedBox.h2,
-                    //           AppTextFormFiledWidget(
-                    //             keyboardType: TextInputType.phone,
-                    //             controller: phoneController,
-                    //             hintText: "Enter User phone",
-                    //             prefix: Icons.call,
-                    //             validate: (value) {
-                    //               return Validations.mobileValidation(value,
-                    //                   name: 'User phone');
-                    //             },
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     AppSizedBox.w5,
-                    //     Expanded(
-                    //       child: Column(
-                    //         children: [
-                    //           const Text(
-                    //             "Gender",
-                    //             style: TextStyle(
-                    //               fontSize: 16,
-                    //               fontWeight: FontWeight.w400,
-                    //             ),
-                    //           ),
-                    //           AppSizedBox.h2,
-                    //           genderWidget(genderController),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-
-                    // AppSizedBox.h3,
                     const Text(
                       "Age",
                       style: TextStyle(
@@ -212,7 +165,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       controller: agecontroller,
                       prefix: Icons.timelapse,
                       keyboardType: TextInputType.number,
-                      hintText: "Enter User age",
+                      hintText: "Enter Trainee age",
                       validate: (value) {
                         return Validations.numberValidation(value,
                             name: 'Age', isInt: true);
@@ -231,10 +184,10 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       controller: heightController,
                       prefix: Icons.height,
                       keyboardType: TextInputType.number,
-                      hintText: "Enter User height",
+                      hintText: "Enter Trainee height",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'User height');
+                            name: 'Trainee height');
                       },
                     ),
                     AppSizedBox.h3,
@@ -250,10 +203,10 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       controller: weightController,
                       prefix: Icons.monitor_weight_sharp,
                       keyboardType: TextInputType.number,
-                      hintText: "Enter User weight",
+                      hintText: "Enter Trainee weight",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'User weight');
+                            name: 'Trainee weight');
                       },
                     ),
                     AppSizedBox.h3,
@@ -269,10 +222,10 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       controller: bodyFatPercentageController,
                       prefix: Icons.percent,
                       keyboardType: TextInputType.number,
-                      hintText: "Enter User body Fat Percentage",
+                      hintText: "Enter Trainee body Fat Percentage",
                       validate: (value) {
                         return Validations.normalValidation(value,
-                            name: 'User body Fat Percentage');
+                            name: 'Trainee body Fat Percentage');
                       },
                     ),
                     AppSizedBox.h3,
@@ -316,7 +269,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                       listener: (context, state) {
                         if (state is ScAddUser) {
                           showFlutterToast(
-                            message: "User added",
+                            message: "Trainee added",
                             toastColor: Colors.green,
                           );
                           Navigator.pop(context);
@@ -334,7 +287,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                             ? const CircularProgressComponent()
                             : BottomComponent(
                                 child: const Text(
-                                  'Add New User',
+                                  'Add Trainee User',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,

@@ -32,8 +32,8 @@ Widget screenBuilder({
       child: Text('Empty'),
     );
   } else {
-    return Center(
-      child: LogOutButton(onTap: () {}),
-    );
+    return const Center(child: Text('No data to show')
+        //LogOutButton(onTap: () {}),
+        );
   }
 }

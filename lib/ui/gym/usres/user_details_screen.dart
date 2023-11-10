@@ -60,7 +60,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Details'),
+        title: const Text('Trainee Details'),
       ),
       body: BlocConsumer<GymCubit, GymState>(
         listener: (context, state) {
@@ -70,12 +70,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             });
             if (model.ban.orFalse()) {
               showFlutterToast(
-                message: "User is banned",
+                message: "Trainee is banned",
                 toastColor: Colors.green,
               );
             } else {
               showFlutterToast(
-                message: "User is unbanned",
+                message: "Trainee is unbanned",
                 toastColor: Colors.green,
               );
             }
@@ -360,10 +360,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     controller: fitnessLevelController,
                     prefix: Icons.percent,
                     keyboardType: TextInputType.number,
-                    hintText: "Enter User Fitness Level",
+                    hintText: "Enter Trainee Fitness Level",
                     validate: (value) {
                       return Validations.normalValidation(value,
-                          name: 'User Fitness Level');
+                          name: 'Trainee Fitness Level');
                     },
                   ),
                   AppSizedBox.h3,

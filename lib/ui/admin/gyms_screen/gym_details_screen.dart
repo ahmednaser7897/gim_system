@@ -100,7 +100,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                                       gymModel.image!.isNotEmpty)
                                   ? NetworkImage(gymModel.image.orEmpty())
                                   : AssetImage(
-                                      AppAssets.admin,
+                                      AppAssets.gym,
                                     ) as ImageProvider,
                             ),
                           ),
@@ -127,7 +127,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CustomButton(
-                          text: 'show users',
+                          text: 'Show Trainee',
                           width: 40,
                           fontsize: 12,
                           onTap: () {

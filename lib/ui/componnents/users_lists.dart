@@ -22,7 +22,7 @@ class ShowUsersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Users'),
+        title: const Text('Trainees'),
       ),
       body: buildusersList(users: users, canEdit: canEdit),
     );
@@ -133,7 +133,7 @@ Widget buildusersList({required List<UserModel> users, bool canEdit = true}) {
           des: users.orEmpty()[index].email.orEmpty(),
           image: users.orEmpty()[index].image,
           id: users[index].id.orEmpty(),
-          assetImage: AppAssets.gym,
+          assetImage: AppAssets.user,
           ontap: () {
             Navigator.push(
               context,
@@ -168,7 +168,7 @@ Widget buildCoachsList(
           des: coachs.orEmpty()[index].email.orEmpty(),
           image: coachs.orEmpty()[index].image,
           id: coachs[index].id.orEmpty(),
-          assetImage: AppAssets.uoach,
+          assetImage: AppAssets.coach,
           ontap: () {
             Navigator.push(
               context,

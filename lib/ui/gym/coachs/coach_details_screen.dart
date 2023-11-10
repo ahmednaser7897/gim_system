@@ -99,7 +99,7 @@ class _CoachDetailsScreenState extends State<CoachDetailsScreen> {
                                     coachModel.image!.isNotEmpty)
                                 ? NetworkImage(coachModel.image.orEmpty())
                                 : AssetImage(
-                                    AppAssets.uoach,
+                                    AppAssets.coach,
                                   ) as ImageProvider,
                           ),
                         ),

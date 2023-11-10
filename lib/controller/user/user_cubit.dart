@@ -42,31 +42,26 @@ class UserCubit extends Cubit<UserState> {
   Future<void> getCurrentGymData() async {
     emit(LoadingGetGym());
     try {
-      print("getCurrentGymData");
-      print(AppPreferences.uId);
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.gymUid)
           .get();
       gymModel = GymModel.fromJson(value.data() ?? {});
+      //get  gym users
       var users = await value.reference.collection(Constants.user).get();
       gymModel!.users = [];
       for (var element in users.docs) {
         gymModel!.users!.add(UserModel.fromJson(element.data()));
       }
-      print('user l is ${gymModel!.users.orEmpty().length}');
+      //get  gym caochs
       var coachs = await value.reference.collection(Constants.coach).get();
       gymModel!.coachs = [];
       for (var element in coachs.docs) {
         gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
       }
-      print('coachs l is ${gymModel!.coachs.orEmpty().length}');
-      print("object2");
-      print(value.data());
       emit(ScGetGym());
-      print("getCurrentGymData done");
     } catch (e) {
-      print('getCurrentGymData Error: $e');
+      print('Error: $e');
       emit(ErorrGetGym(e.toString()));
     }
   }
@@ -75,8 +70,6 @@ class UserCubit extends Cubit<UserState> {
   Future<void> getCurrentUserData() async {
     emit(LoadingGetUser());
     try {
-      print("getCurrentUserData");
-      print(AppPreferences.uId);
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.gymUid)
@@ -90,8 +83,8 @@ class UserCubit extends Cubit<UserState> {
           .collection(Constants.dite)
           .orderBy('createdAt', descending: true)
           .get();
-      print('dites.docs.length l is ${dites.docs.length}');
       userModel!.dites = [];
+      //get evrey users dites
       for (var element in dites.docs) {
         var dite = DietModel.fromJson(element.data());
         var value = await FirebaseFirestore.instance
@@ -103,13 +96,13 @@ class UserCubit extends Cubit<UserState> {
         dite.coachModel = CoachModel.fromJson(value.data() ?? {});
         userModel!.dites.orEmpty().add(dite);
       }
-      print('dites l is ${userModel!.dites.orEmpty().length}');
 
       var userExercise = await value.reference
           .collection(Constants.userExercise)
           .orderBy('date', descending: true)
           .get();
       userModel!.userExercises = [];
+      //get evrey users exercises
       for (var element in userExercise.docs) {
         var userExercises = UserExercises.fromJson(element.data());
         var value = await FirebaseFirestore.instance
@@ -131,13 +124,9 @@ class UserCubit extends Cubit<UserState> {
         });
         userModel!.userExercises!.add(userExercises);
       }
-      print('userExercises l is ${userModel!.userExercises.orEmpty().length}');
-      print("object2");
-      print(value.data());
       emit(ScGetUser());
-      print("getCurrentUserData done");
     } catch (e) {
-      print('getCurrentUserData Error: $e');
+      print('Error: $e');
       emit(ErorrGetUser(e.toString()));
     }
   }
@@ -177,9 +166,6 @@ class UserCubit extends Cubit<UserState> {
           parentImageFile: image,
         );
       }
-      print('admin updated Success 😎');
-      print('EditUser userId');
-      print(AppPreferences.uId);
       emit(ScEditUser());
       await getCurrentUserData();
     } catch (error) {
@@ -190,7 +176,6 @@ class UserCubit extends Cubit<UserState> {
         emit(ErorrEditUser(
             'The email address is already in use by another account'));
       }
-      print('Error: $error');
       emit(ErorrEditUser(error.toString()));
     }
   }
@@ -200,8 +185,6 @@ class UserCubit extends Cubit<UserState> {
       required String userId,
       required File parentImageFile}) async {
     try {
-      print('addGuyImage userId');
-      print(userId);
       var parentImageUrl = parentImageFile.path;
       var value = await firebase_storage.FirebaseStorage.instance
           .ref()
@@ -219,7 +202,6 @@ class UserCubit extends Cubit<UserState> {
           .update({
         'image': parentImageUrl,
       });
-      print('addImage done');
     } catch (e) {
       print('Error: $e');
     }
@@ -228,7 +210,6 @@ class UserCubit extends Cubit<UserState> {
   List<CoachModel> coachs = [];
   Future<void> getAllCoachs() async {
     try {
-      print("getAllcoachs");
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.gymUid)
@@ -237,10 +218,8 @@ class UserCubit extends Cubit<UserState> {
       for (var element in value.docs) {
         coachs.add(CoachModel.fromJson(element.data()));
       }
-      print("getAllcoachs done");
-      print(coachs.length);
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Error: $e');
     }
   }
 
@@ -251,7 +230,7 @@ class UserCubit extends Cubit<UserState> {
       await getAllCoachs();
       emit(ScGetHomeData());
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get home Data Error: $e');
       emit(ErorrGetHomeData(e.toString()));
     }
   }
@@ -364,7 +343,7 @@ class UserCubit extends Cubit<UserState> {
   List<MessageModel> messages = [];
   Future<void> getMessages({required CoachModel coachModel}) async {
     try {
-      // messages = [];
+      messages = [];
       emit(LoadingUserGetdMessages());
       FirebaseFirestore.instance
           .collection(Constants.gym)

@@ -41,7 +41,7 @@ class _CoachHomeScreenState extends State<CoachHomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  AppAssets.uoach,
+                  AppAssets.coach,
                   height: 7.w,
                   width: 7.w,
                 ),
@@ -53,7 +53,7 @@ class _CoachHomeScreenState extends State<CoachHomeScreen> {
                   height: 7.w,
                   width: 7.w,
                 ),
-                label: 'Users',
+                label: 'Trainees',
               ),
               const BottomNavigationBarItem(
                 icon: Icon(IconBroken.Setting),

@@ -54,7 +54,7 @@ class _UserDetailsFromCoachScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Details'),
+        title: const Text('Trainee Details'),
       ),
       body: BlocConsumer<CoachCubit, CoachState>(
         listener: (context, state) {},
@@ -266,7 +266,7 @@ class _UserDetailsFromCoachScreenState
               controller: agecontroller,
               prefix: Icons.timelapse,
               keyboardType: TextInputType.number,
-              hintText: "Enter User age",
+              hintText: "Enter Trainee age",
               validate: (value) {
                 return Validations.numberValidation(value,
                     name: 'Age', isInt: true);
@@ -286,9 +286,10 @@ class _UserDetailsFromCoachScreenState
               controller: heightController,
               prefix: Icons.height,
               keyboardType: TextInputType.number,
-              hintText: "Enter User height",
+              hintText: "Enter Trainees height",
               validate: (value) {
-                return Validations.normalValidation(value, name: 'User height');
+                return Validations.normalValidation(value,
+                    name: 'Trainees height');
               },
             ),
             AppSizedBox.h3,
@@ -305,9 +306,10 @@ class _UserDetailsFromCoachScreenState
               controller: weightController,
               prefix: Icons.monitor_weight_sharp,
               keyboardType: TextInputType.number,
-              hintText: "Enter User weight",
+              hintText: "Enter Trainees weight",
               validate: (value) {
-                return Validations.normalValidation(value, name: 'User weight');
+                return Validations.normalValidation(value,
+                    name: 'Trainees weight');
               },
             ),
             AppSizedBox.h3,
@@ -324,10 +326,10 @@ class _UserDetailsFromCoachScreenState
               controller: bodyFatPercentageController,
               prefix: Icons.percent,
               keyboardType: TextInputType.number,
-              hintText: "Enter User body Fat Percentage",
+              hintText: "Enter Trainees body Fat Percentage",
               validate: (value) {
                 return Validations.normalValidation(value,
-                    name: 'User body Fat Percentage');
+                    name: 'Trainees body Fat Percentage');
               },
             ),
             AppSizedBox.h3,
@@ -344,9 +346,10 @@ class _UserDetailsFromCoachScreenState
               controller: goalController,
               prefix: Icons.star,
               keyboardType: TextInputType.number,
-              hintText: "Enter User goal",
+              hintText: "Enter Trainees goal",
               validate: (value) {
-                return Validations.normalValidation(value, name: 'User goal');
+                return Validations.normalValidation(value,
+                    name: 'Trainees goal');
               },
             ),
             AppSizedBox.h3,
@@ -363,10 +366,10 @@ class _UserDetailsFromCoachScreenState
               controller: fitnessLevelController,
               prefix: Icons.percent,
               keyboardType: TextInputType.number,
-              hintText: "Enter User Fitness Level",
+              hintText: "Enter Trainees Fitness Level",
               validate: (value) {
                 return Validations.normalValidation(value,
-                    name: 'User Fitness Level');
+                    name: 'Trainees Fitness Level');
               },
             ),
             AppSizedBox.h2,

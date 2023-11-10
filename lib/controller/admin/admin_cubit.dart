@@ -39,23 +39,17 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   AdminModel? adminModel;
-  Future<void> getCurrentAdninData() async {
+  Future<void> getCurrentAdminData() async {
     emit(LoadingGetAdmin());
     try {
-      print("getCurrentParentData");
-      print(AppPreferences.uId);
       var value = await FirebaseFirestore.instance
           .collection(Constants.admin)
           .doc(AppPreferences.uId)
           .get();
       adminModel = AdminModel.fromJson(value.data() ?? {});
-      print("object2");
-      print(value.data());
-      print(adminModel);
       emit(ScGetAdmin());
-      print("getCurrentParentData done");
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get admin Data Error: $e');
       emit(ErorrGetAdmin(e.toString()));
     }
   }
@@ -85,9 +79,6 @@ class AdminCubit extends Cubit<AdminState> {
             .collection(Constants.gym)
             .doc(value1.user?.uid)
             .set(gymModel.toJson());
-        print('User Register Success 😎');
-        print('addGym userId');
-        print(value1.user?.uid);
         if (image != null) {
           await addImage(
             type: Constants.gym,
@@ -136,9 +127,6 @@ class AdminCubit extends Cubit<AdminState> {
             .collection(Constants.admin)
             .doc(value1.user?.uid)
             .set(model.toJson());
-        print('admin Register Success 😎');
-        print('addadmin userId');
-        print(value1.user?.uid);
         if (image != null) {
           await addImage(
             type: Constants.admin,
@@ -195,11 +183,8 @@ class AdminCubit extends Cubit<AdminState> {
           parentImageFile: image,
         );
       }
-      print('admin updated Success 😎');
-      print('EditAdmin userId');
-      print(AppPreferences.uId);
       emit(ScEditAdmin());
-      await getCurrentAdninData();
+      await getCurrentAdminData();
     } catch (error) {
       print('Error: $error');
       if (error
@@ -218,8 +203,6 @@ class AdminCubit extends Cubit<AdminState> {
       required String userId,
       required File parentImageFile}) async {
     try {
-      print('addGuyImage userId');
-      print(userId);
       var parentImageUrl = parentImageFile.path;
       var value = await firebase_storage.FirebaseStorage.instance
           .ref()
@@ -241,7 +224,6 @@ class AdminCubit extends Cubit<AdminState> {
   List<AdminModel> admins = [];
   Future<void> getAllAdmins() async {
     try {
-      print("getAllAdmins");
       var value =
           await FirebaseFirestore.instance.collection(Constants.admin).get();
       for (var element in value.docs) {
@@ -251,10 +233,8 @@ class AdminCubit extends Cubit<AdminState> {
 
         admins.add(AdminModel.fromJson(element.data()));
       }
-      print("getAllAdmins done");
-      print(admins.length);
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get all admins Data Error: $e');
     }
   }
 
@@ -262,29 +242,28 @@ class AdminCubit extends Cubit<AdminState> {
   Future<void> getAllGyms() async {
     emit(LoadingGetAdmin());
     try {
-      print("getAllGyms");
       var value =
           await FirebaseFirestore.instance.collection(Constants.gym).get();
 
       for (var element in value.docs) {
         var gym = GymModel.fromJson(element.data());
+        //get evrey gyms users
         var users = await element.reference.collection(Constants.user).get();
         gym.users = [];
         for (var element in users.docs) {
           gym.users!.add(UserModel.fromJson(element.data()));
         }
-        print('user l is ${gym.users.orEmpty().length}');
+        //get evrey gyms coachs
         var coachs = await element.reference.collection(Constants.coach).get();
         gym.coachs = [];
         for (var element in coachs.docs) {
           gym.coachs!.add(CoachModel.fromJson(element.data()));
         }
-        print('coachs l is ${gym.coachs.orEmpty().length}');
         gyms.add(gym);
       }
       emit(ScGetAdmin());
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get all gyms Data Error: $e');
       emit(ErorrGetAdmin(e.toString()));
     }
   }
@@ -298,16 +277,13 @@ class AdminCubit extends Cubit<AdminState> {
       await getAllGyms();
       emit(ScGetHomeData());
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get home Data Error: $e');
       emit(ErorrGetHomeData(e.toString()));
     }
   }
 
   Future<void> changeGymBan(String gymId, bool value) async {
     emit(LoadingChangeGymBan());
-    print(changeGymBan);
-    print(gymId);
-    print(value);
     try {
       await FirebaseFirestore.instance
           .collection(Constants.gym)
@@ -317,16 +293,13 @@ class AdminCubit extends Cubit<AdminState> {
       });
       emit(ScChangeGymBan());
     } catch (e) {
-      print('changeGymBan $e');
+      print('change Gym Ban $e');
       emit(ErorrChangeGymBan(e.toString()));
     }
   }
 
   Future<void> changeAdminBan(String adminId, bool value) async {
     emit(LoadingChangeAdminBan());
-    print(changeAdminBan);
-    print(adminId);
-    print(value);
     try {
       await FirebaseFirestore.instance
           .collection(Constants.admin)
@@ -336,7 +309,7 @@ class AdminCubit extends Cubit<AdminState> {
       });
       emit(ScChangeAdminBan());
     } catch (e) {
-      print('changeAdminBan $e');
+      print('change Admin Ban $e');
       emit(ErorrChangeAdminBan(e.toString()));
     }
   }

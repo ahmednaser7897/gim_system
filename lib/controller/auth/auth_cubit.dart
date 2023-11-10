@@ -16,6 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   TokensModel? tokenModel;
   String userId = '';
+  //login function that check this email type and login as this type
   void userMakLogin({required String email, required String password}) async {
     emit(AuthGetUserAfterLoginLoadingState());
     await FirebaseAuth.instance
@@ -25,6 +26,7 @@ class AuthCubit extends Cubit<AuthState> {
       print('on log in');
       print(AppPreferences.uId);
       print(AppPreferences.userType);
+      //check this user type
       await getUserType(userId);
     }).catchError((error) {
       catchError(error);
@@ -35,6 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> getUserType(String userId) async {
     try {
       if (userId != '') {
+        //save token to firebase to send notifications
         var token = await FirebaseMessaging.instance.getToken();
         tokenModel = TokensModel(id: userId, token: token!);
         await FirebaseFirestore.instance.collection('tokens').doc(userId).set(
@@ -97,11 +100,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<bool> isAdmin(String userId) async {
     print('check if user admin');
-    final adminRef = await FirebaseFirestore.instance
-        .collection(Constants.admin)
-        .doc(userId);
+    final adminRef =
+        FirebaseFirestore.instance.collection(Constants.admin).doc(userId);
     final adminDocExit = await adminRef.get().then((value) => value.exists);
     final adminDoc = await adminRef.get();
+    //check if this admin baned
     if (adminDocExit == true) {
       if (adminDoc.data()!['ban']) {
         emit(AuthGetUserAfterLoginErrorState(error: 'Admin is banned'));
@@ -117,15 +120,13 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<bool> isGym(String userId) async {
-    print('check if user gym');
     final parentRef =
         FirebaseFirestore.instance.collection(Constants.gym).doc(userId);
     final parentDocExit = await parentRef.get().then((value) => value.exists);
     final parentDoc = await parentRef.get();
     if (parentDocExit) {
-      print('check if  gym ban');
+      //check if this gym baned
       if (parentDoc.data()!['ban']) {
-        print('gym is ban');
         emit(AuthGetUserAfterLoginErrorState(error: 'Gym is banned'));
         return false;
       } else {
@@ -139,7 +140,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<bool> isCoach(String userId) async {
-    print('check if user coach');
     final gymsQuerySnapshot =
         await FirebaseFirestore.instance.collection(Constants.gym).get();
     for (final gyms in gymsQuerySnapshot.docs) {
@@ -147,10 +147,12 @@ class AuthCubit extends Cubit<AuthState> {
       final coachDocExit = await coachRef.get().then((value) => value.exists);
       final coachDoc = await coachRef.get();
       if (coachDocExit == true) {
+        //check if this coach is baned
         if (coachDoc.data()!['ban']) {
           emit(AuthGetUserAfterLoginErrorState(error: 'Coach is banned'));
           return false;
         } else {
+          //check if this coachs gym is baned
           if (gyms.data()['ban']) {
             emit(AuthGetUserAfterLoginErrorState(error: 'Gym is banned'));
             return false;
@@ -167,7 +169,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<bool> isUser(String userId) async {
-    print('check if user coach');
     final gymsQuerySnapshot =
         await FirebaseFirestore.instance.collection(Constants.gym).get();
     for (final gyms in gymsQuerySnapshot.docs) {
@@ -175,10 +176,12 @@ class AuthCubit extends Cubit<AuthState> {
       final userDocExit = await userRef.get().then((value) => value.exists);
       final userDoc = await userRef.get();
       if (userDocExit == true) {
+        //check if this user  is baned
         if (userDoc.data()!['ban']) {
           emit(AuthGetUserAfterLoginErrorState(error: 'user is banned'));
           return false;
         } else {
+          //check if this users gym is baned
           if (gyms.data()['ban']) {
             emit(AuthGetUserAfterLoginErrorState(error: 'Gym is banned'));
             return false;

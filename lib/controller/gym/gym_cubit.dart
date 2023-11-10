@@ -32,7 +32,7 @@ class GymCubit extends Cubit<GymState> {
     const GymSettingsScreen(),
   ];
   List titles = [
-    'Users',
+    'Trainees',
     'Coachs',
     'Exercises',
     'Settings',
@@ -47,19 +47,14 @@ class GymCubit extends Cubit<GymState> {
   Future<void> getCurrentGymData() async {
     emit(LoadingGetGym());
     try {
-      print("getCurrentGymData");
-      print(AppPreferences.uId);
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
           .get();
       gymModel = GymModel.fromJson(value.data() ?? {});
-      print("object2");
-      print(value.data());
       emit(ScGetGym());
-      print("getCurrentGymData done");
     } catch (e) {
-      print('getCurrentGymData Error: $e');
+      print('Error: $e');
       emit(ErorrGetGym(e.toString()));
     }
   }
@@ -96,13 +91,10 @@ class GymCubit extends Cubit<GymState> {
           parentImageFile: image,
         );
       }
-      print('admin updated Success 😎');
-      print('EditGym userId');
       print(AppPreferences.uId);
       emit(ScEditGym());
       await getCurrentGymData();
     } catch (error) {
-      print('Error: $error');
       if (error
           .toString()
           .contains('The email address is already in use by another account')) {
@@ -141,9 +133,6 @@ class GymCubit extends Cubit<GymState> {
             .collection(Constants.coach)
             .doc(value1.user?.uid)
             .set(model.toJson());
-        print('coach Register Success 😎');
-        print('AddCoach userId');
-        print(value1.user?.uid);
         if (image != null) {
           await addImageSub(
             type: Constants.coach,
@@ -193,9 +182,6 @@ class GymCubit extends Cubit<GymState> {
             .collection(Constants.user)
             .doc(value1.user?.uid)
             .set(model.toJson());
-        print('user Register Success 😎');
-        print('Adduser userId');
-        print(value1.user?.uid);
         if (image != null) {
           await addImageSub(
             type: Constants.user,
@@ -234,8 +220,6 @@ class GymCubit extends Cubit<GymState> {
           .collection(Constants.exercise)
           .doc(value.id)
           .update({'id': value.id});
-
-      print('Exercise added');
       emit(ScAddExercise());
       await getHomeData();
     } catch (error) {
@@ -268,8 +252,6 @@ class GymCubit extends Cubit<GymState> {
       required String userId,
       required File parentImageFile}) async {
     try {
-      print('addGuyImage userId');
-      print(userId);
       var parentImageUrl = parentImageFile.path;
       var value = await firebase_storage.FirebaseStorage.instance
           .ref()
@@ -277,8 +259,6 @@ class GymCubit extends Cubit<GymState> {
           .putFile(parentImageFile);
       var value2 = await value.ref.getDownloadURL();
       parentImageUrl = value2;
-      print('addGuyImage image');
-      print(parentImageUrl);
       await FirebaseFirestore.instance.collection(type).doc(userId).update({
         'image': parentImageUrl,
       });
@@ -302,8 +282,6 @@ class GymCubit extends Cubit<GymState> {
           .putFile(parentImageFile);
       var value2 = await value.ref.getDownloadURL();
       parentImageUrl = value2;
-      print('addGuyImage image');
-      print(parentImageUrl);
       await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
@@ -312,7 +290,6 @@ class GymCubit extends Cubit<GymState> {
           .update({
         'image': parentImageUrl,
       });
-      print('addImage done');
     } catch (e) {
       print('Error: $e');
     }
@@ -321,7 +298,6 @@ class GymCubit extends Cubit<GymState> {
   List<CoachModel> coachs = [];
   Future<void> getAllCoachs() async {
     try {
-      print("getAllcoachs");
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
@@ -333,17 +309,15 @@ class GymCubit extends Cubit<GymState> {
         }
         coachs.add(CoachModel.fromJson(element.data()));
       }
-      print("getAllcoachs done");
       print(coachs.length);
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Error: $e');
     }
   }
 
   List<UserModel> users = [];
   Future<void> getAllusers() async {
     try {
-      print("getAllusers");
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
@@ -355,8 +329,8 @@ class GymCubit extends Cubit<GymState> {
             .collection(Constants.dite)
             .orderBy('createdAt', descending: true)
             .get();
-        print('dites.docs.length l is ${dites.docs.length}');
         user.dites = [];
+        //get evrey users dites
         for (var element in dites.docs) {
           var dite = DietModel.fromJson(element.data());
           var value = await FirebaseFirestore.instance
@@ -368,13 +342,13 @@ class GymCubit extends Cubit<GymState> {
           dite.coachModel = CoachModel.fromJson(value.data() ?? {});
           user.dites.orEmpty().add(dite);
         }
-        print('dites l is ${user.dites.orEmpty().length}');
 
         var userExercise = await element.reference
             .collection(Constants.userExercise)
             .orderBy('date', descending: true)
             .get();
         user.userExercises = [];
+        //get evrey users exercises
         for (var element in userExercise.docs) {
           var userExercises = UserExercises.fromJson(element.data());
           var value = await FirebaseFirestore.instance
@@ -396,38 +370,16 @@ class GymCubit extends Cubit<GymState> {
           });
           user.userExercises!.add(userExercises);
         }
-        print('userExercises l is ${user.userExercises.orEmpty().length}');
         users.add(user);
       }
-      print("getAllusers done");
-      print(users.length);
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Error: $e');
     }
   }
-
-  // Future<void> getAllusers() async {
-  //   try {
-  //     print("getAllusers");
-  //     var value = await FirebaseFirestore.instance
-  //         .collection(Constants.gym)
-  //         .doc(AppPreferences.uId)
-  //         .collection(Constants.user)
-  //         .get();
-  //     for (var element in value.docs) {
-  //       users.add(UserModel.fromJson(element.data()));
-  //     }
-  //     print("getAllusers done");
-  //     print(users.length);
-  //   } catch (e) {
-  //     print('Get Parent Data Error: $e');
-  //   }
-  // }
 
   List<ExerciseModel> exercises = [];
   Future<void> getAllexercises() async {
     try {
-      print("getAllexercises");
       var value = await FirebaseFirestore.instance
           .collection(Constants.gym)
           .doc(AppPreferences.uId)
@@ -436,10 +388,9 @@ class GymCubit extends Cubit<GymState> {
       for (var element in value.docs) {
         exercises.add(ExerciseModel.fromJson(element.data()));
       }
-      print("getAllexercises done");
       print(exercises.length);
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Error: $e');
     }
   }
 
@@ -454,7 +405,7 @@ class GymCubit extends Cubit<GymState> {
       await getAllexercises();
       emit(ScGetHomeData());
     } catch (e) {
-      print('Get Parent Data Error: $e');
+      print('Get home Data Error: $e');
       emit(ErorrGetHomeData(e.toString()));
     }
   }

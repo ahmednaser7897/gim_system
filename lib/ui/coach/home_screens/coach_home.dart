@@ -70,7 +70,7 @@ class _CochHomeState extends State<CochHome> {
                 des: cubit.coachs[index].email.orEmpty(),
                 id: cubit.coachs[index].id.orEmpty(),
                 image: cubit.coachs[index].image,
-                assetImage: AppAssets.uoach,
+                assetImage: AppAssets.coach,
                 ontap: () {
                   Navigator.push(
                     context,

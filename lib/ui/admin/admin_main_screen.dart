@@ -16,7 +16,7 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
-    AdminCubit.get(context).getCurrentAdninData();
+    AdminCubit.get(context).getCurrentAdminData();
     AdminCubit.get(context).getHomeData();
     super.initState();
   }

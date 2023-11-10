@@ -41,7 +41,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  AppAssets.uoach,
+                  AppAssets.coach,
                   height: 7.w,
                   width: 7.w,
                 ),

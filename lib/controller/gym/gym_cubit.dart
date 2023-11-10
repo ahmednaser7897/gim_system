@@ -273,8 +273,6 @@ class GymCubit extends Cubit<GymState> {
       required String userId,
       required File parentImageFile}) async {
     try {
-      print('addGuyImage userId');
-      print(userId);
       var parentImageUrl = parentImageFile.path;
       var value = await firebase_storage.FirebaseStorage.instance
           .ref()

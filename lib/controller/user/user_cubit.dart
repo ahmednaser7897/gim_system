@@ -38,34 +38,6 @@ class UserCubit extends Cubit<UserState> {
     emit(ScChangeHomeIndex());
   }
 
-  GymModel? gymModel;
-  Future<void> getCurrentGymData() async {
-    emit(LoadingGetGym());
-    try {
-      var value = await FirebaseFirestore.instance
-          .collection(Constants.gym)
-          .doc(AppPreferences.gymUid)
-          .get();
-      gymModel = GymModel.fromJson(value.data() ?? {});
-      //get  gym users
-      var users = await value.reference.collection(Constants.user).get();
-      gymModel!.users = [];
-      for (var element in users.docs) {
-        gymModel!.users!.add(UserModel.fromJson(element.data()));
-      }
-      //get  gym caochs
-      var coachs = await value.reference.collection(Constants.coach).get();
-      gymModel!.coachs = [];
-      for (var element in coachs.docs) {
-        gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
-      }
-      emit(ScGetGym());
-    } catch (e) {
-      print('Error: $e');
-      emit(ErorrGetGym(e.toString()));
-    }
-  }
-
   UserModel? userModel;
   Future<void> getCurrentUserData() async {
     emit(LoadingGetUser());
@@ -128,6 +100,34 @@ class UserCubit extends Cubit<UserState> {
     } catch (e) {
       print('Error: $e');
       emit(ErorrGetUser(e.toString()));
+    }
+  }
+
+  GymModel? gymModel;
+  Future<void> getCurrentGymData() async {
+    emit(LoadingGetGym());
+    try {
+      var value = await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .get();
+      gymModel = GymModel.fromJson(value.data() ?? {});
+      //get  gym users
+      var users = await value.reference.collection(Constants.user).get();
+      gymModel!.users = [];
+      for (var element in users.docs) {
+        gymModel!.users!.add(UserModel.fromJson(element.data()));
+      }
+      //get  gym caochs
+      var coachs = await value.reference.collection(Constants.coach).get();
+      gymModel!.coachs = [];
+      for (var element in coachs.docs) {
+        gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
+      }
+      emit(ScGetGym());
+    } catch (e) {
+      print('Error: $e');
+      emit(ErorrGetGym(e.toString()));
     }
   }
 

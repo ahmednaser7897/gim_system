@@ -60,6 +60,34 @@ class CoachCubit extends Cubit<CoachState> {
     }
   }
 
+  GymModel? gymModel;
+  Future<void> getCurrentGymData() async {
+    emit(LoadingGetGym());
+    try {
+      var value = await FirebaseFirestore.instance
+          .collection(Constants.gym)
+          .doc(AppPreferences.gymUid)
+          .get();
+      gymModel = GymModel.fromJson(value.data() ?? {});
+      //get  gym users
+      var users = await value.reference.collection(Constants.user).get();
+      gymModel!.users = [];
+      for (var element in users.docs) {
+        gymModel!.users!.add(UserModel.fromJson(element.data()));
+      }
+      //get  gym caochs
+      var coachs = await value.reference.collection(Constants.coach).get();
+      gymModel!.coachs = [];
+      for (var element in coachs.docs) {
+        gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
+      }
+      emit(ScGetGym());
+    } catch (e) {
+      print('Error: $e');
+      emit(ErorrGetGym(e.toString()));
+    }
+  }
+
   Future<void> editCoach(
       {required CoachModel model, required File? image}) async {
     try {
@@ -248,34 +276,6 @@ class CoachCubit extends Cubit<CoachState> {
     }
   }
 
-  GymModel? gymModel;
-  Future<void> getCurrentGymData() async {
-    emit(LoadingGetGym());
-    try {
-      var value = await FirebaseFirestore.instance
-          .collection(Constants.gym)
-          .doc(AppPreferences.gymUid)
-          .get();
-      gymModel = GymModel.fromJson(value.data() ?? {});
-      //get  gym users
-      var users = await value.reference.collection(Constants.user).get();
-      gymModel!.users = [];
-      for (var element in users.docs) {
-        gymModel!.users!.add(UserModel.fromJson(element.data()));
-      }
-      //get  gym caochs
-      var coachs = await value.reference.collection(Constants.coach).get();
-      gymModel!.coachs = [];
-      for (var element in coachs.docs) {
-        gymModel!.coachs!.add(CoachModel.fromJson(element.data()));
-      }
-      emit(ScGetGym());
-    } catch (e) {
-      print('Error: $e');
-      emit(ErorrGetGym(e.toString()));
-    }
-  }
-
   Future<void> addDite({required DietModel model}) async {
     try {
       emit(LoadingAddDite());
@@ -453,7 +453,6 @@ class CoachCubit extends Cubit<CoachState> {
 
   String authorization =
       "key=AAAAd2vXNyY:APA91bGddOGr4r1Y9CAWFlT5onvbv6scxr_ouuGK7sv3AJNSYBvvdnz76-0kYcE3-FgoPvfYxX2yvvB-n4txf8CLrw1H31eF38Gh-ejEMVZZcXa5kKWe1XRP_g06j-6BT2hfcjKU_-PS";
-
   Future<void> sendNotificationToUser(String token) async {
     try {
       await http.post(

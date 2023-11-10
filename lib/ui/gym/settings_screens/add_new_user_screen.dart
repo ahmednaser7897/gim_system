@@ -316,7 +316,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                                           bodyFatPercentage:
                                               bodyFatPercentageController.text,
                                           height: heightController.text,
-                                          goal: genderController.text,
+                                          goal: goalController.text,
                                           fitnesLevel:
                                               fitnessLevelController.text,
                                           weight: weightController.text,

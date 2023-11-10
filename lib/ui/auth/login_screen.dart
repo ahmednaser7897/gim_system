@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .replaceAll(' ', '')
                                               .toLowerCase();
                                           setState(() {});
-                                          authCubit.userMakLogin(
+                                          authCubit.login(
                                             email: emailController.text,
                                             password: passwordController.text,
                                           );

@@ -20,7 +20,7 @@ class ShowUserFitnessInfo extends StatefulWidget {
 class _ShowUserFitnessInfoState extends State<ShowUserFitnessInfo> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
-  TextEditingController bodyFatPercentageController = TextEditingController();
+  TextEditingController bmiController = TextEditingController();
   TextEditingController goalController = TextEditingController();
   TextEditingController fitnessLevelController = TextEditingController();
 
@@ -31,7 +31,8 @@ class _ShowUserFitnessInfoState extends State<ShowUserFitnessInfo> {
     model = widget.model;
     weightController.text = model.weight ?? '';
     heightController.text = model.height ?? '';
-    bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
+    bmiController.text =
+        '${model.bmi == null ? 0 : model.bmi!.toStringAsFixed(2)} - ${model.bmiRuselt ?? 'unavailable'}';
     goalController.text = model.goal ?? '';
     fitnessLevelController.text = model.fitnesLevel ?? '';
 
@@ -106,7 +107,7 @@ class _ShowUserFitnessInfoState extends State<ShowUserFitnessInfo> {
         ),
         AppSizedBox.h3,
         const Text(
-          "Body Fat Percentage",
+          "BMI",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
@@ -115,7 +116,7 @@ class _ShowUserFitnessInfoState extends State<ShowUserFitnessInfo> {
         AppSizedBox.h2,
         AppTextFormFiledWidget(
           isEnable: false,
-          controller: bodyFatPercentageController,
+          controller: bmiController,
           prefix: Icons.percent,
           keyboardType: TextInputType.number,
           hintText: "Enter User body Fat Percentage",

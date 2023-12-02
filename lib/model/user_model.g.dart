@@ -18,7 +18,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       ban: json['ban'] as bool?,
       age: json['age'] as String?,
       gymId: json['gymId'] as String?,
-      bodyFatPercentage: json['bodyFatPercentage'] as String?,
+      bmi: (json['bmi'] as num?)?.toDouble(),
+      bmiRuselt: json['bmiRuselt'] as String?,
       goal: json['goal'] as String?,
       height: json['height'] as String?,
       weight: json['weight'] as String?,
@@ -52,7 +53,8 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) {
   writeNotNull('age', instance.age);
   writeNotNull('weight', instance.weight);
   writeNotNull('height', instance.height);
-  writeNotNull('bodyFatPercentage', instance.bodyFatPercentage);
+  writeNotNull('bmi', instance.bmi);
+  writeNotNull('bmiRuselt', instance.bmiRuselt);
   writeNotNull('goal', instance.goal);
   writeNotNull('fitnesLevel', instance.fitnesLevel);
   writeNotNull('dites', instance.dites);

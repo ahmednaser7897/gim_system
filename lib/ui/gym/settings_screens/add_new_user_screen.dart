@@ -5,7 +5,7 @@ import 'package:gim_system/app/app_sized_box.dart';
 import 'package:gim_system/app/app_validation.dart';
 import 'package:gim_system/app/extensions.dart';
 import 'package:gim_system/controller/gym/gym_cubit.dart';
-
+import 'package:gim_system/ui/gym/settings_screens/bmi.dart';
 import '../../../model/user_model.dart';
 import '../../auth/widgets/build_auth_bottom.dart';
 import '../../componnents/app_textformfiled_widget.dart';
@@ -33,7 +33,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
 
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
-  TextEditingController bodyFatPercentageController = TextEditingController();
+  //TextEditingController bodyFatPercentageController = TextEditingController();
   TextEditingController goalController = TextEditingController();
   TextEditingController fitnessLevelController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -209,25 +209,25 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                             name: 'Trainee weight');
                       },
                     ),
-                    AppSizedBox.h3,
-                    const Text(
-                      "Body Fat Percentage",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    AppSizedBox.h2,
-                    AppTextFormFiledWidget(
-                      controller: bodyFatPercentageController,
-                      prefix: Icons.percent,
-                      keyboardType: TextInputType.number,
-                      hintText: "Enter Trainee body Fat Percentage",
-                      validate: (value) {
-                        return Validations.normalValidation(value,
-                            name: 'Trainee body Fat Percentage');
-                      },
-                    ),
+                    // AppSizedBox.h3,
+                    // const Text(
+                    //   "Body Fat Percentage",
+                    //   style: TextStyle(
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.w400,
+                    //   ),
+                    // ),
+                    // AppSizedBox.h2,
+                    // AppTextFormFiledWidget(
+                    //   controller: bodyFatPercentageController,
+                    //   prefix: Icons.percent,
+                    //   keyboardType: TextInputType.number,
+                    //   hintText: "Enter Trainee body Fat Percentage",
+                    //   validate: (value) {
+                    //     return Validations.normalValidation(value,
+                    //         name: 'Trainee body Fat Percentage');
+                    //   },
+                    // ),
                     AppSizedBox.h3,
                     Row(
                       children: [
@@ -313,8 +313,14 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                                           gender: genderController.text,
                                           createdAt: DateTime.now().toString(),
                                           gymId: AppPreferences.uId,
-                                          bodyFatPercentage:
-                                              bodyFatPercentageController.text,
+                                          bmi: getBmi(weightController.text,
+                                              heightController.text),
+                                          bmiRuselt: getBmiRuselt(
+                                              genderController.text,
+                                              getBmi(weightController.text,
+                                                  heightController.text)),
+                                          // bodyFatPercentage:
+                                          //     bodyFatPercentageController.text,
                                           height: heightController.text,
                                           goal: goalController.text,
                                           fitnesLevel:

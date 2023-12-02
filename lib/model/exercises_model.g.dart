@@ -39,7 +39,10 @@ UserExercises _$UserExercisesFromJson(Map json) => UserExercises(
       exercises: (json['exercises'] as List<dynamic>?)
           ?.map((e) => Exercise.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
-    );
+    )..coachModel = json['coachModel'] == null
+        ? null
+        : CoachModel.fromJson(
+            Map<String, dynamic>.from(json['coachModel'] as Map));
 
 Map<String, dynamic> _$UserExercisesToJson(UserExercises instance) {
   final val = <String, dynamic>{};
@@ -53,6 +56,7 @@ Map<String, dynamic> _$UserExercisesToJson(UserExercises instance) {
   writeNotNull('id', instance.id);
   writeNotNull('userId', instance.userId);
   writeNotNull('coachId', instance.coachId);
+  writeNotNull('coachModel', instance.coachModel?.toJson());
   writeNotNull('done', instance.done);
   writeNotNull('date', instance.date);
   writeNotNull(
@@ -65,7 +69,10 @@ Exercise _$ExerciseFromJson(Map json) => Exercise(
       total: (json['total'] as num?)?.toDouble(),
       exerciseId: json['exerciseId'] as String?,
       done: json['done'] as bool?,
-    );
+    )..exerciseModel = json['exerciseModel'] == null
+        ? null
+        : ExerciseModel.fromJson(
+            Map<String, dynamic>.from(json['exerciseModel'] as Map));
 
 Map<String, dynamic> _$ExerciseToJson(Exercise instance) {
   final val = <String, dynamic>{};
@@ -79,6 +86,7 @@ Map<String, dynamic> _$ExerciseToJson(Exercise instance) {
   writeNotNull('count', instance.count);
   writeNotNull('total', instance.total);
   writeNotNull('exerciseId', instance.exerciseId);
+  writeNotNull('exerciseModel', instance.exerciseModel?.toJson());
   writeNotNull('done', instance.done);
   return val;
 }

@@ -348,7 +348,9 @@ class CoachCubit extends Cubit<CoachState> {
       oldModel.fitnesLevel = newModel.fitnesLevel;
       oldModel.height = newModel.height;
       oldModel.weight = newModel.weight;
-      oldModel.bodyFatPercentage = newModel.bodyFatPercentage;
+      //oldModel.bodyFatPercentage = newModel.bodyFatPercentage;
+      oldModel.bmi = newModel.bmi;
+      oldModel.bmiRuselt = newModel.bmiRuselt;
       emit(ScUpdateUserFitnessInfo());
     } catch (error) {
       emit(ErorrUpdateUserFitnessInfo(error.toString()));

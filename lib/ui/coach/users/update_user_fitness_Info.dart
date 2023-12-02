@@ -11,6 +11,7 @@ import '../../componnents/app_textformfiled_widget.dart';
 import '../../componnents/const_widget.dart';
 import '../../componnents/show_flutter_toast.dart';
 import '../../componnents/widgets.dart';
+import '../../gym/settings_screens/bmi.dart';
 
 class UpdateUserFitnessInfo extends StatefulWidget {
   const UpdateUserFitnessInfo({
@@ -26,7 +27,7 @@ class UpdateUserFitnessInfo extends StatefulWidget {
 class _UpdateUserFitnessInfoState extends State<UpdateUserFitnessInfo> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
-  TextEditingController bodyFatPercentageController = TextEditingController();
+  //TextEditingController bodyFatPercentageController = TextEditingController();
   TextEditingController goalController = TextEditingController();
   TextEditingController fitnessLevelController = TextEditingController();
 
@@ -37,7 +38,7 @@ class _UpdateUserFitnessInfoState extends State<UpdateUserFitnessInfo> {
     model = widget.model;
     weightController.text = model.weight ?? '';
     heightController.text = model.height ?? '';
-    bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
+    //bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
     goalController.text = model.goal ?? '';
     fitnessLevelController.text = model.fitnesLevel ?? '';
 
@@ -100,8 +101,14 @@ class _UpdateUserFitnessInfoState extends State<UpdateUserFitnessInfo> {
                                         weight: weightController.text,
                                         fitnesLevel:
                                             fitnessLevelController.text,
-                                        bodyFatPercentage:
-                                            bodyFatPercentageController.text,
+                                        bmi: getBmi(weightController.text,
+                                            heightController.text),
+                                        bmiRuselt: getBmiRuselt(
+                                            model.gender.toString(),
+                                            getBmi(weightController.text,
+                                                heightController.text)),
+                                        // bodyFatPercentage:
+                                        //     bodyFatPercentageController.text,
                                         goal: goalController.text));
                               }
                             },
@@ -156,25 +163,25 @@ class _UpdateUserFitnessInfoState extends State<UpdateUserFitnessInfo> {
             return Validations.normalValidation(value, name: 'User weight');
           },
         ),
-        AppSizedBox.h3,
-        const Text(
-          "Body Fat Percentage",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        AppSizedBox.h2,
-        AppTextFormFiledWidget(
-          controller: bodyFatPercentageController,
-          prefix: Icons.percent,
-          keyboardType: TextInputType.number,
-          hintText: "Enter User body Fat Percentage",
-          validate: (value) {
-            return Validations.normalValidation(value,
-                name: 'User body Fat Percentage');
-          },
-        ),
+        // AppSizedBox.h3,
+        // const Text(
+        //   "Body Fat Percentage",
+        //   style: TextStyle(
+        //     fontSize: 16,
+        //     fontWeight: FontWeight.w400,
+        //   ),
+        // ),
+        // AppSizedBox.h2,
+        // AppTextFormFiledWidget(
+        //   controller: bodyFatPercentageController,
+        //   prefix: Icons.percent,
+        //   keyboardType: TextInputType.number,
+        //   hintText: "Enter User body Fat Percentage",
+        //   validate: (value) {
+        //     return Validations.normalValidation(value,
+        //         name: 'User body Fat Percentage');
+        //   },
+        // ),
         AppSizedBox.h3,
         Row(
           children: [

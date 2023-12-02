@@ -21,7 +21,9 @@ class UserModel {
   String? age;
   String? weight;
   String? height;
-  String? bodyFatPercentage;
+  //String? bodyFatPercentage;
+  double? bmi;
+  String? bmiRuselt;
   String? goal;
   String? fitnesLevel;
   List<DietModel>? dites;
@@ -39,7 +41,9 @@ class UserModel {
       this.ban,
       this.age,
       this.gymId,
-      this.bodyFatPercentage,
+      //this.bodyFatPercentage,
+      this.bmi,
+      this.bmiRuselt,
       this.goal,
       this.height,
       this.weight,

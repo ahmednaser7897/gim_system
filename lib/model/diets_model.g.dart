@@ -15,7 +15,9 @@ DietModel _$DietModelFromJson(Map<String, dynamic> json) => DietModel(
       lunch: json['lunch'] as String?,
       notes: json['notes'] as String?,
       userId: json['userId'] as String?,
-    );
+    )..coachModel = json['coachModel'] == null
+        ? null
+        : CoachModel.fromJson(json['coachModel'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$DietModelToJson(DietModel instance) {
   final val = <String, dynamic>{};
@@ -34,5 +36,6 @@ Map<String, dynamic> _$DietModelToJson(DietModel instance) {
   writeNotNull('lunch', instance.lunch);
   writeNotNull('notes', instance.notes);
   writeNotNull('createdAt', instance.createdAt);
+  writeNotNull('coachModel', instance.coachModel);
   return val;
 }

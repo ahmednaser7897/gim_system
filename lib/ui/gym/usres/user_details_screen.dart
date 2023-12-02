@@ -32,7 +32,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
-  TextEditingController bodyFatPercentageController = TextEditingController();
+  TextEditingController bmiController = TextEditingController();
   TextEditingController goalController = TextEditingController();
   TextEditingController fitnessLevelController = TextEditingController();
 
@@ -49,7 +49,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
     weightController.text = model.weight ?? '';
     heightController.text = model.height ?? '';
-    bodyFatPercentageController.text = model.bodyFatPercentage ?? '';
+    bmiController.text =
+        '${model.bmi == null ? 0 : model.bmi!.toStringAsFixed(2)} - ${model.bmiRuselt ?? 'unavailable'}';
     goalController.text = model.goal ?? '';
     fitnessLevelController.text = model.fitnesLevel ?? '';
 
@@ -308,7 +309,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   ),
                   AppSizedBox.h3,
                   const Text(
-                    "Body Fat Percentage",
+                    "BMI",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -317,7 +318,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   AppSizedBox.h2,
                   AppTextFormFiledWidget(
                     isEnable: false,
-                    controller: bodyFatPercentageController,
+                    controller: bmiController,
                     prefix: Icons.percent,
                     keyboardType: TextInputType.number,
                     hintText: "Enter User body Fat Percentage",

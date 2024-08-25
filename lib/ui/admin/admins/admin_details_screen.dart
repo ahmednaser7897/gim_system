@@ -20,7 +20,7 @@ class AdminDetailsScreen extends StatefulWidget {
 
 class _AdminDetailsScreenState extends State<AdminDetailsScreen> {
   TextEditingController nameController = TextEditingController();
-
+  TextEditingController emailController1 = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
